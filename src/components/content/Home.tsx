@@ -1,4 +1,4 @@
-import Frame from "../frame/Frame";
+import Layout from "../layout/Layout";
 
 function HomeComponent() {
     return (
@@ -9,5 +9,5 @@ function HomeComponent() {
 }
 
 export default function Home() {
-    return <Frame component={HomeComponent}/>;
+    return <Layout component={HomeComponent} />;
 }

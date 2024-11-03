@@ -1,4 +1,4 @@
-import Frame from "../frame/Frame";
+import Layout from "../layout/Layout";
 
 function DataComponent() {
     return (
@@ -9,5 +9,5 @@ function DataComponent() {
 }
 
 export default function Data() {
-    return <Frame component={DataComponent}/>;
+    return <Layout component={DataComponent} />;
 }

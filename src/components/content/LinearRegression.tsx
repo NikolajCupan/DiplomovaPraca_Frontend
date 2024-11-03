@@ -1,4 +1,4 @@
-import Frame from "../frame/Frame";
+import Layout from "../layout/Layout";
 
 function LinearRegressionComponent() {
     return (
@@ -9,5 +9,5 @@ function LinearRegressionComponent() {
 }
 
 export default function LinearRegression() {
-    return <Frame component={LinearRegressionComponent} />;
+    return <Layout component={LinearRegressionComponent} />;
 }
