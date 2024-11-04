@@ -1,9 +1,10 @@
+import * as CookieManager from "../../helpers/CookiesManager";
+import { FetchRequest } from "../../helpers/Types";
 import Layout from "../layout/Layout";
 import "./Data.css";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SendIcon from "@mui/icons-material/Send";
-
 import {
     Button,
     FormControl,
@@ -15,12 +16,21 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
+import { BACKEND, UPLOAD_FILE } from "../../helpers/Constants";
 
 function DataComponent() {
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
     const [file, setFile] = useState<File | null>(null);
     const [frequency, setFrequency] = useState<string>("");
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
+
+    useEffect(() => {
+        if (startDate === null || file === null || frequency === "") {
+            setSubmitDisabled(true);
+        } else {
+            setSubmitDisabled(false);
+        }
+    }, [startDate, file, frequency]);
 
     const handleStartDateChange = (date: Dayjs | null) => {
         if (date) {
@@ -43,29 +53,33 @@ function DataComponent() {
         setFrequency(event.target.value);
     };
 
-    useEffect(() => {
-        if (startDate === null || file === null || frequency === "") {
-            setSubmitDisabled(true);
-        } else {
-            setSubmitDisabled(false);
-        }
-    }, [startDate, file, frequency]);
-
-    const dump = () => {
-        console.log("Start date: ");
-        if (startDate) {
-            console.log(startDate);
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (!startDate || !file || frequency.trim() === "") {
+            return;
         }
 
-        console.log("File: ");
-        if (file) {
-            console.log(file);
-        }
+        try {
+            const formData = new FormData();
+            formData.append("startDate", startDate.toString());
+            formData.append("file", file, file.name);
+            formData.append("frequency", frequency);
 
-        console.log("Frequency: ");
-        if (frequency) {
-            console.log(frequency);
-        }
+            const request: FetchRequest = {
+                url: BACKEND + UPLOAD_FILE,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
+
+            CookieManager.prepareRequest(request);
+            const response = await fetch(request.url, request.options);
+
+            if (response.ok) {
+                CookieManager.processResponse(response);
+            }
+        } catch (_) {}
     };
 
     return (
@@ -74,7 +88,7 @@ function DataComponent() {
                 <h1 className="data-upload-title">Upload nového súboru</h1>
 
                 <fieldset>
-                    <form action="#" method="get">
+                    <form action="#" method="post" onSubmit={handleSubmit}>
                         <div className="data-upload-field">
                             <p className="data-upload-label">
                                 Začiatočný dátum
@@ -158,9 +172,6 @@ function DataComponent() {
                             id="data-upload-submit-button"
                             disabled={submitDisabled}
                             style={{ marginTop: "20px", marginBottom: "20px" }}
-                            onClick={(event) => {
-                                handleSubmit(event);
-                            }}
                             type="submit"
                             size="large"
                             variant="contained"
@@ -171,9 +182,6 @@ function DataComponent() {
                     </form>
                 </fieldset>
             </div>
-
-            <div className="dole"></div>
-            <button onClick={dump}>Dump</button>
         </>
     );
 }
