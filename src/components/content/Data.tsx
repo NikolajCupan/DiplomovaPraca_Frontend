@@ -16,7 +16,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
-import { BACKEND, UPLOAD_FILE } from "../../helpers/Constants";
+import { BACKEND_PATH, UPLOAD_FILE_PATH } from "../../helpers/Constants";
 
 function DataComponent() {
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -66,7 +66,7 @@ function DataComponent() {
             formData.append("frequency", frequency);
 
             const request: FetchRequest = {
-                url: BACKEND + UPLOAD_FILE,
+                url: BACKEND_PATH + UPLOAD_FILE_PATH,
                 options: {
                     method: "post",
                     body: formData,
@@ -79,23 +79,23 @@ function DataComponent() {
             if (response.ok) {
                 CookieManager.processResponse(response);
             }
-        } catch (_) {}
+        } catch {}
     };
 
     return (
         <>
-            <div className="data-upload-wrapper">
-                <h1 className="data-upload-title">Upload nového súboru</h1>
+            <div className="data-upload-container">
+                <h1 className="data-upload-main-title">Upload nového súboru</h1>
 
                 <fieldset>
                     <form action="#" method="post" onSubmit={handleSubmit}>
-                        <div className="data-upload-field">
-                            <p className="data-upload-label">
+                        <div className="data-upload-group">
+                            <p className="data-upload-group-label">
                                 Začiatočný dátum
                             </p>
 
                             <DatePicker
-                                className="data-upload-value"
+                                className="data-upload-group-value"
                                 onChange={(date) => {
                                     handleStartDateChange(date);
                                 }}
@@ -114,7 +114,7 @@ function DataComponent() {
                                 {file?.name
                                     ? "Zvolený súbor: " + file.name
                                     : "Zvoľte súbor"}
-                                <div className="file-upload">
+                                <div className="data-upload-file">
                                     <input
                                         type="file"
                                         accept=".csv"

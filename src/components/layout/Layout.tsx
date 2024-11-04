@@ -1,4 +1,7 @@
-import { SIDEBAR_MENU_WIDTH } from "../../helpers/Constants";
+import {
+    SIDEBAR_AUTOMATIC_CLOSE_WIDTH,
+    SIDEBAR_MENU_WIDTH,
+} from "../../helpers/Constants";
 
 import CustomListItem from "./CustomListItem";
 
@@ -110,6 +113,20 @@ interface InternalComponentProps {
 export default function MiniDrawer(props: InternalComponentProps) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+
+    const handleResize = () => {
+        if (window.innerWidth < SIDEBAR_AUTOMATIC_CLOSE_WIDTH) {
+            setOpen(false);
+        }
+    };
+
+    React.useEffect(() => {
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
 
     const handleDrawerOpen = () => {
         setOpen(true);

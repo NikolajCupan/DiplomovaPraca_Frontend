@@ -7,7 +7,9 @@ export const processResponse = (response: Response) => {
     try {
         const cookies = new Cookies();
 
-        const currentSessionCookie = cookies.get(SESSION_COOKIE_NAME);
+        const currentSessionCookie = cookies.get(
+            SESSION_COOKIE_NAME,
+        ) as unknown;
         const newSessionCookieID = response.headers.get("session_cookie_id");
 
         if (!currentSessionCookie) {
@@ -21,12 +23,12 @@ export const processResponse = (response: Response) => {
 export const prepareRequest = (request: FetchRequest) => {
     try {
         const cookies = new Cookies();
-        const sessionCookie = cookies.get(SESSION_COOKIE_NAME);
+        const sessionCookie = cookies.get(SESSION_COOKIE_NAME) as unknown;
 
         if (sessionCookie) {
             request.options.headers = {
                 ...request.options.headers,
-                [SESSION_COOKIE_NAME]: sessionCookie,
+                [SESSION_COOKIE_NAME]: sessionCookie as string,
             };
         }
     } catch (_) {}

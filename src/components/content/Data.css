@@ -1,4 +1,4 @@
-.data-upload-wrapper {
+.data-upload-container {
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
@@ -14,22 +14,22 @@
     }
 }
 
-.data-upload-title {
+.ddata-upload-main-title {
     font-weight: bold;
     text-align: center;
 }
 
-.data-upload-field {
+.data-upload-group {
     width: 100%;
     padding-bottom: 25px;
     text-align: center;
 }
 
-.data-upload-label {
+.data-upload-group-label {
     font-weight: bold;
 }
 
-.data-upload-value {
+.data-upload-group-value {
     margin: auto;
     width: 100%;
     text-align: left;
@@ -61,6 +61,6 @@ label {
     font-weight: bold;
 }
 
-.file-upload {
+.data-upload-file {
     display: none;
 }
