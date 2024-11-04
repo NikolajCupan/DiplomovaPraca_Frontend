@@ -9,7 +9,7 @@
 }
 
 @media (max-width: 1000px) {
-    .data-upload-wrapper {
+    .data-upload-container {
         width: 100%;
     }
 }

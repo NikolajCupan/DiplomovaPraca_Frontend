@@ -16,7 +16,11 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
-import { BACKEND_PATH, UPLOAD_FILE_PATH } from "../../helpers/Constants";
+import {
+    BACKEND_PATH,
+    MAX_FILE_SIZE_BYTES,
+    UPLOAD_FILE_PATH,
+} from "../../helpers/Constants";
 
 function DataComponent() {
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -45,7 +49,12 @@ function DataComponent() {
             setFile(null);
         } else {
             const file = event.target.files[0];
-            setFile(file);
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                event.target.files = null;
+                setFile(null);
+            } else {
+                setFile(file);
+            }
         }
     };
 
@@ -102,11 +111,13 @@ function DataComponent() {
                             />
                         </div>
 
-                        <div className="data-upload-field">
-                            <p className="data-upload-label">Súbor .csv</p>
+                        <div className="data-upload-group">
+                            <p className="data-upload-group-label">
+                                Súbor .csv
+                            </p>
 
                             <Button
-                                className="data-upload-value"
+                                className="data-upload-group-value"
                                 component="label"
                                 variant="outlined"
                                 startIcon={<FileUploadIcon />}
@@ -127,11 +138,13 @@ function DataComponent() {
                             </Button>
                         </div>
 
-                        <div className="data-upload-field">
-                            <p className="data-upload-label">Frekvencia</p>
+                        <div className="data-upload-group">
+                            <p className="data-upload-group-label">
+                                Frekvencia
+                            </p>
                             <FormControl
                                 fullWidth
-                                className="data-upload-value"
+                                className="data-upload-group-value"
                             >
                                 <InputLabel
                                     id="input-label-select-frequency"
