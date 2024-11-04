@@ -7,12 +7,16 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SendIcon from "@mui/icons-material/Send";
 import {
     Button,
+    Checkbox,
     FormControl,
+    FormControlLabel,
     InputLabel,
     MenuItem,
     Select,
     SelectChangeEvent,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -24,8 +28,13 @@ import {
 
 function DataComponent() {
     const [startDate, setStartDate] = useState<Dayjs | null>(null);
+    const [startHour, setStartHour] = useState<number>(12);
     const [file, setFile] = useState<File | null>(null);
     const [frequency, setFrequency] = useState<string>("");
+    const [datasetHasHeader, setDatasetHasHeader] = useState<boolean>(false);
+    const [datasetHasDateColumn, setDatasetHasDateColumn] =
+        useState<boolean>(false);
+
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
     useEffect(() => {
@@ -41,6 +50,15 @@ function DataComponent() {
             setStartDate(date);
         } else {
             setStartDate(null);
+        }
+    };
+
+    const handleStartHourChange = (
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        const newHour = Number(event.target.value);
+        if (newHour >= 0 && newHour <= 23) {
+            setStartHour(newHour);
         }
     };
 
@@ -62,6 +80,20 @@ function DataComponent() {
         setFrequency(event.target.value);
     };
 
+    const handleDatasetHasHeader = (
+        event: React.SyntheticEvent<Element, Event>,
+    ) => {
+        const element = event.target as HTMLInputElement;
+        setDatasetHasHeader(element.checked);
+    };
+
+    const handleDatasetHasDateColumn = (
+        event: React.SyntheticEvent<Element, Event>,
+    ) => {
+        const element = event.target as HTMLInputElement;
+        setDatasetHasDateColumn(element.checked);
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (!startDate || !file || frequency.trim() === "") {
@@ -70,9 +102,14 @@ function DataComponent() {
 
         try {
             const formData = new FormData();
-            formData.append("startDate", startDate.toString());
+            formData.append(
+                "startDateTime",
+                startDate.format("YYYY/MM/DD") + "-" + startHour,
+            );
             formData.append("file", file, file.name);
             formData.append("frequency", frequency);
+            formData.append("hasHeader", datasetHasHeader.toString());
+            formData.append("hasDateColumn", datasetHasDateColumn.toString());
 
             const request: FetchRequest = {
                 url: BACKEND_PATH + UPLOAD_FILE_PATH,
@@ -103,12 +140,33 @@ function DataComponent() {
                                 Začiatočný dátum
                             </p>
 
-                            <DatePicker
-                                className="data-upload-group-value"
-                                onChange={(date) => {
-                                    handleStartDateChange(date);
-                                }}
-                            />
+                            <Grid container spacing={2}>
+                                <Grid size={{ xs: 8, lg: 10 }}>
+                                    <DatePicker
+                                        format="YYYY/MM/DD"
+                                        className="data-upload-group-value"
+                                        onChange={(date) => {
+                                            handleStartDateChange(date);
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 4, lg: 2 }}>
+                                    <TextField
+                                        type="number"
+                                        className="data-upload-group-value"
+                                        id="outlined-basic"
+                                        label="Hodina"
+                                        variant="outlined"
+                                        value={startHour}
+                                        onChange={(event) => {
+                                            handleStartHourChange(event);
+                                        }}
+                                        slotProps={{
+                                            htmlInput: { min: 0, max: 23 },
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
                         </div>
 
                         <div className="data-upload-group">
@@ -179,6 +237,43 @@ function DataComponent() {
                                     <MenuItem value={"yearly"}>Ročná</MenuItem>
                                 </Select>
                             </FormControl>
+                        </div>
+
+                        <div className="data-upload-group">
+                            <Grid container spacing={2}>
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                size="medium"
+                                                checked={datasetHasDateColumn}
+                                                onChange={(event) => {
+                                                    handleDatasetHasDateColumn(
+                                                        event,
+                                                    );
+                                                }}
+                                            />
+                                        }
+                                        label="Dataset obsahuje dátum"
+                                    />
+                                </Grid>
+                                <Grid size={{ xs: 12, sm: 6 }}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                size="medium"
+                                                checked={datasetHasHeader}
+                                                onChange={(event) => {
+                                                    handleDatasetHasHeader(
+                                                        event,
+                                                    );
+                                                }}
+                                            />
+                                        }
+                                        label="Dataset obsahuje hlavičku"
+                                    />
+                                </Grid>
+                            </Grid>
                         </div>
 
                         <Button
