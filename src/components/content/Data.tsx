@@ -8,7 +8,6 @@ import SendIcon from "@mui/icons-material/Send";
 import {
     Button,
     Checkbox,
-    Fade,
     FormControl,
     FormControlLabel,
     InputLabel,
@@ -39,6 +38,7 @@ function DataComponent() {
 
     const [dateColumnName, setDateColumnName] = useState<string>("");
     const [dataColumnName, setDataColumnName] = useState<string>("");
+    const [dateFormat, setDateFormat] = useState<string>("");
 
     const [datasetHasDateColumn, setDatasetHasDateColumn] =
         useState<boolean>(false);
@@ -49,15 +49,32 @@ function DataComponent() {
 
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
+    const [startDateElementLoaded, setStartDateElementLoaded] =
+        useState<boolean>(true);
+
     useEffect(() => {
         if (datasetName === "" || file === null || frequency === "") {
             setSubmitDisabled(true);
-        } else if (startDate !== null || datasetHasDateColumn) {
-            setSubmitDisabled(false);
-        } else {
-            setSubmitDisabled(true);
+            return;
         }
-    }, [datasetName, file, startDate, frequency, datasetHasDateColumn]);
+
+        if (
+            (datasetHasDateColumn && dateFormat.trim() === "") ||
+            (!datasetHasDateColumn && startDate === null)
+        ) {
+            setSubmitDisabled(true);
+            return;
+        }
+
+        setSubmitDisabled(false);
+    }, [
+        datasetName,
+        file,
+        startDate,
+        dateFormat,
+        frequency,
+        datasetHasDateColumn,
+    ]);
 
     const handleDatasetNameChange = (newDatasetName: string) => {
         setDatasetName(newDatasetName);
@@ -92,6 +109,10 @@ function DataComponent() {
         }
     };
 
+    const handleDateFormatChange = (newDateFormat: string) => {
+        setDateFormat(newDateFormat);
+    };
+
     const handleFrequencyChange = (event: SelectChangeEvent) => {
         setFrequency(event.target.value);
     };
@@ -116,6 +137,7 @@ function DataComponent() {
     ) => {
         const element = event.target as HTMLInputElement;
         setDatasetHasDateColumn(element.checked);
+        setStartDateElementLoaded((prev) => !prev);
     };
 
     const handleDatasetHasMissingValuesChange = (
@@ -159,6 +181,9 @@ function DataComponent() {
                     startDate.format("YYYY/MM/DD") + "-" + startHourString,
                 );
             }
+            if (dateFormat.trim() !== "") {
+                formData.append("dateFormat", dateFormat);
+            }
 
             formData.append("frequency", frequency);
 
@@ -198,6 +223,68 @@ function DataComponent() {
             }
         } catch {}
     };
+
+    const startDateHTMLElement = (
+        <div className="data-upload-group">
+            <p className="data-upload-group-label">
+                Začiatočný dátum <span style={{ color: "red" }}>*</span>
+            </p>
+
+            <Grid container spacing={2}>
+                <Grid size={{ xs: 8, lg: 10 }}>
+                    <DatePicker
+                        sx={{ width: 1 }}
+                        format="YYYY/MM/DD"
+                        value={startDate}
+                        onChange={(date) => {
+                            handleStartDateChange(date);
+                        }}
+                    />
+                </Grid>
+                <Grid size={{ xs: 4, lg: 2 }}>
+                    <TextField
+                        sx={{ width: 1 }}
+                        type="number"
+                        id="outlined-basic"
+                        label="Hodina"
+                        variant="outlined"
+                        value={startHour}
+                        onChange={(event) => {
+                            handleStartHourChange(event.currentTarget.value);
+                        }}
+                        slotProps={{
+                            htmlInput: {
+                                min: 0,
+                                max: 23,
+                            },
+                        }}
+                    />
+                </Grid>
+            </Grid>
+        </div>
+    );
+
+    const formatDateHTMLElemenet = (
+        <div className="data-upload-group">
+            <p className="data-upload-group-label">
+                Formát dátumu <span style={{ color: "red" }}>*</span>
+            </p>
+
+            <TextField
+                sx={{ width: 1 }}
+                id="outlined-basic"
+                label="Formát"
+                variant="outlined"
+                value={dateFormat}
+                onChange={(event) => {
+                    handleDateFormatChange(event.currentTarget.value);
+                }}
+                slotProps={{
+                    htmlInput: { maxLength: 100 },
+                }}
+            />
+        </div>
+    );
 
     return (
         <>
@@ -257,52 +344,11 @@ function DataComponent() {
                             </Button>
                         </div>
 
-                        <Fade
-                            appear={false}
-                            timeout={500}
-                            in={!datasetHasDateColumn}
-                        >
-                            <div className="data-upload-group">
-                                <p className="data-upload-group-label">
-                                    Začiatočný dátum{" "}
-                                    <span style={{ color: "red" }}>*</span>
-                                </p>
-
-                                <Grid container spacing={2}>
-                                    <Grid size={{ xs: 8, lg: 10 }}>
-                                        <DatePicker
-                                            sx={{ width: 1 }}
-                                            format="YYYY/MM/DD"
-                                            value={startDate}
-                                            onChange={(date) => {
-                                                handleStartDateChange(date);
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid size={{ xs: 4, lg: 2 }}>
-                                        <TextField
-                                            sx={{ width: 1 }}
-                                            type="number"
-                                            id="outlined-basic"
-                                            label="Hodina"
-                                            variant="outlined"
-                                            value={startHour}
-                                            onChange={(event) => {
-                                                handleStartHourChange(
-                                                    event.currentTarget.value,
-                                                );
-                                            }}
-                                            slotProps={{
-                                                htmlInput: {
-                                                    min: 0,
-                                                    max: 23,
-                                                },
-                                            }}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </Fade>
+                        <div>
+                            {startDateElementLoaded
+                                ? startDateHTMLElement
+                                : formatDateHTMLElemenet}
+                        </div>
 
                         <div className="data-upload-group">
                             <p className="data-upload-group-label">
