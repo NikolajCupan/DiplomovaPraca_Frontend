@@ -162,30 +162,35 @@ function DataComponent() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
         if (datasetName.trim() === "" || !file || frequency.trim() === "") {
+            return;
+        }
+        if (
+            (datasetHasDateColumn && dateFormat.trim() === "") ||
+            (!datasetHasDateColumn && !startDate)
+        ) {
             return;
         }
 
         try {
             const formData = new FormData();
-            formData.append("datasetName", datasetName);
-            formData.append("file", file, file.name);
+            formData.append("datasetName", datasetName.trim());
+            formData.append("file", file, file.name.trim());
+            formData.append("frequency", frequency.trim());
 
-            if (startDate) {
+            if (datasetHasDateColumn) {
+                formData.append("dateFormat", dateFormat.trim());
+            } else {
                 const startHourString =
                     startHour < 10
                         ? "0" + startHour.toString()
                         : startHour.toString();
                 formData.append(
                     "startDateTime",
-                    startDate.format("YYYY/MM/DD") + "-" + startHourString,
+                    startDate!.format("YYYY/MM/DD") + "-" + startHourString,
                 );
             }
-            if (dateFormat.trim() !== "") {
-                formData.append("dateFormat", dateFormat);
-            }
-
-            formData.append("frequency", frequency);
 
             if (dateColumnName.trim() !== "") {
                 formData.append("dateColumnName", dateColumnName);
@@ -220,6 +225,11 @@ function DataComponent() {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
+                const responseBody = await response.text();
+                console.log(responseBody);
+            } else {
+                const responseBody = await response.text();
+                console.log(responseBody);
             }
         } catch {}
     };
