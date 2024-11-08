@@ -8,59 +8,39 @@
     margin-top: 20px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1600px) {
+    .data-upload-container {
+        width: 70%;
+    }
+}
+
+@media (max-width: 1200px) {
+    .data-upload-container {
+        width: 80%;
+    }
+}
+
+@media (max-width: 1025px) {
     .data-upload-container {
         width: 100%;
     }
 }
 
-.ddata-upload-main-title {
+.data-upload-main-title {
     font-weight: bold;
     text-align: center;
 }
 
 .data-upload-group {
-    width: 100%;
     padding-bottom: 25px;
-    text-align: center;
+    text-align: left;
 }
 
 .data-upload-group-label {
     font-weight: bold;
-}
-
-.data-upload-group-value {
-    margin: auto;
-    width: 100%;
-    text-align: left;
-    height: 50px;
+    text-align: center;
 }
 
 fieldset {
     border: none;
-}
-
-input {
-    display: block;
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    font-size: 12px;
-}
-
-label {
-    font-size: 15px;
-    display: block;
-    width: 100%;
-    margin-top: 8px;
-    margin-bottom: 5px;
-    text-align: left;
-    color: #555;
-    font-weight: bold;
-}
-
-.data-upload-file {
-    display: none;
 }
