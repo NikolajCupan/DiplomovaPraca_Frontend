@@ -53,7 +53,7 @@ function DataComponent() {
         useState<boolean>(true);
 
     useEffect(() => {
-        if (datasetName === "" || file === null || frequency === "") {
+        if (datasetName.trim() === "" || file === null || frequency.trim() === "") {
             setSubmitDisabled(true);
             return;
         }
@@ -151,6 +151,7 @@ function DataComponent() {
         setDatasetName("");
         setFile(null);
         setStartDate(null);
+        setDateFormat("");
         setStartHour(0);
         setFrequency("");
         setDateColumnName("");
@@ -161,6 +162,9 @@ function DataComponent() {
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        const resultElement = document.getElementById(
+            "data-upload-submit-result",
+        );
         event.preventDefault();
 
         if (datasetName.trim() === "" || !file || frequency.trim() === "") {
@@ -226,12 +230,29 @@ function DataComponent() {
             if (response.ok) {
                 CookieManager.processResponse(response);
                 const responseBody = await response.text();
-                console.log(responseBody);
+
+                resultElement!.className = "";
+                resultElement!.classList.add(
+                    "data-upload-submit-result-success",
+                );
+                resultElement!.innerText = responseBody;
+
+                resetForm();
             } else {
                 const responseBody = await response.text();
                 console.log(responseBody);
+
+                resultElement!.className = "";
+                resultElement!.classList.add(
+                    "data-upload-submit-result-failure",
+                );
+                resultElement!.innerText = responseBody;
             }
-        } catch {}
+        } catch {
+            resultElement!.className = "";
+            resultElement!.classList.add("data-upload-submit-result-failure");
+            resultElement!.innerText = "Dataset sa nepodarilo uložiť";
+        }
     };
 
     const startDateHTMLElement = (
@@ -546,6 +567,18 @@ function DataComponent() {
                         </Button>
                     </form>
                 </fieldset>
+                <p
+                    id="data-upload-submit-result"
+                    className="data-upload-submit-result-invisible"
+                    style={{
+                        marginTop: "0",
+                        marginBottom: "30px",
+                        fontWeight: "bold",
+                        fontSize: "20px",
+                    }}
+                >
+                    &nbsp;
+                </p>
             </div>
         </>
     );
