@@ -1,5 +1,9 @@
 import * as CookieManager from "../../../helpers/CookiesManager";
-import { FetchRequest } from "../../../helpers/Types";
+import {
+    DatasetInfo,
+    FetchRequest,
+    RequestResult,
+} from "../../../helpers/Types";
 import "./DatasetUploadForm.css";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -19,14 +23,18 @@ import Grid from "@mui/material/Grid2";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Dayjs } from "dayjs";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
     BACKEND_PATH,
     MAX_FILE_SIZE_BYTES,
-    UPLOAD_FILE_PATH,
+    UPLOAD_DATASET_PATH,
 } from "../../../helpers/Constants";
 
-function DataComponent() {
+interface DatasetUploadFormProps {
+    setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
+}
+
+function DatasetUploadForm(props: DatasetUploadFormProps) {
     const [datasetName, setDatasetName] = useState<string>("");
     const [file, setFile] = useState<File | null>(null);
 
@@ -220,7 +228,7 @@ function DataComponent() {
             );
 
             const request: FetchRequest = {
-                url: BACKEND_PATH + UPLOAD_FILE_PATH,
+                url: BACKEND_PATH + UPLOAD_DATASET_PATH,
                 options: {
                     method: "post",
                     body: formData,
@@ -232,24 +240,28 @@ function DataComponent() {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                const responseBody = await response.text();
+                const responseBody = (await response.json()) as RequestResult;
 
                 resultElement!.className = "";
                 resultElement!.classList.add(
                     "data-upload-submit-result-success",
                 );
-                resultElement!.innerText = responseBody;
+                resultElement!.innerText = responseBody.message;
+
+                props.setDatasetInfos((prevDatasets) => [
+                    ...prevDatasets,
+                    responseBody.data as DatasetInfo,
+                ]);
 
                 resetForm();
             } else {
-                const responseBody = await response.text();
-                console.log(responseBody);
+                const responseBody = (await response.json()) as RequestResult;
 
                 resultElement!.className = "";
                 resultElement!.classList.add(
                     "data-upload-submit-result-failure",
                 );
-                resultElement!.innerText = responseBody;
+                resultElement!.innerText = responseBody.message;
             }
         } catch {
             resultElement!.className = "";
@@ -279,7 +291,7 @@ function DataComponent() {
                     <TextField
                         sx={{ width: 1 }}
                         type="number"
-                        id="outlined-basic"
+                        id="id-start-date"
                         label="Hodina"
                         variant="outlined"
                         value={startHour}
@@ -306,7 +318,7 @@ function DataComponent() {
 
             <TextField
                 sx={{ width: 1 }}
-                id="outlined-basic"
+                id="id-date-format"
                 label="Formát"
                 variant="outlined"
                 value={dateFormat}
@@ -321,270 +333,254 @@ function DataComponent() {
     );
 
     return (
-        <>
-            <div className="data-upload-container">
-                <h1 className="data-upload-main-title">Upload nového súboru</h1>
+        <div className="data-upload-container">
+            <h1 className="data-upload-main-title">Upload nového súboru</h1>
 
-                <fieldset>
-                    <form action="#" method="post" onSubmit={handleSubmit}>
-                        <div className="data-upload-group">
-                            <p className="data-upload-group-label">
-                                Názov datasetu{" "}
-                                <span style={{ color: "red" }}>*</span>
-                            </p>
+            <fieldset>
+                <form action="#" method="post" onSubmit={handleSubmit}>
+                    <div className="data-upload-group">
+                        <p className="data-upload-group-label">
+                            Názov datasetu{" "}
+                            <span style={{ color: "red" }}>*</span>
+                        </p>
 
-                            <TextField
-                                sx={{ width: 1 }}
-                                id="outlined-basic"
-                                label="Názov datasetu"
-                                variant="outlined"
-                                value={datasetName}
-                                slotProps={{
-                                    htmlInput: { maxLength: 100 },
-                                }}
+                        <TextField
+                            sx={{ width: 1 }}
+                            id="id-dataset-name"
+                            label="Názov datasetu"
+                            variant="outlined"
+                            value={datasetName}
+                            slotProps={{
+                                htmlInput: { maxLength: 100 },
+                            }}
+                            onChange={(event) => {
+                                handleDatasetNameChange(
+                                    event.currentTarget.value,
+                                );
+                            }}
+                        />
+                    </div>
+
+                    <div className="data-upload-group">
+                        <p className="data-upload-group-label">
+                            Súbor .csv <span style={{ color: "red" }}>*</span>
+                        </p>
+
+                        <Button
+                            sx={{ width: 1, height: "56px" }}
+                            component="label"
+                            variant="outlined"
+                            startIcon={<FileUploadIcon />}
+                        >
+                            {file?.name
+                                ? "Zvolený súbor: " + file.name
+                                : "Zvoľte súbor"}
+                            <input
+                                type="file"
+                                accept=".csv"
+                                hidden
                                 onChange={(event) => {
-                                    handleDatasetNameChange(
-                                        event.currentTarget.value,
-                                    );
+                                    handleFileChange(event.currentTarget.files);
                                 }}
                             />
-                        </div>
+                        </Button>
+                    </div>
 
-                        <div className="data-upload-group">
-                            <p className="data-upload-group-label">
-                                Súbor .csv{" "}
-                                <span style={{ color: "red" }}>*</span>
-                            </p>
+                    <div>
+                        {startDateElementLoaded
+                            ? startDateHTMLElement
+                            : formatDateHTMLElemenet}
+                    </div>
 
-                            <Button
-                                sx={{ width: 1, height: "56px" }}
-                                component="label"
-                                variant="outlined"
-                                startIcon={<FileUploadIcon />}
+                    <div className="data-upload-group">
+                        <p className="data-upload-group-label">
+                            Frekvencia <span style={{ color: "red" }}>*</span>
+                        </p>
+
+                        <FormControl sx={{ width: 1 }} fullWidth>
+                            <InputLabel
+                                id="input-label-select-frequency"
+                                sx={{
+                                    margin: "auto",
+                                }}
                             >
-                                {file?.name
-                                    ? "Zvolený súbor: " + file.name
-                                    : "Zvoľte súbor"}
-                                <input
-                                    type="file"
-                                    accept=".csv"
-                                    hidden
+                                Frekvencia
+                            </InputLabel>
+                            <Select
+                                labelId="input-label-select-frequency"
+                                id="id-dataset-frequency"
+                                value={frequency}
+                                label="Frekvencia"
+                                onChange={(event) => {
+                                    handleFrequencyChange(event);
+                                }}
+                            >
+                                <MenuItem value={"hourly"}>Hodinová</MenuItem>
+                                <MenuItem value={"daily"}>Denná</MenuItem>
+                                <MenuItem value={"weekly"}>Týždená</MenuItem>
+                                <MenuItem value={"monthly"}>Mesačná</MenuItem>
+                                <MenuItem value={"quarterly"}>
+                                    Štvrťročná
+                                </MenuItem>
+                                <MenuItem value={"yearly"}>Ročná</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="data-upload-group">
+                        <p className="data-upload-group-label">
+                            Doplňujúce informácie o datasete
+                        </p>
+
+                        <Grid container spacing={2}>
+                            <Grid size={{ xs: 12, lg: 6 }}>
+                                <TextField
+                                    sx={{ width: 1 }}
+                                    id="id-dataset-date-column-name"
+                                    label="Názov stĺpca s dátumom"
+                                    variant="outlined"
+                                    value={dateColumnName}
+                                    slotProps={{
+                                        htmlInput: { maxLength: 100 },
+                                    }}
                                     onChange={(event) => {
-                                        handleFileChange(
-                                            event.currentTarget.files,
+                                        handleDateColumnNameChange(
+                                            event.currentTarget.value,
                                         );
                                     }}
                                 />
-                            </Button>
-                        </div>
+                            </Grid>
 
-                        <div>
-                            {startDateElementLoaded
-                                ? startDateHTMLElement
-                                : formatDateHTMLElemenet}
-                        </div>
-
-                        <div className="data-upload-group">
-                            <p className="data-upload-group-label">
-                                Frekvencia{" "}
-                                <span style={{ color: "red" }}>*</span>
-                            </p>
-
-                            <FormControl sx={{ width: 1 }} fullWidth>
-                                <InputLabel
-                                    id="input-label-select-frequency"
-                                    sx={{
-                                        margin: "auto",
+                            <Grid size={{ xs: 12, lg: 6 }}>
+                                <TextField
+                                    sx={{ width: 1 }}
+                                    id="id-dataset-data-column-name"
+                                    label="Názov stĺpca s dátami"
+                                    variant="outlined"
+                                    value={dataColumnName}
+                                    slotProps={{
+                                        htmlInput: { maxLength: 100 },
                                     }}
-                                >
-                                    Frekvencia
-                                </InputLabel>
-                                <Select
-                                    labelId="sinput-label-select-frequency"
-                                    id="select-frequency"
-                                    value={frequency}
-                                    label="Frekvencia"
                                     onChange={(event) => {
-                                        handleFrequencyChange(event);
+                                        handleDataColumnNameChange(
+                                            event.currentTarget.value,
+                                        );
                                     }}
+                                />
+                            </Grid>
+                        </Grid>
+                    </div>
+
+                    <div className="data-upload-group">
+                        <Grid container spacing={3}>
+                            <Grid size={{ sm: 12, md: 6 }}>
+                                <Box
+                                    display="flex"
+                                    justifyContent="center"
+                                    alignItems="center"
                                 >
-                                    <MenuItem value={"hourly"}>
-                                        Hodinová
-                                    </MenuItem>
-                                    <MenuItem value={"daily"}>Denná</MenuItem>
-                                    <MenuItem value={"weekly"}>
-                                        Týždená
-                                    </MenuItem>
-                                    <MenuItem value={"monthly"}>
-                                        Mesačná
-                                    </MenuItem>
-                                    <MenuItem value={"quarterly"}>
-                                        Štvrťročná
-                                    </MenuItem>
-                                    <MenuItem value={"yearly"}>Ročná</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </div>
-
-                        <div className="data-upload-group">
-                            <p className="data-upload-group-label">
-                                Doplňujúce informácie o datasete
-                            </p>
-
-                            <Grid container spacing={2}>
-                                <Grid size={{ xs: 12, lg: 6 }}>
-                                    <TextField
-                                        sx={{ width: 1 }}
-                                        id="outlined-basic"
-                                        label="Názov stĺpca s dátumom"
-                                        variant="outlined"
-                                        value={dateColumnName}
-                                        slotProps={{
-                                            htmlInput: { maxLength: 100 },
-                                        }}
-                                        onChange={(event) => {
-                                            handleDateColumnNameChange(
-                                                event.currentTarget.value,
-                                            );
-                                        }}
-                                    />
-                                </Grid>
-
-                                <Grid size={{ xs: 12, lg: 6 }}>
-                                    <TextField
-                                        sx={{ width: 1 }}
-                                        id="outlined-basic"
-                                        label="Názov stĺpca s dátami"
-                                        variant="outlined"
-                                        value={dataColumnName}
-                                        slotProps={{
-                                            htmlInput: { maxLength: 100 },
-                                        }}
-                                        onChange={(event) => {
-                                            handleDataColumnNameChange(
-                                                event.currentTarget.value,
-                                            );
-                                        }}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </div>
-
-                        <div className="data-upload-group">
-                            <Grid container spacing={3}>
-                                <Grid size={{ sm: 12, md: 6 }}>
-                                    <Box
-                                        display="flex"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                    >
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    size="medium"
-                                                    checked={
-                                                        datasetHasDateColumn
-                                                    }
-                                                    onChange={(event) => {
-                                                        handleDatasetHasDateColumnChange(
-                                                            event,
-                                                        );
-                                                    }}
-                                                />
-                                            }
-                                            label="Dataset obsahuje stlpec s&nbsp;dátumom"
-                                        />
-                                    </Box>
-                                </Grid>
-
-                                <Grid size={{ sm: 12, md: 6 }}>
-                                    <Box
-                                        display="flex"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                    >
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    size="medium"
-                                                    checked={
-                                                        datasetHasHeaderColumn
-                                                    }
-                                                    onChange={(event) => {
-                                                        handleDatasetHasHeaderChange(
-                                                            event,
-                                                        );
-                                                    }}
-                                                />
-                                            }
-                                            label="Dataset obsahuje hlavičku"
-                                        />
-                                    </Box>
-                                </Grid>
-
-                                <Grid size={12}>
-                                    <Box
-                                        sx={{
-                                            justifyContent: {
-                                                xs: "start",
-                                                sm: "center",
-                                            },
-                                        }}
-                                        display="flex"
-                                        alignItems="center"
-                                    >
-                                        <Grid>
-                                            <FormControlLabel
-                                                sx={{ width: 1 }}
-                                                control={
-                                                    <Checkbox
-                                                        size="medium"
-                                                        checked={
-                                                            datasetHasMissingValues
-                                                        }
-                                                        onChange={(event) => {
-                                                            handleDatasetHasMissingValuesChange(
-                                                                event,
-                                                            );
-                                                        }}
-                                                    />
-                                                }
-                                                label="Dataset obsahuje chýbajúce hodnoty"
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                size="medium"
+                                                checked={datasetHasDateColumn}
+                                                onChange={(event) => {
+                                                    handleDatasetHasDateColumnChange(
+                                                        event,
+                                                    );
+                                                }}
                                             />
-                                        </Grid>
-                                    </Box>
-                                </Grid>
+                                        }
+                                        label="Dataset obsahuje stlpec s&nbsp;dátumom"
+                                    />
+                                </Box>
                             </Grid>
-                        </div>
 
-                        <Button
-                            id="data-upload-submit-button"
-                            disabled={submitDisabled}
-                            style={{ marginTop: "20px", marginBottom: "20px" }}
-                            type="submit"
-                            size="large"
-                            variant="contained"
-                            endIcon={<SendIcon />}
-                        >
-                            Odoslať
-                        </Button>
-                    </form>
-                </fieldset>
-                <p
-                    id="data-upload-submit-result"
-                    className="data-upload-submit-result-invisible"
-                    style={{
-                        marginTop: "0",
-                        marginBottom: "30px",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                    }}
-                >
-                    &nbsp;
-                </p>
-            </div>
-        </>
+                            <Grid size={{ sm: 12, md: 6 }}>
+                                <Box
+                                    display="flex"
+                                    justifyContent="center"
+                                    alignItems="center"
+                                >
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                size="medium"
+                                                checked={datasetHasHeaderColumn}
+                                                onChange={(event) => {
+                                                    handleDatasetHasHeaderChange(
+                                                        event,
+                                                    );
+                                                }}
+                                            />
+                                        }
+                                        label="Dataset obsahuje hlavičku"
+                                    />
+                                </Box>
+                            </Grid>
+
+                            <Grid size={12}>
+                                <Box
+                                    sx={{
+                                        justifyContent: {
+                                            xs: "start",
+                                            sm: "center",
+                                        },
+                                    }}
+                                    display="flex"
+                                    alignItems="center"
+                                >
+                                    <Grid>
+                                        <FormControlLabel
+                                            sx={{ width: 1 }}
+                                            control={
+                                                <Checkbox
+                                                    size="medium"
+                                                    checked={
+                                                        datasetHasMissingValues
+                                                    }
+                                                    onChange={(event) => {
+                                                        handleDatasetHasMissingValuesChange(
+                                                            event,
+                                                        );
+                                                    }}
+                                                />
+                                            }
+                                            label="Dataset obsahuje chýbajúce hodnoty"
+                                        />
+                                    </Grid>
+                                </Box>
+                            </Grid>
+                        </Grid>
+                    </div>
+
+                    <Button
+                        id="data-upload-submit-button"
+                        disabled={submitDisabled}
+                        style={{ marginTop: "20px", marginBottom: "20px" }}
+                        type="submit"
+                        size="large"
+                        variant="contained"
+                        endIcon={<SendIcon />}
+                    >
+                        Odoslať
+                    </Button>
+                </form>
+            </fieldset>
+            <p
+                id="data-upload-submit-result"
+                className="data-upload-submit-result-invisible"
+                style={{
+                    marginTop: "0",
+                    marginBottom: "30px",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                }}
+            >
+                &nbsp;
+            </p>
+        </div>
     );
 }
 
-export default DataComponent;
+export default DatasetUploadForm;

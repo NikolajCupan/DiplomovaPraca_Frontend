@@ -10,7 +10,7 @@ export const processResponse = (response: Response) => {
         const currentSessionCookie = cookies.get(
             SESSION_COOKIE_NAME,
         ) as unknown;
-        const newSessionCookieID = response.headers.get("session_cookie_id");
+        const newSessionCookieID = response.headers.get(SESSION_COOKIE_NAME);
 
         if (!currentSessionCookie) {
             cookies.set(SESSION_COOKIE_NAME, newSessionCookieID, { path: "/" });

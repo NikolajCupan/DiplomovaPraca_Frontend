@@ -1,13 +1,13 @@
 import Layout from "../layout/Layout";
 
 function HomeComponent() {
-    return (
+    const content = (
         <div>
             <p>Home</p>
         </div>
     );
+
+    return <Layout component={content} />;
 }
 
-export default function Home() {
-    return <Layout component={HomeComponent} />;
-}
+export default HomeComponent;

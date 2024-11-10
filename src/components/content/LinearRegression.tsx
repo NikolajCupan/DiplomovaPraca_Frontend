@@ -1,13 +1,13 @@
 import Layout from "../layout/Layout";
 
 function LinearRegressionComponent() {
-    return (
+    const content = (
         <div>
             <p>LR</p>
         </div>
     );
+
+    return <Layout component={content} />;
 }
 
-export default function LinearRegression() {
-    return <Layout component={LinearRegressionComponent} />;
-}
+export default LinearRegressionComponent;
