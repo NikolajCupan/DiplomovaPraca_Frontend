@@ -1,7 +1,6 @@
-import * as CookieManager from "../../helpers/CookiesManager";
-import { FetchRequest } from "../../helpers/Types";
-import Layout from "../layout/Layout";
-import "./Data.css";
+import * as CookieManager from "../../../helpers/CookiesManager";
+import { FetchRequest } from "../../../helpers/Types";
+import "./DatasetUploadForm.css";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SendIcon from "@mui/icons-material/Send";
@@ -25,7 +24,7 @@ import {
     BACKEND_PATH,
     MAX_FILE_SIZE_BYTES,
     UPLOAD_FILE_PATH,
-} from "../../helpers/Constants";
+} from "../../../helpers/Constants";
 
 function DataComponent() {
     const [datasetName, setDatasetName] = useState<string>("");
@@ -53,7 +52,11 @@ function DataComponent() {
         useState<boolean>(true);
 
     useEffect(() => {
-        if (datasetName.trim() === "" || file === null || frequency.trim() === "") {
+        if (
+            datasetName.trim() === "" ||
+            file === null ||
+            frequency.trim() === ""
+        ) {
             setSubmitDisabled(true);
             return;
         }
@@ -584,6 +587,4 @@ function DataComponent() {
     );
 }
 
-export default function Data() {
-    return <Layout component={DataComponent} />;
-}
+export default DataComponent;

@@ -107,7 +107,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 interface InternalComponentProps {
-    component: React.ComponentType;
+    component: React.ReactNode;
 }
 
 export default function MiniDrawer(props: InternalComponentProps) {
@@ -201,7 +201,7 @@ export default function MiniDrawer(props: InternalComponentProps) {
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
                 <div id="content">
-                    <props.component />
+                    {props.component}
                 </div>
             </Box>
         </Box>
