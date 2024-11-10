@@ -1,5 +1,6 @@
 import {
     BACKEND_PATH,
+    DOWNLOAD_DATASET_PATH,
     GET_DATASETS_OF_USER_PATH,
 } from "../../../helpers/Constants";
 import * as CookieManager from "../../../helpers/CookiesManager";
@@ -11,7 +12,10 @@ import {
 } from "../../../helpers/Types";
 import "./DatasetTable.css";
 
+import DownloadIcon from "@mui/icons-material/Download";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import {
+    IconButton,
     Table,
     TableBody,
     TableCell,
@@ -26,6 +30,10 @@ interface DatasetTableProps {
 }
 
 function DatasetTable(props: DatasetTableProps) {
+    useEffect(() => {
+        loadDatasets();
+    }, []);
+
     const loadDatasets = async () => {
         try {
             const request: FetchRequest = {
@@ -49,17 +57,33 @@ function DatasetTable(props: DatasetTableProps) {
                     ...prevDatasets,
                     ...newDatasets,
                 ]);
-            } else {
-                console.log("NOT OK");
             }
-        } catch {
-            console.log("Problem!");
-        }
+        } catch {}
     };
 
-    useEffect(() => {
-        loadDatasets();
-    }, []);
+    const handleDownloadDataset = async (idDataset: number) => {
+        try {
+            const formData = new FormData();
+            formData.append("idDataset", idDataset.toString());
+
+            const request: FetchRequest = {
+                url: BACKEND_PATH + DOWNLOAD_DATASET_PATH,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
+
+            CookieManager.prepareRequest(request);
+            const response = await fetch(request.url, request.options);
+
+            if (response.ok) {
+                console.log("ok");
+            } else {
+                console.log("not ok");
+            }
+        } catch {}
+    };
 
     return (
         <>
@@ -96,7 +120,23 @@ function DatasetTable(props: DatasetTableProps) {
                                         )}
                                     </TableCell>
                                     <TableCell align="right">
-                                        <button>Edit</button>
+                                        <IconButton
+                                            color="primary"
+                                            aria-label="edit-dataset"
+                                        >
+                                            <ModeEditIcon />
+                                        </IconButton>
+                                        <IconButton
+                                            color="primary"
+                                            aria-label="download-dataset"
+                                            onClick={() => {
+                                                handleDownloadDataset(
+                                                    datasetInfo.idDataset,
+                                                );
+                                            }}
+                                        >
+                                            <DownloadIcon />
+                                        </IconButton>
                                     </TableCell>
                                 </TableRow>
                             ))

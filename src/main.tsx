@@ -1,3 +1,5 @@
+import { STRICT_MODE } from "./helpers/Constants.tsx";
+
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
@@ -11,11 +13,15 @@ import "./index.css";
 const rootElement: HTMLElement | null = document.getElementById("root");
 
 if (rootElement) {
-    createRoot(rootElement).render(
-        <StrictMode>
-            <App />
-        </StrictMode>,
-    );
+    if (STRICT_MODE) {
+        createRoot(rootElement).render(
+            <StrictMode>
+                <App />
+            </StrictMode>,
+        );
+    } else {
+        createRoot(rootElement).render(<App />);
+    }
 } else {
     console.error("Root element was not found");
 }

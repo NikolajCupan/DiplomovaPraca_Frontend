@@ -14,7 +14,7 @@ function Data() {
                 <DatasetUploadForm setDatasetInfos={setDatasetInfos} />
             </div>
 
-            <div style={{ marginBottom: "50px" }}>
+            <div style={{ marginBottom: "20px" }}>
                 <DatasetTable
                     datasetInfos={datasetInfos}
                     setDatasetInfos={setDatasetInfos}
