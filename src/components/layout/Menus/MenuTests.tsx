@@ -1,6 +1,7 @@
-import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import BiotechIcon from "@mui/icons-material/Biotech";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
 import Menu, { MenuProps } from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { alpha, styled } from "@mui/material/styles";
@@ -69,49 +70,81 @@ export default function CustomizedMenus() {
         <div>
             <Button
                 className="menu-button"
-                id="menu-models-button"
-                aria-controls={open ? "menu-models" : undefined}
+                id="menu-tests-button"
+                aria-controls={open ? "menu-tests" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
-                endIcon={<LightbulbIcon />}
+                endIcon={<BiotechIcon />}
             >
-                Modely
+                <div className="custom-font">Testy a analýza</div>
             </Button>
             <StyledMenu
-                id="menu-models"
+                id="menu-tests"
                 MenuListProps={{
-                    "aria-labelledby": "menu-models-button",
+                    "aria-labelledby": "menu-tests-button",
                 }}
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
             >
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Lineárna regresia
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    ARIMA
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
+                    <NavigateNextIcon style={{ color: "black" }} />
                     <div style={{ textWrap: "balance" }}>
-                        Exponenciálne vyrovnávanie Holt-Winter
+                        <a className="custom-font" href="/">
+                            Dickey-Fuller test
+                        </a>
                     </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
+                    <NavigateNextIcon style={{ color: "black" }} />
                     <div style={{ textWrap: "balance" }}>
-                        Jednoduché exponenciálne vyrovnávanie
+                        <a className="custom-font" href="/">
+                            Kwiatkowski-Phillips-Schmidt-Shin test (KPSS)
+                        </a>
+                    </div>
+                </MenuItem>
+
+                <Divider sx={{ my: 0.5 }} />
+
+                <MenuItem onClick={handleClose} disableRipple>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <div style={{ textWrap: "balance" }}>
+                        <a className="custom-font" href="/">
+                            Dekompozícia časového radu
+                        </a>
                     </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    GARCH
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        Periodogram
+                    </a>
+                </MenuItem>
+                <MenuItem onClick={handleClose} disableRipple>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        Korelogram
+                    </a>
+                </MenuItem>
+
+                <Divider sx={{ my: 0.5 }} />
+
+                <MenuItem onClick={handleClose} disableRipple>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        ARCH test
+                    </a>
+                </MenuItem>
+                <MenuItem onClick={handleClose} disableRipple>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <div style={{ textWrap: "balance" }}>
+                        <a className="custom-font" href="/">
+                            Durbin-Watson test
+                        </a>
+                    </div>
                 </MenuItem>
             </StyledMenu>
         </div>

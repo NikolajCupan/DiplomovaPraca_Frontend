@@ -1,7 +1,6 @@
-import BiotechIcon from "@mui/icons-material/Biotech";
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
 import Menu, { MenuProps } from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { alpha, styled } from "@mui/material/styles";
@@ -70,67 +69,49 @@ export default function CustomizedMenus() {
         <div>
             <Button
                 className="menu-button"
-                id="menu-tests-button"
-                aria-controls={open ? "menu-tests" : undefined}
+                id="menu-transformations-button"
+                aria-controls={open ? "menu-transformations" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
-                endIcon={<BiotechIcon />}
+                endIcon={<AutoFixHighIcon />}
             >
-                Testy a analýza
+                <div className="custom-font">Transformácie</div>
             </Button>
             <StyledMenu
-                id="menu-tests"
+                id="menu-transformations"
                 MenuListProps={{
-                    "aria-labelledby": "menu-tests-button",
+                    "aria-labelledby": "menu-transformations-button",
                 }}
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
             >
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    <div style={{ textWrap: "balance" }}>
-                        Dickey-Fuller test
-                    </div>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" id="bruh-bruh" href="/">
+                        Diferencia
+                    </a>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    <div style={{ textWrap: "balance" }}>
-                        Kwiatkowski-Phillips-Schmidt-Shin test (KPSS)
-                    </div>
-                </MenuItem>
-
-                <Divider sx={{ my: 0.5 }} />
-
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    <div style={{ textWrap: "balance" }}>
-                        Dekompozícia časového radu
-                    </div>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        Logaritmovanie
+                    </a>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Periodogram
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        Normalizácia
+                    </a>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Korelogram
-                </MenuItem>
-
-                <Divider sx={{ my: 0.5 }} />
-
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    ARCH test
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    <div style={{ textWrap: "balance" }}>
-                        Durbin-Watson test
-                    </div>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        Štandardizácia
+                    </a>
                 </MenuItem>
             </StyledMenu>
         </div>

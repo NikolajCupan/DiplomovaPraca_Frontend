@@ -1,4 +1,4 @@
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Button from "@mui/material/Button";
 import Menu, { MenuProps } from "@mui/material/Menu";
@@ -69,41 +69,59 @@ export default function CustomizedMenus() {
         <div>
             <Button
                 className="menu-button"
-                id="menu-transformations-button"
-                aria-controls={open ? "menu-transformations" : undefined}
+                id="menu-models-button"
+                aria-controls={open ? "menu-models" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
-                endIcon={<AutoFixHighIcon />}
+                endIcon={<LightbulbIcon />}
             >
-                Transformácie
+                <div className="custom-font">Modely</div>
             </Button>
             <StyledMenu
-                id="menu-transformations"
+                id="menu-models"
                 MenuListProps={{
-                    "aria-labelledby": "menu-transformations-button",
+                    "aria-labelledby": "menu-models-button",
                 }}
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
             >
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Diferencia
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        Lineárna regresia
+                    </a>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Logaritmovanie
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        ARIMA
+                    </a>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Normalizácia
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <div style={{ textWrap: "balance" }}>
+                        <a className="custom-font" href="/">
+                            Exponenciálne vyrovnávanie Holt-Winter
+                        </a>
+                    </div>
                 </MenuItem>
                 <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon />
-                    Štandardizácia
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <div style={{ textWrap: "balance" }}>
+                        <a className="custom-font" href="/">
+                            Jednoduché exponenciálne vyrovnávanie
+                        </a>
+                    </div>
+                </MenuItem>
+                <MenuItem onClick={handleClose} disableRipple>
+                    <NavigateNextIcon style={{ color: "black" }} />
+                    <a className="custom-font" href="/">
+                        GARCH
+                    </a>
                 </MenuItem>
             </StyledMenu>
         </div>

@@ -1,13 +1,14 @@
 .custom-menu-item {
     padding-right: 20px;
+    font-family: "Comic Sans MS", sans-serif !important;
 }
 
 @media (width < 900px) {
     .menu-button {
         background-color: transparent !important;
-        color: rgb(55, 65, 81) !important;
-        text-transform: uppercase !important;
+        color: black !important;
+        text-transform: none !important;
         font-weight: normal !important;
-        font-size: 15px !important;
+        font-size: 16px !important;
     }
 }

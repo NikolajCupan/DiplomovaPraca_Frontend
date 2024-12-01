@@ -1,4 +1,4 @@
-import Layout from "../layout2/Layout";
+import Layout from "../layout/Layout";
 
 function HomeComponent() {
     const content = (

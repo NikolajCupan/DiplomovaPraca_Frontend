@@ -22,8 +22,9 @@ export default function CustomizedMenus() {
                 disableElevation
                 onClick={handleClick}
                 endIcon={<DataObjectIcon />}
+                href="/data"
             >
-                Dáta
+                <div className="custom-font">Dáta</div>
             </Button>
         </div>
     );
