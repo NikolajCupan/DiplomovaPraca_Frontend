@@ -78,16 +78,16 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                     },
                                 }}
                             >
-                                <div className="custom-menu-item">
+                                <div className="custom-mini-menu-item">
                                     <MenuData />
                                 </div>
-                                <div className="custom-menu-item">
+                                <div className="custom-mini-menu-item">
                                     <MenuTests />
                                 </div>
-                                <div className="custom-menu-item">
+                                <div className="custom-mini-menu-item">
                                     <MenuTransformations />
                                 </div>
-                                <div className="custom-menu-item">
+                                <div className="custom-mini-menu-item">
                                     <MenuModels />
                                 </div>
                             </Menu>

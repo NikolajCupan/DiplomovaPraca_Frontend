@@ -89,40 +89,44 @@ export default function CustomizedMenus() {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" href="/">
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         Lineárna regresia
-                    </a>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" href="/">
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         ARIMA
-                    </a>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <div style={{ textWrap: "balance" }}>
-                        <a className="custom-font" href="/">
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
+                        <div style={{ textWrap: "balance" }}>
                             Exponenciálne vyrovnávanie Holt-Winter
-                        </a>
-                    </div>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <div style={{ textWrap: "balance" }}>
-                        <a className="custom-font" href="/">
+                        </div>
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
+                        <div style={{ textWrap: "balance" }}>
                             Jednoduché exponenciálne vyrovnávanie
-                        </a>
-                    </div>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" href="/">
+                        </div>
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         GARCH
-                    </a>
-                </MenuItem>
+                    </MenuItem>
+                </a>
             </StyledMenu>
         </div>
     );

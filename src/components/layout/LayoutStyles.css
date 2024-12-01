@@ -1,6 +1,9 @@
 .custom-menu-item {
     padding-right: 20px;
-    font-family: "Comic Sans MS", sans-serif !important;
+}
+
+.custom-mini-menu-item:hover {
+    background-color: rgb(245, 245, 245) !important;
 }
 
 @media (width < 900px) {

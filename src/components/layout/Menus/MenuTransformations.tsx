@@ -89,30 +89,33 @@ export default function CustomizedMenus() {
                 open={open}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" id="bruh-bruh" href="/">
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         Diferencia
-                    </a>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" href="/">
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         Logaritmovanie
-                    </a>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" href="/">
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         Normalizácia
-                    </a>
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                    <NavigateNextIcon style={{ color: "black" }} />
-                    <a className="custom-font" href="/">
+                    </MenuItem>
+                </a>
+
+                <a href="/">
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
                         Štandardizácia
-                    </a>
-                </MenuItem>
+                    </MenuItem>
+                </a>
             </StyledMenu>
         </div>
     );

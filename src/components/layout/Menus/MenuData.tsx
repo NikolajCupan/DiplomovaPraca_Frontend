@@ -24,7 +24,7 @@ export default function CustomizedMenus() {
                 endIcon={<DataObjectIcon />}
                 href="/data"
             >
-                <div className="custom-font">Dáta</div>
+                Dáta
             </Button>
         </div>
     );
