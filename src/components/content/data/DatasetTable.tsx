@@ -19,6 +19,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableContainer,
     TableHead,
     TableRow,
 } from "@mui/material";
@@ -88,67 +89,76 @@ function DatasetTable(props: DatasetTableProps) {
     return (
         <>
             <div className="data-table-container">
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell align="right">Názov</TableCell>
-                            <TableCell align="right">Frekvencia</TableCell>
-                            <TableCell align="right">Upraviť</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.datasetInfos.length > 0 ? (
-                            props.datasetInfos.map((datasetInfo) => (
-                                <TableRow
-                                    key={datasetInfo.idDataset}
-                                    sx={{
-                                        "&:last-child td, &:last-child th": {
-                                            border: 0,
-                                        },
-                                    }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {datasetInfo.idDataset}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {datasetInfo.datasetName}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {Helper.translateFrequency(
-                                            datasetInfo.frequencyType,
-                                        )}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        <IconButton
-                                            color="primary"
-                                            aria-label="edit-dataset"
-                                        >
-                                            <ModeEditIcon />
-                                        </IconButton>
-                                        <IconButton
-                                            color="primary"
-                                            aria-label="download-dataset"
-                                            onClick={() => {
-                                                handleDownloadDataset(
-                                                    datasetInfo.idDataset,
-                                                );
-                                            }}
-                                        >
-                                            <DownloadIcon />
-                                        </IconButton>
+                <TableContainer>
+                    <Table sx={{ minWidth: 650 }}>
+                        <colgroup>
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "25%" }} />
+                        </colgroup>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell align="left">Názov</TableCell>
+                                <TableCell align="left">Frekvencia</TableCell>
+                                <TableCell align="right">Upraviť</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {props.datasetInfos.length > 0 ? (
+                                props.datasetInfos.map((datasetInfo) => (
+                                    <TableRow
+                                        key={datasetInfo.idDataset}
+                                        sx={{
+                                            "&:last-child td, &:last-child th":
+                                                {
+                                                    border: 0,
+                                                },
+                                        }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {datasetInfo.idDataset}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            {datasetInfo.datasetName}
+                                        </TableCell>
+                                        <TableCell align="left">
+                                            {Helper.translateFrequency(
+                                                datasetInfo.frequencyType,
+                                            )}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                color="primary"
+                                                aria-label="edit-dataset"
+                                            >
+                                                <ModeEditIcon />
+                                            </IconButton>
+                                            <IconButton
+                                                color="primary"
+                                                aria-label="download-dataset"
+                                                onClick={() => {
+                                                    handleDownloadDataset(
+                                                        datasetInfo.idDataset,
+                                                    );
+                                                }}
+                                            >
+                                                <DownloadIcon />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={4} align="center">
+                                        Žiadne dáta nie sú k dispozícii
                                     </TableCell>
                                 </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={4} align="center">
-                                    Žiadne dáta nie sú k dispozícii
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </div>
         </>
     );

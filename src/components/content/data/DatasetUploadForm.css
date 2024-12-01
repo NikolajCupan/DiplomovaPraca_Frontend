@@ -22,7 +22,13 @@
 
 @media (max-width: 1025px) {
     .data-upload-container {
-        width: 100%;
+        width: 90%;
+    }
+}
+
+@media (max-width: 420px) {
+    .data-upload-container {
+        width: 85%;
     }
 }
 
