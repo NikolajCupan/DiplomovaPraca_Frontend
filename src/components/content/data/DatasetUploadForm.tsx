@@ -51,8 +51,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         useState<boolean>(false);
     const [datasetHasHeaderColumn, setDatasetHasHeaderColumn] =
         useState<boolean>(false);
-    const [datasetHasMissingValues, setDatasetHasMissingValues] =
-        useState<boolean>(false);
 
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
 
@@ -151,16 +149,17 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         setStartDateElementLoaded((prev) => !prev);
     };
 
-    const handleDatasetHasMissingValuesChange = (
-        event: React.SyntheticEvent<Element, Event>,
-    ) => {
-        const element = event.target as HTMLInputElement;
-        setDatasetHasMissingValues(element.checked);
-    };
-
     const resetForm = () => {
         setDatasetName("");
+
         setFile(null);
+        const fileInput = document.getElementById(
+            "data-file-input",
+        ) as HTMLInputElement;
+        if (fileInput) {
+            fileInput.value = "";
+        }
+
         setStartDate(null);
         setDateFormat("");
         setStartHour(0);
@@ -169,7 +168,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         setDataColumnName("");
         setDatasetHasDateColumn(false);
         setDatasetHasHeaderColumn(false);
-        setDatasetHasMissingValues(false);
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -221,10 +219,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
             formData.append(
                 "datasetHasHeader",
                 datasetHasHeaderColumn.toString(),
-            );
-            formData.append(
-                "datasetHasMissingValues",
-                datasetHasMissingValues.toString(),
             );
 
             const request: FetchRequest = {
@@ -376,6 +370,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                 ? "Zvolený súbor: " + file.name
                                 : "Zvoľte súbor"}
                             <input
+                                id="data-file-input"
                                 type="file"
                                 accept=".csv"
                                 hidden
@@ -472,7 +467,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                     </div>
 
                     <div className="data-upload-group">
-                        <Grid container spacing={3}>
+                        <Grid container spacing={2}>
                             <Grid size={{ sm: 12, md: 6 }}>
                                 <Box
                                     display="flex"
@@ -516,39 +511,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                         }
                                         label="Dataset obsahuje hlavičku"
                                     />
-                                </Box>
-                            </Grid>
-
-                            <Grid size={12}>
-                                <Box
-                                    sx={{
-                                        justifyContent: {
-                                            xs: "start",
-                                            sm: "center",
-                                        },
-                                    }}
-                                    display="flex"
-                                    alignItems="center"
-                                >
-                                    <Grid>
-                                        <FormControlLabel
-                                            sx={{ width: 1 }}
-                                            control={
-                                                <Checkbox
-                                                    size="medium"
-                                                    checked={
-                                                        datasetHasMissingValues
-                                                    }
-                                                    onChange={(event) => {
-                                                        handleDatasetHasMissingValuesChange(
-                                                            event,
-                                                        );
-                                                    }}
-                                                />
-                                            }
-                                            label="Dataset obsahuje chýbajúce hodnoty"
-                                        />
-                                    </Grid>
                                 </Box>
                             </Grid>
                         </Grid>

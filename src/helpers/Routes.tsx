@@ -1,7 +1,8 @@
 import Data from "../components/content/data/Data";
+import DatasetEditor from "../components/content/data/DatasetEditor";
 import Home from "../components/content/Home";
-import Test from "../testing/Test";
 import LinearRegression from "../components/content/LinearRegression";
+import Test from "../testing/Test";
 
 export const ROUTES = [
     {
@@ -11,6 +12,10 @@ export const ROUTES = [
     {
         path: "/data",
         element: <Data />,
+    },
+    {
+        path: "/data/edit/:idDataset",
+        element: <DatasetEditor />,
     },
     {
         path: "/linear-regression",

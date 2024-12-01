@@ -8,3 +8,4 @@ export const BACKEND_PATH = "http://localhost:8080";
 export const UPLOAD_DATASET_PATH = "/dataset/upload";
 export const DOWNLOAD_DATASET_PATH = "/dataset/download";
 export const GET_DATASETS_OF_USER_PATH = "/dataset/get";
+export const GET_DATASET_FOR_EDITING = "/dataset/get-for-editing";

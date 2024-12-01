@@ -79,9 +79,7 @@ function DatasetTable(props: DatasetTableProps) {
             const response = await fetch(request.url, request.options);
 
             if (response.ok) {
-                for (let [key, value] of response.headers) {
-                    console.log(`${key}: ${value}`);
-                }
+                CookieManager.processResponse(response);
 
                 const blob = await response.blob();
                 const newBlob = new Blob([blob]);
@@ -150,12 +148,19 @@ function DatasetTable(props: DatasetTableProps) {
                                             )}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <IconButton
-                                                color="primary"
-                                                aria-label="edit-dataset"
+                                            <a
+                                                href={
+                                                    "/data/edit/" +
+                                                    datasetInfo.idDataset
+                                                }
                                             >
-                                                <ModeEditIcon />
-                                            </IconButton>
+                                                <IconButton
+                                                    color="primary"
+                                                    aria-label="edit-dataset"
+                                                >
+                                                    <ModeEditIcon />
+                                                </IconButton>
+                                            </a>
                                             <IconButton
                                                 color="primary"
                                                 aria-label="download-dataset"
