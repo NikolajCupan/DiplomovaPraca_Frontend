@@ -79,7 +79,28 @@ function DatasetTable(props: DatasetTableProps) {
             const response = await fetch(request.url, request.options);
 
             if (response.ok) {
-                console.log("ok");
+                for (let [key, value] of response.headers) {
+                    console.log(`${key}: ${value}`);
+                }
+
+                const blob = await response.blob();
+                const newBlob = new Blob([blob]);
+
+                const blobUrl = window.URL.createObjectURL(newBlob);
+
+                const link = document.createElement("a");
+                link.href = blobUrl;
+                link.setAttribute(
+                    "download",
+                    `${response.headers.get("dataset-name")}.${"csv"}`,
+                );
+
+                document.body.appendChild(link);
+
+                link.click();
+                link.parentNode!.removeChild(link);
+
+                window.URL.revokeObjectURL(blobUrl);
             } else {
                 console.log("not ok");
             }
