@@ -1,0 +1,13 @@
+.custom-menu-item {
+    padding-right: 20px;
+}
+
+@media (width < 900px) {
+    .menu-button {
+        background-color: transparent !important;
+        color: rgb(55, 65, 81) !important;
+        text-transform: uppercase !important;
+        font-weight: normal !important;
+        font-size: 15px !important;
+    }
+}
