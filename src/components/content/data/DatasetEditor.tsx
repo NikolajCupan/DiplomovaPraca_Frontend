@@ -23,8 +23,9 @@ import {
     Row,
 } from "../../../helpers/Types";
 import Layout from "../../layout/Layout";
+import "./DatasetEditor.css";
 
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function DatasetEditor() {
@@ -37,6 +38,10 @@ function DatasetEditor() {
     const [datasetForEditing, setDatasetForEditing] =
         useState<DatasetForEditing | null>(null);
 
+    const [changedValues, setChangedValues] = useState<Map<number, string>>(
+        new Map(),
+    );
+
     useEffect(() => {
         loadDatasetInfos();
     }, []);
@@ -47,6 +52,10 @@ function DatasetEditor() {
 
     useEffect(() => {
         loadDatasetForEditing();
+        setChangedValues(() => {
+            const newMap = new Map();
+            return newMap;
+        });
     }, [selectedDatasetInfo]);
 
     const loadDatasetInfos = async () => {
@@ -137,7 +146,7 @@ function DatasetEditor() {
                 for (let i = 0; i < rows.length; ++i) {
                     let newRow: Row = {
                         date: new Date(),
-                        value: -1,
+                        value: "",
                     };
 
                     newRow.date = rows[i].dateTime;
@@ -153,6 +162,37 @@ function DatasetEditor() {
         } catch {}
     };
 
+    const handleNewValueChange = (
+        index: number,
+        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => {
+        const value = event.target.value.trim();
+        const numberValue: number = Number(value);
+        const previousValue: string | null = changedValues.has(index)
+            ? (changedValues.get(index) as string)
+            : null;
+
+        if (value !== "" && !Number.isNaN(numberValue)) {
+            setChangedValues((prevChangedValues) => {
+                const newMap = new Map(prevChangedValues);
+                newMap.set(index, value);
+                return newMap;
+            });
+        } else if (value === "-") {
+            setChangedValues((prevChangedValues) => {
+                const newMap = new Map(prevChangedValues);
+                newMap.set(index, "-");
+                return newMap;
+            });
+        } else if (previousValue != null && value === "") {
+            setChangedValues((prevChangedValues) => {
+                const newMap = new Map(prevChangedValues);
+                newMap.delete(index);
+                return newMap;
+            });
+        }
+    };
+
     const test = () => {
         console.log("\n\n\n----------");
         console.log("DATASET INFOS");
@@ -161,6 +201,11 @@ function DatasetEditor() {
         console.log(selectedDatasetInfo);
         console.log("DATASET FOR EDITING");
         console.log(datasetForEditing);
+        console.log("CHANGED VALUES");
+
+        changedValues.forEach((value, key) => {
+            console.log(key, value);
+        });
     };
 
     const content = (
@@ -191,9 +236,9 @@ function DatasetEditor() {
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table sx={{ minWidth: 650 }}>
                         <colgroup>
-                            <col style={{ width: "60%" }} />
-                            <col style={{ width: "20%" }} />
-                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "50%" }} />
+                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "25%" }} />
                         </colgroup>
                         <TableHead>
                             <TableRow>
@@ -204,7 +249,7 @@ function DatasetEditor() {
                                               .columnName
                                         : "Data"}
                                 </TableCell>
-                                <TableCell>Editácia</TableCell>
+                                <TableCell align="left">Nová hodnota</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -219,10 +264,32 @@ function DatasetEditor() {
                                                 {dateString}
                                             </TableCell>
                                             <TableCell align="left">
-                                                {row.value}
+                                                {row.value === ""
+                                                    ? "-"
+                                                    : row.value}
                                             </TableCell>
-                                            <TableCell align="left">
-                                                {row.value}
+                                            <TableCell className="editor-input-cell">
+                                                <label className="editor-input-cell-label">
+                                                    <TextField
+                                                        value={
+                                                            changedValues.has(
+                                                                index,
+                                                            )
+                                                                ? changedValues.get(
+                                                                      index,
+                                                                  )
+                                                                : ""
+                                                        }
+                                                        onChange={(event) =>
+                                                            handleNewValueChange(
+                                                                index,
+                                                                event,
+                                                            )
+                                                        }
+                                                        className="editor-input-field"
+                                                        variant="standard"
+                                                    />
+                                                </label>
                                             </TableCell>
                                         </TableRow>
                                     );

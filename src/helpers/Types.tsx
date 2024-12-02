@@ -17,7 +17,7 @@ export interface DatasetInfo {
 
 export interface Row {
     date: Date;
-    value: number;
+    value: string;
 }
 
 export interface DatasetForEditing {
