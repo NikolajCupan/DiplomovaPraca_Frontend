@@ -7,10 +7,11 @@ import { FetchRequest, RequestResult } from "../../../helpers/Types";
 import Layout from "../../layout/Layout";
 
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function DatasetEditor() {
     const { idDataset } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         loadDataset();
@@ -36,8 +37,12 @@ function DatasetEditor() {
                 CookieManager.processResponse(response);
                 const responseBody = (await response.json()) as RequestResult;
                 console.log(responseBody.data);
+            } else {
+                navigate("/data");
             }
-        } catch {}
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const content = (

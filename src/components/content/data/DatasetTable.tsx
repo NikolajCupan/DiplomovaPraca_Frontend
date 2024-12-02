@@ -50,13 +50,13 @@ function DatasetTable(props: DatasetTableProps) {
             if (response.ok) {
                 CookieManager.processResponse(response);
                 const responseBody = (await response.json()) as RequestResult;
-                const newDatasets = responseBody.data.map(
+                const newDatasets: DatasetInfo[] = responseBody.data.map(
                     (arrayElement: unknown) => arrayElement as DatasetInfo,
                 );
 
                 props.setDatasetInfos((prevDatasets) => [
+                    ...newDatasets.reverse(),
                     ...prevDatasets,
-                    ...newDatasets,
                 ]);
             }
         } catch {}

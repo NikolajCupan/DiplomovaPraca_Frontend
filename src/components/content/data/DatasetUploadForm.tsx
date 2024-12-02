@@ -243,8 +243,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                 resultElement!.innerText = responseBody.message;
 
                 props.setDatasetInfos((prevDatasets) => [
-                    ...prevDatasets,
                     responseBody.data as DatasetInfo,
+                    ...prevDatasets,
                 ]);
 
                 resetForm();
