@@ -1,15 +1,26 @@
-import { Autocomplete, TextField } from "@mui/material";
+import {
+    Autocomplete,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+} from "@mui/material";
 import {
     BACKEND_PATH,
     GET_DATASET_FOR_EDITING,
     GET_DATASETS_OF_USER_PATH,
 } from "../../../helpers/Constants";
 import * as CookieManager from "../../../helpers/CookiesManager";
+import * as Helper from "../../../helpers/Helper";
 import {
     DatasetForEditing,
     DatasetInfo,
     FetchRequest,
     RequestResult,
+    Row,
 } from "../../../helpers/Types";
 import Layout from "../../layout/Layout";
 
@@ -78,6 +89,7 @@ function DatasetEditor() {
     const loadDatasetForEditing = async () => {
         try {
             if (selectedDatasetInfo == null) {
+                setDatasetForEditing(null);
                 return;
             }
 
@@ -101,28 +113,62 @@ function DatasetEditor() {
             if (response.ok) {
                 CookieManager.processResponse(response);
                 const responseBody = (await response.json()) as RequestResult;
-                setDatasetForEditing(responseBody.data);
+
+                let datasetForEditing: DatasetForEditing = {
+                    datasetInfo: {
+                        idDataset: -1,
+                        datasetName: "",
+                        columnName: "",
+                        frequencyType: "",
+                    },
+                    rows: [],
+                };
+
+                datasetForEditing.datasetInfo.idDataset =
+                    responseBody.data.datasetInfoDto.idDataset;
+                datasetForEditing.datasetInfo.datasetName =
+                    responseBody.data.datasetInfoDto.datasetName;
+                datasetForEditing.datasetInfo.columnName =
+                    responseBody.data.datasetInfoDto.columnName;
+                datasetForEditing.datasetInfo.frequencyType =
+                    responseBody.data.datasetInfoDto.frequencyType;
+
+                const rows = responseBody.data.rows;
+                for (let i = 0; i < rows.length; ++i) {
+                    let newRow: Row = {
+                        date: new Date(),
+                        value: -1,
+                    };
+
+                    newRow.date = rows[i].dateTime;
+                    newRow.value = rows[i].value;
+
+                    datasetForEditing.rows.push(newRow);
+                }
+
+                setDatasetForEditing(datasetForEditing);
             } else {
                 navigate("/data");
             }
-        } catch (error) {
-            console.log(error);
-        }
+        } catch {}
     };
 
     const test = () => {
-        console.log("test");
-        console.log(selectedDatasetInfo);
+        console.log("\n\n\n----------");
+        console.log("DATASET INFOS");
         console.log(datasetInfos);
+        console.log("SELECTED DATASET INFO");
+        console.log(selectedDatasetInfo);
+        console.log("DATASET FOR EDITING");
         console.log(datasetForEditing);
     };
 
     const content = (
         <>
-            <button onClick={test}>click</button>
-            <div>
-                <p>j</p>
-            </div>
+            <button style={{ marginBottom: "100px" }} onClick={test}>
+                click
+            </button>
+
             <Autocomplete
                 value={selectedDatasetInfo}
                 options={datasetInfos}
@@ -140,6 +186,60 @@ function DatasetEditor() {
                     setSelectedDatasetInfo(newValue);
                 }}
             />
+
+            <div className="data-table-container">
+                <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
+                    <Table sx={{ minWidth: 650 }}>
+                        <colgroup>
+                            <col style={{ width: "60%" }} />
+                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "20%" }} />
+                        </colgroup>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Dátum (YYYY/MM/DD-HH)</TableCell>
+                                <TableCell>
+                                    {datasetForEditing != null
+                                        ? datasetForEditing.datasetInfo
+                                              .columnName
+                                        : "Data"}
+                                </TableCell>
+                                <TableCell>Editácia</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {datasetForEditing != null ? (
+                                datasetForEditing.rows.map((row, index) => {
+                                    const date = new Date(row.date);
+                                    const dateString = Helper.formatDate(date);
+
+                                    return (
+                                        <TableRow key={index}>
+                                            <TableCell align="left">
+                                                {dateString}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.value}
+                                            </TableCell>
+                                            <TableCell align="left">
+                                                {row.value}
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={3} align="center">
+                                        Zvoľte dataset
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
+
+            <p id="testik"></p>
         </>
     );
 

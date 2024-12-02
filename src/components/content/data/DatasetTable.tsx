@@ -11,7 +11,7 @@ import {
     FetchRequest,
     RequestResult,
 } from "../../../helpers/Types";
-import "./DatasetTable.css";
+import "./Data.css";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
@@ -115,7 +115,7 @@ function DatasetTable(props: DatasetTableProps) {
     return (
         <>
             <div className="data-table-container">
-                <TableContainer>
+                <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table sx={{ minWidth: 650 }}>
                         <colgroup>
                             <col style={{ width: "25%" }} />
