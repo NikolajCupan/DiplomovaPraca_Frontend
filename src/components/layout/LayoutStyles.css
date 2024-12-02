@@ -15,3 +15,11 @@
         font-size: 16px !important;
     }
 }
+
+.no-padding-right {
+    padding-right: 0 !important;
+}
+
+.padding-right {
+    padding-right: 17px !important;
+}

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
     BACKEND_PATH,
     DOWNLOAD_DATASET_PATH,
@@ -31,6 +32,8 @@ interface DatasetTableProps {
 }
 
 function DatasetTable(props: DatasetTableProps) {
+    const navigate = useNavigate();
+
     useEffect(() => {
         loadDatasets();
     }, []);
@@ -105,6 +108,10 @@ function DatasetTable(props: DatasetTableProps) {
         } catch {}
     };
 
+    const handleEditClick = (idDataset: number) => {
+        navigate("/data/edit", { state: { idDataset } });
+    };
+
     return (
         <>
             <div className="data-table-container">
@@ -148,19 +155,17 @@ function DatasetTable(props: DatasetTableProps) {
                                             )}
                                         </TableCell>
                                         <TableCell align="right">
-                                            <a
-                                                href={
-                                                    "/data/edit/" +
-                                                    datasetInfo.idDataset
+                                            <IconButton
+                                                color="primary"
+                                                aria-label="edit-dataset"
+                                                onClick={() =>
+                                                    handleEditClick(
+                                                        datasetInfo.idDataset,
+                                                    )
                                                 }
                                             >
-                                                <IconButton
-                                                    color="primary"
-                                                    aria-label="edit-dataset"
-                                                >
-                                                    <ModeEditIcon />
-                                                </IconButton>
-                                            </a>
+                                                <ModeEditIcon />
+                                            </IconButton>
                                             <IconButton
                                                 color="primary"
                                                 aria-label="download-dataset"

@@ -14,7 +14,7 @@ export const ROUTES = [
         element: <Data />,
     },
     {
-        path: "/data/edit/:idDataset",
+        path: "/data/edit",
         element: <DatasetEditor />,
     },
     {

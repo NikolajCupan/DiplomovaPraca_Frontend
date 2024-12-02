@@ -8,6 +8,11 @@ export interface RequestResult {
     data: any;
 }
 
+export interface DatasetForEditing {
+    datasetInfo: DatasetInfo;
+    rows: [Date, number][];
+}
+
 export interface DatasetInfo {
     idDataset: number;
     datasetName: string;

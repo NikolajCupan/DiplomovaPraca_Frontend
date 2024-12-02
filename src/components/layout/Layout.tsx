@@ -26,10 +26,18 @@ function ResponsiveAppBar(props: InternalComponentProps) {
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
+
+        document.body.classList.add("no-padding-right");
+        document.getElementById("content")!.classList.add("padding-right");
+        document.getElementById("header")!.classList.add("padding-right");
     };
 
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
+
+        document.body.classList.remove("no-padding-right");
+        document.getElementById("content")!.classList.remove("padding-right");
+        document.getElementById("header")!.classList.remove("padding-right");
     };
 
     useEffect(() => {
@@ -38,7 +46,7 @@ function ResponsiveAppBar(props: InternalComponentProps) {
 
     return (
         <>
-            <AppBar position="static">
+            <AppBar id="header" position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <Box
