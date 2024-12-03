@@ -1,5 +1,6 @@
 import {
     Autocomplete,
+    Button,
     Table,
     TableBody,
     TableCell,
@@ -10,6 +11,7 @@ import {
 } from "@mui/material";
 import {
     BACKEND_PATH,
+    EDIT_DATASET,
     GET_DATASET_FOR_EDITING,
     GET_DATASETS_OF_USER_PATH,
 } from "../../../helpers/Constants";
@@ -25,6 +27,7 @@ import {
 import Layout from "../../layout/Layout";
 import "./DatasetEditor.css";
 
+import SendIcon from "@mui/icons-material/Send";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -42,6 +45,9 @@ function DatasetEditor() {
         new Map(),
     );
 
+    const [buttonConfirmDisabled, setButtonConfirmDisabled] =
+        useState<boolean>(true);
+
     useEffect(() => {
         loadDatasetInfos();
     }, []);
@@ -52,11 +58,16 @@ function DatasetEditor() {
 
     useEffect(() => {
         loadDatasetForEditing();
-        setChangedValues(() => {
-            const newMap = new Map();
-            return newMap;
-        });
+        clearChangedValuesInputs();
     }, [selectedDatasetInfo]);
+
+    useEffect(() => {
+        if (changedValues.size > 0) {
+            setButtonConfirmDisabled(false);
+        } else {
+            setButtonConfirmDisabled(true);
+        }
+    }, [changedValues]);
 
     const loadDatasetInfos = async () => {
         try {
@@ -193,6 +204,77 @@ function DatasetEditor() {
         }
     };
 
+    const handleConfirmChanges = async () => {
+        if (buttonConfirmDisabled) {
+            return;
+        }
+
+        let changedRows: Row[] = [];
+
+        changedValues.forEach((_, key) => {
+            const row: HTMLTableRowElement = document.getElementById(
+                "dataset-for-editing-table-row-" + key,
+            ) as HTMLTableRowElement;
+
+            let changedRow: Row = { date: "", value: "" };
+
+            const cells: HTMLTableCellElement[] = [...row.cells];
+            cells.forEach((element: HTMLTableCellElement) => {
+                if (
+                    element.classList.contains("dataset-for-editing-date-cell")
+                ) {
+                    changedRow.date = element.textContent!;
+                } else if (
+                    element.classList.contains(
+                        "dataset-for-editing-changed-value-cell",
+                    )
+                ) {
+                    changedRow.value = element.querySelector("input")!.value;
+                }
+            });
+
+            changedRows.push(changedRow);
+        });
+
+        if (changedRows.length === 0) {
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append(
+                "idDataset",
+                selectedDatasetInfo!.idDataset.toString(),
+            );
+            formData.append("rows", JSON.stringify(changedRows));
+
+            const request: FetchRequest = {
+                url: BACKEND_PATH + EDIT_DATASET,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
+
+            CookieManager.prepareRequest(request);
+            const response = await fetch(request.url, request.options);
+
+            if (response.ok) {
+                CookieManager.processResponse(response);
+                loadDatasetForEditing();
+                clearChangedValuesInputs();
+            } else {
+            }
+        } catch {}
+    };
+
+    const clearChangedValuesInputs = () => {
+        setChangedValues(() => {
+            const newMap = new Map();
+            return newMap;
+        });
+    };
+
     const test = () => {
         console.log("\n\n\n----------");
         console.log("DATASET INFOS");
@@ -234,11 +316,14 @@ function DatasetEditor() {
 
             <div className="data-table-container">
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
-                    <Table sx={{ minWidth: 650 }}>
+                    <Table
+                        id="dataset-for-editing-table"
+                        sx={{ minWidth: 650 }}
+                    >
                         <colgroup>
-                            <col style={{ width: "50%" }} />
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "60%" }} />
+                            <col style={{ minWidth: "200px", width: "20%" }} />
+                            <col style={{ minWidth: "200px", width: "20%" }} />
                         </colgroup>
                         <TableHead>
                             <TableRow>
@@ -259,16 +344,28 @@ function DatasetEditor() {
                                     const dateString = Helper.formatDate(date);
 
                                     return (
-                                        <TableRow key={index}>
-                                            <TableCell align="left">
+                                        <TableRow
+                                            id={
+                                                "dataset-for-editing-table-row-" +
+                                                index
+                                            }
+                                            key={index}
+                                        >
+                                            <TableCell
+                                                className="dataset-for-editing-date-cell"
+                                                align="left"
+                                            >
                                                 {dateString}
                                             </TableCell>
-                                            <TableCell align="left">
+                                            <TableCell
+                                                className="dataset-for-editing-original-value-cell"
+                                                align="left"
+                                            >
                                                 {row.value === ""
                                                     ? "-"
                                                     : row.value}
                                             </TableCell>
-                                            <TableCell className="editor-input-cell">
+                                            <TableCell className="dataset-for-editing-changed-value-cell editor-input-cell">
                                                 <label className="editor-input-cell-label">
                                                     <TextField
                                                         value={
@@ -286,7 +383,6 @@ function DatasetEditor() {
                                                                 event,
                                                             )
                                                         }
-                                                        className="editor-input-field"
                                                         variant="standard"
                                                     />
                                                 </label>
@@ -304,6 +400,19 @@ function DatasetEditor() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                <Button
+                    id="data-upload-submit-button"
+                    disabled={buttonConfirmDisabled}
+                    style={{ marginTop: "50px", marginBottom: "20px" }}
+                    type="submit"
+                    size="large"
+                    variant="contained"
+                    endIcon={<SendIcon />}
+                    onClick={handleConfirmChanges}
+                >
+                    Potvrdiť zmeny
+                </Button>
             </div>
 
             <p id="testik"></p>
