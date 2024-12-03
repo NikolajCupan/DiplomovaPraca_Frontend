@@ -5,7 +5,7 @@ import Snackbar, {
     SnackbarOrigin,
 } from "@mui/material/Snackbar";
 import { TransitionProps } from "@mui/material/transitions";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 
 interface State extends SnackbarOrigin {
     open: boolean;
@@ -20,7 +20,7 @@ interface State extends SnackbarOrigin {
 }
 
 export interface NotificationRef {
-    open: () => void;
+    open: (message?: string, color?: string, backgroundColor?: string) => void;
 }
 
 interface NotificationProps {
@@ -40,26 +40,35 @@ const Notification = forwardRef<NotificationRef, NotificationProps>(
             vertical: "top",
             horizontal: "center",
         });
+        const timeoutRef = useRef<number | undefined>(undefined);
 
         useImperativeHandle(ref, () => ({
-            open: () => {
+            open: (
+                message?: string,
+                color?: string,
+                backgroundColor?: string,
+            ) => {
                 setNotificationState((prevState) => ({
                     ...prevState,
                     open: true,
+                    message: message ? message : prevState.message,
+                    color: color ? color : prevState.color,
+                    backgroundColor: backgroundColor
+                        ? backgroundColor
+                        : prevState.backgroundColor,
                 }));
+
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = setTimeout(function () {
+                    setNotificationState((prevState) => ({
+                        ...prevState,
+                        open: false,
+                    }));
+                }, 3000);
             },
         }));
 
-        const openNotification = () => {
-            if (!notificationState.open) {
-                setNotificationState((prevState) => ({
-                    ...prevState,
-                    open: true,
-                }));
-            }
-        };
-
-        const handleClose = (_: any, reason?: SnackbarCloseReason) => {
+        const handleClose = (event: any, reason?: SnackbarCloseReason) => {
             if (reason === null) {
                 return;
             }
@@ -76,9 +85,7 @@ const Notification = forwardRef<NotificationRef, NotificationProps>(
             <div>
                 <Snackbar
                     open={notificationState.open}
-                    autoHideDuration={3000}
                     message="Note archived"
-                    onClose={handleClose}
                     anchorOrigin={{
                         vertical: notificationState.vertical,
                         horizontal: notificationState.horizontal,

@@ -103,7 +103,6 @@ function DatasetTable(props: DatasetTableProps) {
 
                 window.URL.revokeObjectURL(blobUrl);
             } else {
-                console.log("not ok");
             }
         } catch {}
     };

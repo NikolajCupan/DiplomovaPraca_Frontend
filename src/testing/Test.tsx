@@ -1,7 +1,8 @@
-import { useRef } from "react";
 import Notification, {
     NotificationRef,
 } from "../components/common/Notification";
+
+import { useRef } from "react";
 
 function Test() {
     const notificationRef = useRef<NotificationRef>(null);
