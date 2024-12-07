@@ -55,35 +55,19 @@ export default function CustomizedMenus() {
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
-
-        if (!document.body.classList.contains("no-padding-right")) {
-            document.body.classList.add("no-padding-right");
-            document.body.classList.add("mini-menu-no-padding-right");
-
-            document.getElementById("content")!.classList.add("padding-right");
-            document.getElementById("header")!.classList.add("padding-right");
-        }
     };
 
     const handleClose = () => {
         setAnchorEl(null);
-
-        if (document.body.classList.contains("mini-menu-no-padding-right")) {
-            document.body.classList.remove("no-padding-right");
-            document.body.classList.remove("mini-menu-no-padding-right");
-
-            document
-                .getElementById("content")!
-                .classList.remove("padding-right");
-            document
-                .getElementById("header")!
-                .classList.remove("padding-right");
-        }
     };
 
     useEffect(() => {
         window.addEventListener("resize", handleClose);
-    });
+
+        return () => {
+            window.removeEventListener("resize", handleClose);
+        };
+    }, []);
 
     return (
         <div>

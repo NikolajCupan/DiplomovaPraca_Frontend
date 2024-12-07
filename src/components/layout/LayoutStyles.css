@@ -16,14 +16,6 @@
     }
 }
 
-.no-padding-right {
-    padding-right: 0 !important;
-}
-
-.padding-right {
-    padding-right: 17px !important;
-}
-
 .mini-menu-items * {
     min-height: 0 !important;
 }

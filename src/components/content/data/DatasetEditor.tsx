@@ -139,6 +139,7 @@ function DatasetEditor() {
                         idDataset: -1,
                         datasetName: "",
                         columnName: "",
+                        rowsCount: -1,
                         frequencyType: "",
                     },
                     rows: [],
@@ -150,6 +151,8 @@ function DatasetEditor() {
                     responseBody.data.datasetInfoDto.datasetName;
                 datasetForEditing.datasetInfo.columnName =
                     responseBody.data.datasetInfoDto.columnName;
+                datasetForEditing.datasetInfo.rowsCount =
+                    responseBody.data.datasetInfoDto.rowsCount;
                 datasetForEditing.datasetInfo.frequencyType =
                     responseBody.data.datasetInfoDto.frequencyType;
 
