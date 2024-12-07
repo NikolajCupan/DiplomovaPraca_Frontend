@@ -23,3 +23,7 @@
 .padding-right {
     padding-right: 17px !important;
 }
+
+.mini-menu-items * {
+    min-height: 0 !important;
+}

@@ -85,6 +85,7 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                         md: "none",
                                     },
                                 }}
+                                className="mini-menu-items"
                             >
                                 <div className="custom-mini-menu-item">
                                     <MenuData />

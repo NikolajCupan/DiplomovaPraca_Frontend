@@ -14,5 +14,11 @@ a {
 body,
 html,
 .custom-font {
+    letter-spacing: normal !important;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
+}
+
+* {
+    letter-spacing: normal !important;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
 }
