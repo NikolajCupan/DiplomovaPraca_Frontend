@@ -18,6 +18,8 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DownloadIcon from "@mui/icons-material/Download";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import {
+    Box,
+    Button,
     IconButton,
     Table,
     TableBody,
@@ -115,7 +117,51 @@ function DatasetTable(props: DatasetTableProps) {
     };
 
     const handleDeleteClick = (idDataset: number) => {
-        modalRef.current!.open(<p>hi</p>);
+        modalRef.current!.open(
+            <>
+                <p
+                    style={{
+                        marginTop: "0",
+                        fontWeight: "bold",
+                        fontSize: "25px",
+                    }}
+                >
+                    Potvrdenie zmazania
+                </p>
+                <p>
+                    Ste si istý, že chcete vymazať daný dataset? Akciu nie je
+                    možné vrátiť späť
+                </p>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: "30px",
+                    }}
+                >
+                    <Button
+                        type="submit"
+                        size="medium"
+                        variant="contained"
+                        onClick={modalRef.current!.close}
+                        style={{ backgroundColor: "green" }}
+                    >
+                        Zrušiť
+                    </Button>
+                    <Button
+                        type="submit"
+                        size="medium"
+                        variant="contained"
+                        style={{ backgroundColor: "red" }}
+                    >
+                        Zmazať
+                    </Button>
+                </Box>
+            </>,
+        );
     };
 
     return (
