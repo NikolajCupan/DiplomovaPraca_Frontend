@@ -175,9 +175,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        const resultElement = document.getElementById(
-            "data-upload-submit-result",
-        );
         event.preventDefault();
 
         if (datasetName.trim() === "" || !file || frequency.trim() === "") {
@@ -460,7 +457,9 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                         variant="outlined"
                                         value={dateColumnName}
                                         slotProps={{
-                                            htmlInput: { maxLength: 100 },
+                                            htmlInput: {
+                                                maxLength: 100,
+                                            },
                                         }}
                                         onChange={(event) => {
                                             handleDateColumnNameChange(
@@ -478,7 +477,9 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                         variant="outlined"
                                         value={dataColumnName}
                                         slotProps={{
-                                            htmlInput: { maxLength: 100 },
+                                            htmlInput: {
+                                                maxLength: 100,
+                                            },
                                         }}
                                         onChange={(event) => {
                                             handleDataColumnNameChange(
@@ -547,7 +548,10 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                         <Button
                             id="data-upload-submit-button"
                             disabled={submitDisabled}
-                            style={{ marginTop: "20px", marginBottom: "20px" }}
+                            style={{
+                                marginTop: "20px",
+                                marginBottom: "20px",
+                            }}
                             type="submit"
                             size="large"
                             variant="contained"
@@ -557,18 +561,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                         </Button>
                     </form>
                 </fieldset>
-                <p
-                    id="data-upload-submit-result"
-                    className="data-upload-submit-result-invisible"
-                    style={{
-                        marginTop: "0",
-                        marginBottom: "30px",
-                        fontWeight: "bold",
-                        fontSize: "20px",
-                    }}
-                >
-                    &nbsp;
-                </p>
             </div>
         </>
     );

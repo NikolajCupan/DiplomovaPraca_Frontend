@@ -1,9 +1,6 @@
 import { SnackbarContent } from "@mui/material";
 import Slide from "@mui/material/Slide";
-import Snackbar, {
-    SnackbarCloseReason,
-    SnackbarOrigin,
-} from "@mui/material/Snackbar";
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import { TransitionProps } from "@mui/material/transitions";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 
@@ -68,19 +65,6 @@ const Notification = forwardRef<NotificationRef, NotificationProps>(
             },
         }));
 
-        const handleClose = (event: any, reason?: SnackbarCloseReason) => {
-            if (reason === null) {
-                return;
-            }
-
-            if (reason === "timeout") {
-                setNotificationState((prevState) => ({
-                    ...prevState,
-                    open: false,
-                }));
-            }
-        };
-
         return (
             <div>
                 <Snackbar
@@ -101,7 +85,7 @@ const Notification = forwardRef<NotificationRef, NotificationProps>(
                             justifyContent: "center",
                             alignItems: "center",
                             textAlign: "center",
-                            borderRadius: "15px",
+                            borderRadius: "var(--default-border-radius)",
                         }}
                     />
                 </Snackbar>

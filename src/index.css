@@ -1,5 +1,6 @@
 :root {
     --primary-color: #1976d2;
+    --default-border-radius: 15px;
 }
 
 body {

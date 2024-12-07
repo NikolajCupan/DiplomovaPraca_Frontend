@@ -11,8 +11,10 @@ import {
     FetchRequest,
     RequestResult,
 } from "../../../helpers/Types";
+import Modal, { ModalRef } from "../../common/Modal";
 import "./Data.css";
 
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import DownloadIcon from "@mui/icons-material/Download";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import {
@@ -24,7 +26,7 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 interface DatasetTableProps {
     datasetInfos: DatasetInfo[];
@@ -32,6 +34,7 @@ interface DatasetTableProps {
 }
 
 function DatasetTable(props: DatasetTableProps) {
+    const modalRef = useRef<ModalRef>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -111,22 +114,30 @@ function DatasetTable(props: DatasetTableProps) {
         navigate("/data/edit", { state: { idDataset } });
     };
 
+    const handleDeleteClick = (idDataset: number) => {
+        modalRef.current!.open(<p>hi</p>);
+    };
+
     return (
         <>
+            <Modal ref={modalRef}></Modal>
+
             <div className="data-table-container">
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table sx={{ minWidth: 650 }}>
                         <colgroup>
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "25%" }} />
-                            <col style={{ width: "25%" }} />
+                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "20%" }} />
+                            <col style={{ width: "20%" }} />
                         </colgroup>
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell align="left">Názov</TableCell>
                                 <TableCell align="left">Frekvencia</TableCell>
+                                <TableCell align="left">Počet dát</TableCell>
                                 <TableCell align="right">Upraviť</TableCell>
                             </TableRow>
                         </TableHead>
@@ -153,7 +164,24 @@ function DatasetTable(props: DatasetTableProps) {
                                                 datasetInfo.frequencyType,
                                             )}
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="left">
+                                            {datasetInfo.rowsCount}
+                                        </TableCell>
+                                        <TableCell
+                                            align="right"
+                                            sx={{ minWidth: "125px" }}
+                                        >
+                                            <IconButton
+                                                color="primary"
+                                                aria-label="delete-dataset"
+                                                onClick={() =>
+                                                    handleDeleteClick(
+                                                        datasetInfo.idDataset,
+                                                    )
+                                                }
+                                            >
+                                                <DeleteForeverIcon />
+                                            </IconButton>
                                             <IconButton
                                                 color="primary"
                                                 aria-label="edit-dataset"
@@ -181,7 +209,7 @@ function DatasetTable(props: DatasetTableProps) {
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={4} align="center">
+                                    <TableCell colSpan={5} align="center">
                                         Žiadne dáta nie sú k dispozícii
                                     </TableCell>
                                 </TableRow>

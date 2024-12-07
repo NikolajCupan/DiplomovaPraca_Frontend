@@ -12,6 +12,7 @@ export interface DatasetInfo {
     idDataset: number;
     datasetName: string;
     columnName: string;
+    rowsCount: number;
     frequencyType: string;
 }
 

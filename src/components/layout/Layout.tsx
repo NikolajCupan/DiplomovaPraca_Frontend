@@ -85,6 +85,14 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                         md: "none",
                                     },
                                 }}
+                                slotProps={{
+                                    paper: {
+                                        sx: {
+                                            borderRadius:
+                                                "var(--default-border-radius)",
+                                        },
+                                    },
+                                }}
                                 className="mini-menu-items"
                             >
                                 <div className="custom-mini-menu-item">
