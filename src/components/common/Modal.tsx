@@ -35,7 +35,7 @@ const Modal = forwardRef<ModalRef>((_, ref) => {
         },
         close: () => {
             setOpen(false);
-        }
+        },
     }));
 
     return (

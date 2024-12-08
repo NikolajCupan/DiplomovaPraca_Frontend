@@ -3,8 +3,8 @@
     --default-border-radius: 15px;
 }
 
-body {
-    margin: 0;
+html {
+    overflow-y: scroll;
 }
 
 a {

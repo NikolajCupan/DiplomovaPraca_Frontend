@@ -315,6 +315,7 @@ function DatasetEditor() {
                 onChange={(_, newValue) => {
                     setSelectedDatasetInfo(newValue);
                 }}
+                noOptionsText="Daný dataset neexistuje"
             />
 
             <div className="data-table-container">
