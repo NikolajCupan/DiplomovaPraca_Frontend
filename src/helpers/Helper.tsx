@@ -8,7 +8,7 @@ export function translateFrequency(frequency: string) {
             return "týždenná";
         case "monthly":
             return "mesačná";
-        case "quaterly":
+        case "quarterly":
             return "štvrťročná";
         case "yearly":
             return "ročná";
