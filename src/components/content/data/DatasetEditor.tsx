@@ -1,5 +1,6 @@
 import {
     Autocomplete,
+    Box,
     Button,
     Paper,
     styled,
@@ -27,10 +28,12 @@ import {
     RequestResult,
     Row,
 } from "../../../helpers/Types";
+import Modal, { ModalRef } from "../../common/Modal";
 import Notification, { NotificationRef } from "../../common/Notification";
 import Layout from "../../layout/Layout";
 import "./DatasetEditor.css";
 
+import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -43,6 +46,8 @@ const Item = styled(Paper)(({}) => ({
 
 function DatasetEditor() {
     const notificationRef = useRef<NotificationRef>(null);
+
+    const modalRef = useRef<ModalRef>(null);
     const openNotification = (
         message?: string,
         color?: string,
@@ -60,9 +65,14 @@ function DatasetEditor() {
     const [datasetForEditing, setDatasetForEditing] =
         useState<DatasetForEditing | null>(null);
 
+    const [newColumnName, setNewColumnName] = useState<string>("");
     const [changedValues, setChangedValues] = useState<Map<number, string>>(
         new Map(),
     );
+
+    const handleNewColumnNameChange = (newColumnName: string) => {
+        setNewColumnName(newColumnName);
+    };
 
     const [buttonConfirmDisabled, setButtonConfirmDisabled] =
         useState<boolean>(true);
@@ -81,12 +91,12 @@ function DatasetEditor() {
     }, [selectedDatasetInfo]);
 
     useEffect(() => {
-        if (changedValues.size > 0) {
-            setButtonConfirmDisabled(false);
-        } else {
+        if (changedValues.size <= 0 && newColumnName.trim() === "") {
             setButtonConfirmDisabled(true);
+        } else {
+            setButtonConfirmDisabled(false);
         }
-    }, [changedValues]);
+    }, [newColumnName, changedValues]);
 
     const loadDatasetInfos = async () => {
         try {
@@ -258,12 +268,14 @@ function DatasetEditor() {
             changedRows.push(changedRow);
         });
 
-        if (changedRows.length === 0) {
+        if (changedRows.length === 0 && newColumnName.trim() === "") {
             return;
         }
 
         try {
             const formData = new FormData();
+            formData.append("newColumnName", newColumnName);
+
             formData.append(
                 "idDataset",
                 selectedDatasetInfo!.idDataset.toString(),
@@ -299,6 +311,212 @@ function DatasetEditor() {
             const newMap = new Map();
             return newMap;
         });
+        setNewColumnName("");
+    };
+
+    const handleNewStartDataCountChange = (value: number) => {
+        const inputElement = document.getElementById(
+            "new-start-data-count-hidden",
+        ) as HTMLInputElement;
+        inputElement.value = value.toString();
+    };
+
+    const handleNewEndDataCountChange = (value: number) => {
+        const inputElement = document.getElementById(
+            "new-end-data-count-hidden",
+        ) as HTMLInputElement;
+        inputElement.value = value.toString();
+    };
+
+    const handleNewDataModalClose = () => {
+        modalRef.current!.close();
+
+        const inputElementStart = document.getElementById(
+            "new-start-data-count-hidden",
+        ) as HTMLInputElement;
+        inputElementStart.value = "0";
+
+        const inputElementEnd = document.getElementById(
+            "new-end-data-count-hidden",
+        ) as HTMLInputElement;
+        inputElementEnd.value = "0";
+    };
+
+    const handleNewDataModalConfirm = () => {
+        const inputElementStart = document.getElementById(
+            "new-start-data-count-hidden",
+        ) as HTMLInputElement;
+        const inputElementEnd = document.getElementById(
+            "new-end-data-count-hidden",
+        ) as HTMLInputElement;
+
+        let startCount = parseInt(inputElementStart.value);
+        let endCount = parseInt(inputElementEnd.value);
+
+        if (Number.isNaN(startCount) && Number.isNaN(endCount)) {
+            notificationRef.current!.open("Neplatné hodnoty", "white", "red");
+
+            return;
+        }
+
+        startCount = Number.isNaN(startCount) ? 0 : startCount;
+        endCount = Number.isNaN(endCount) ? 0 : endCount;
+
+        if (
+            startCount < 0 ||
+            endCount < 0 ||
+            startCount > 100 ||
+            endCount > 100
+        ) {
+            notificationRef.current!.open(
+                "Hodnoty musia byť z rozsahu <0, 100>",
+                "white",
+                "red",
+            );
+        }
+
+        const frequency = datasetForEditing!.datasetInfo.frequencyType;
+
+        let firstRow = datasetForEditing!.rows[0];
+        const newStartRows: Row[] = [];
+        for (let i = 0; i < startCount; ++i) {
+            let newRow: Row = {
+                date: new Date(),
+                value: "",
+            };
+
+            newRow.date = Helper.getPreviousDate(
+                firstRow.date as Date,
+                frequency,
+            );
+
+            newStartRows.unshift(newRow);
+            firstRow = newStartRows[0];
+        }
+
+        let lastRow =
+            datasetForEditing!.rows[datasetForEditing!.rows.length - 1];
+        const newEndRows: Row[] = [];
+        for (let i = 0; i < endCount; ++i) {
+            let newRow: Row = {
+                date: new Date(),
+                value: "",
+            };
+
+            newRow.date = Helper.getNextDate(lastRow.date as Date, frequency);
+
+            newEndRows.push(newRow);
+            lastRow = newEndRows[newEndRows.length - 1];
+        }
+
+        setDatasetForEditing((prevState) => {
+            if (prevState) {
+                return {
+                    ...prevState,
+                    rows: [...newStartRows, ...prevState.rows, ...newEndRows],
+                };
+            }
+            return prevState;
+        });
+
+        const originalMap = changedValues;
+        const newMap = new Map();
+
+        originalMap.forEach((value, index) => {
+            newMap.set(index + startCount, value);
+        });
+
+        setChangedValues(newMap);
+    };
+
+    const handleAddDataClick = () => {
+        modalRef.current!.open(
+            <>
+                <p
+                    style={{
+                        marginTop: "0",
+                        fontWeight: "bold",
+                        fontSize: "25px",
+                    }}
+                >
+                    Pridanie dát
+                </p>
+
+                <Grid container>
+                    <Grid size={12}>
+                        <TextField
+                            id="dataset-data-new-data-start"
+                            label="Počet nových dát na začiatku"
+                            variant="outlined"
+                            type="number"
+                            style={{ width: "100%" }}
+                            onChange={(event) =>
+                                handleNewStartDataCountChange(
+                                    parseInt(event.currentTarget.value),
+                                )
+                            }
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true,
+                                },
+                            }}
+                            defaultValue={0}
+                        />
+                    </Grid>
+
+                    <Grid size={12}>
+                        <TextField
+                            id="dataset-data-new-data-end"
+                            label="Počet nových dát na konci"
+                            variant="outlined"
+                            style={{ width: "100%", marginTop: "30px" }}
+                            type="number"
+                            onChange={(event) =>
+                                handleNewEndDataCountChange(
+                                    parseInt(event.currentTarget.value),
+                                )
+                            }
+                            slotProps={{
+                                inputLabel: {
+                                    shrink: true,
+                                },
+                            }}
+                            defaultValue={0}
+                        />
+                    </Grid>
+                </Grid>
+
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: "30px",
+                    }}
+                >
+                    <Button
+                        type="submit"
+                        size="medium"
+                        variant="contained"
+                        style={{ backgroundColor: "red" }}
+                        onClick={handleNewDataModalClose}
+                    >
+                        Zrušiť
+                    </Button>
+                    <Button
+                        type="submit"
+                        size="medium"
+                        variant="contained"
+                        style={{ backgroundColor: "green" }}
+                        onClick={handleNewDataModalConfirm}
+                    >
+                        Pridať
+                    </Button>
+                </Box>
+            </>,
+        );
     };
 
     const test = () => {
@@ -325,9 +543,14 @@ function DatasetEditor() {
                 backgroundColor="black"
             />
 
+            <Modal ref={modalRef}></Modal>
+
             <button style={{ marginBottom: "100px" }} onClick={test}>
                 click
             </button>
+
+            <input type="hidden" id="new-start-data-count-hidden" value="0" />
+            <input type="hidden" id="new-end-data-count-hidden" value="0" />
 
             <Autocomplete
                 value={selectedDatasetInfo}
@@ -452,6 +675,13 @@ function DatasetEditor() {
                                         },
                                     }}
                                     style={{ width: "100%" }}
+                                    value={newColumnName}
+                                    onChange={(event) => {
+                                        handleNewColumnNameChange(
+                                            event.currentTarget.value,
+                                        );
+                                    }}
+                                    disabled={selectedDatasetInfo === null}
                                 />
                             </div>
                         </Item>
@@ -462,8 +692,9 @@ function DatasetEditor() {
                                 <Button
                                     size="large"
                                     variant="contained"
-                                    endIcon={<SendIcon />}
-                                    onClick={handleConfirmChanges}
+                                    endIcon={<AddIcon />}
+                                    onClick={handleAddDataClick}
+                                    disabled={selectedDatasetInfo === null}
                                 >
                                     Pridať dáta
                                 </Button>
