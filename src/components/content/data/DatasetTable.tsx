@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {
     BACKEND_PATH,
+    DELETE_DATASET,
     DOWNLOAD_DATASET_PATH,
     GET_DATASETS_OF_USER_PATH,
 } from "../../../helpers/Constants";
@@ -33,6 +34,11 @@ import { Dispatch, SetStateAction, useEffect, useRef } from "react";
 interface DatasetTableProps {
     datasetInfos: DatasetInfo[];
     setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
+    openNotification: (
+        message?: string,
+        color?: string,
+        backgroundColor?: string,
+    ) => void;
 }
 
 function DatasetTable(props: DatasetTableProps) {
@@ -156,12 +162,56 @@ function DatasetTable(props: DatasetTableProps) {
                         size="medium"
                         variant="contained"
                         style={{ backgroundColor: "red" }}
+                        onClick={() => handleDeleteDataset(idDataset)}
                     >
                         Zmazať
                     </Button>
                 </Box>
             </>,
         );
+    };
+
+    const handleDeleteDataset = async (idDataset: number) => {
+        try {
+            const formData = new FormData();
+            formData.append("idDataset", idDataset.toString());
+
+            const request: FetchRequest = {
+                url: BACKEND_PATH + DELETE_DATASET,
+                options: {
+                    method: "delete",
+                    body: formData,
+                },
+            };
+
+            CookieManager.prepareRequest(request);
+            const response = await fetch(request.url, request.options);
+            modalRef.current!.close();
+
+            if (response.ok) {
+                CookieManager.processResponse(response);
+                props.openNotification(
+                    "Dataset bol úspešne zmazaný",
+                    "white",
+                    "green",
+                );
+
+                const responseBody = (await response.json()) as RequestResult;
+                const deletedDatasetInfo = responseBody.data as DatasetInfo;
+                props.setDatasetInfos((prevDatasets) =>
+                    prevDatasets.filter(
+                        (dataset) =>
+                            dataset.idDataset !== deletedDatasetInfo.idDataset,
+                    ),
+                );
+            } else {
+                props.openNotification(
+                    "Dataset nebolo možné zmazať",
+                    "white",
+                    "red",
+                );
+            }
+        } catch {}
     };
 
     return (

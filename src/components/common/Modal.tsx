@@ -29,7 +29,6 @@ const Modal = forwardRef<ModalRef>((_, ref) => {
 
     useImperativeHandle(ref, () => ({
         open: (innerComponent: React.ReactNode) => {
-            console.log("open");
             setContent(innerComponent);
             setOpen(true);
         },

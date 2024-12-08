@@ -38,7 +38,6 @@ function ResponsiveAppBar(props: InternalComponentProps) {
     }, []);
 
     const handleResize = () => {
-        console.log("changes");
         const header = document.getElementById("header");
         const headerContainer = document.getElementById("header-container");
         headerContainer!.setAttribute(

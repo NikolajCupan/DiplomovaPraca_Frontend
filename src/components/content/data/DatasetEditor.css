@@ -10,3 +10,38 @@
     padding-top: 16px !important;
     padding-bottom: 16px !important;
 }
+
+.dataset-data-new-column-name {
+    width: 80%;
+}
+
+@media (max-width: 970px) {
+    .dataset-data-new-column-name {
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .dataset-data-new-column-name {
+        width: 50%;
+    }
+}
+
+.dataset-data-new-column-name,
+.dataset-data-add-data-button,
+.dataset-data-submit-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px !important;
+    margin-bottom: 30px !important;
+    height: 30px;
+}
+
+@media (max-width: 900px) {
+    .dataset-data-new-column-name,
+    .dataset-data-add-data-button {
+        margin-bottom: 10px !important;
+    }
+}

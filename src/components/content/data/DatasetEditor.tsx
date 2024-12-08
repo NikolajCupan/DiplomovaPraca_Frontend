@@ -1,6 +1,8 @@
 import {
     Autocomplete,
     Button,
+    Paper,
+    styled,
     Table,
     TableBody,
     TableCell,
@@ -9,6 +11,7 @@ import {
     TableRow,
     TextField,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import {
     BACKEND_PATH,
     EDIT_DATASET,
@@ -24,14 +27,30 @@ import {
     RequestResult,
     Row,
 } from "../../../helpers/Types";
+import Notification, { NotificationRef } from "../../common/Notification";
 import Layout from "../../layout/Layout";
 import "./DatasetEditor.css";
 
 import SendIcon from "@mui/icons-material/Send";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
+const Item = styled(Paper)(({}) => ({
+    textAlign: "center",
+    boxShadow: "none",
+    border: "none",
+}));
+
 function DatasetEditor() {
+    const notificationRef = useRef<NotificationRef>(null);
+    const openNotification = (
+        message?: string,
+        color?: string,
+        backgroundColor?: string,
+    ) => {
+        notificationRef.current!.open(message, color, backgroundColor);
+    };
+
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -261,12 +280,16 @@ function DatasetEditor() {
 
             CookieManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
+            const responseBody = (await response.json()) as RequestResult;
 
             if (response.ok) {
                 CookieManager.processResponse(response);
+                openNotification(responseBody.message, "white", "green");
+
                 loadDatasetForEditing();
                 clearChangedValuesInputs();
             } else {
+                openNotification(responseBody.message, "white", "red");
             }
         } catch {}
     };
@@ -295,6 +318,13 @@ function DatasetEditor() {
 
     const content = (
         <>
+            <Notification
+                ref={notificationRef}
+                message="n/a"
+                color="white"
+                backgroundColor="black"
+            />
+
             <button style={{ marginBottom: "100px" }} onClick={test}>
                 click
             </button>
@@ -405,18 +435,59 @@ function DatasetEditor() {
                     </Table>
                 </TableContainer>
 
-                <Button
-                    id="data-upload-submit-button"
-                    disabled={buttonConfirmDisabled}
-                    style={{ marginTop: "50px", marginBottom: "20px" }}
-                    type="submit"
-                    size="large"
-                    variant="contained"
-                    endIcon={<SendIcon />}
-                    onClick={handleConfirmChanges}
-                >
-                    Potvrdiť zmeny
-                </Button>
+                <Grid container>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                        <Item>
+                            <div
+                                className="dataset-data-new-column-name"
+                                style={{ width: "100%" }}
+                            >
+                                <TextField
+                                    id="dataset-data-new-column-name"
+                                    label="Nový názov stĺpca s dátami"
+                                    variant="outlined"
+                                    slotProps={{
+                                        htmlInput: {
+                                            maxLength: 100,
+                                        },
+                                    }}
+                                    style={{ width: "100%" }}
+                                />
+                            </div>
+                        </Item>
+                    </Grid>
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                        <Item>
+                            <div className="dataset-data-add-data-button">
+                                <Button
+                                    size="large"
+                                    variant="contained"
+                                    endIcon={<SendIcon />}
+                                    onClick={handleConfirmChanges}
+                                >
+                                    Pridať dáta
+                                </Button>
+                            </div>
+                        </Item>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 4 }}>
+                        <Item>
+                            <div className="dataset-data-submit-button">
+                                <Button
+                                    id="data-upload-submit-button"
+                                    disabled={buttonConfirmDisabled}
+                                    type="submit"
+                                    size="large"
+                                    variant="contained"
+                                    endIcon={<SendIcon />}
+                                    onClick={handleConfirmChanges}
+                                >
+                                    Potvrdiť zmeny
+                                </Button>
+                            </div>
+                        </Item>
+                    </Grid>
+                </Grid>
             </div>
 
             <p id="testik"></p>

@@ -1,11 +1,9 @@
-import { useRef } from "react";
 import * as CookieManager from "../../../helpers/CookiesManager";
 import {
     DatasetInfo,
     FetchRequest,
     RequestResult,
 } from "../../../helpers/Types";
-import Notification, { NotificationRef } from "../../common/Notification";
 import "./DatasetUploadForm.css";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -34,11 +32,14 @@ import {
 
 interface DatasetUploadFormProps {
     setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
+    openNotification: (
+        message?: string,
+        color?: string,
+        backgroundColor?: string,
+    ) => void;
 }
 
 function DatasetUploadForm(props: DatasetUploadFormProps) {
-    const notificationRef = useRef<NotificationRef>(null);
-
     const [datasetName, setDatasetName] = useState<string>("");
     const [file, setFile] = useState<File | null>(null);
 
@@ -236,12 +237,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
             if (response.ok) {
                 CookieManager.processResponse(response);
                 const responseBody = (await response.json()) as RequestResult;
-
-                notificationRef.current!.open(
-                    responseBody.message,
-                    "white",
-                    "green",
-                );
+                props.openNotification(responseBody.message, "white", "green");
 
                 props.setDatasetInfos((prevDatasets) => [
                     responseBody.data as DatasetInfo,
@@ -251,15 +247,10 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                 resetForm();
             } else {
                 const responseBody = (await response.json()) as RequestResult;
-
-                notificationRef.current!.open(
-                    responseBody.message,
-                    "white",
-                    "red",
-                );
+                props.openNotification(responseBody.message, "white", "red");
             }
         } catch {
-            notificationRef.current!.open(
+            props.openNotification(
                 "Dataset sa nepodarilo uložiť",
                 "white",
                 "red",
@@ -331,13 +322,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
 
     return (
         <>
-            <Notification
-                ref={notificationRef}
-                message="n/a"
-                color="white"
-                backgroundColor="black"
-            />
-
             <div className="data-upload-container">
                 <h1 className="data-upload-main-title">Upload nového súboru</h1>
 

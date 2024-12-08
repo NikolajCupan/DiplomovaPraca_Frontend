@@ -13,3 +13,4 @@ export const GET_DATASETS_OF_USER_PATH = "/dataset/get";
 
 export const GET_DATASET_FOR_EDITING = "/dataset/get-for-editing";
 export const EDIT_DATASET = "/dataset/edit";
+export const DELETE_DATASET = "/dataset/delete";
