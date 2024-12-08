@@ -45,6 +45,7 @@ const Modal = forwardRef<ModalRef>((_, ref) => {
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                disableScrollLock={true}
             >
                 <Box sx={style}>{content}</Box>
             </MuiModal>
