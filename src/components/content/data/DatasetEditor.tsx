@@ -1,3 +1,13 @@
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as CookieManager from "../../../helpers/CookiesManager.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
+import * as Type from "../../../helpers/Types.tsx";
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
+import Layout from "../../layout/Layout.tsx";
+import "./DatasetEditor.css";
+
+import AddIcon from "@mui/icons-material/Add";
+import SendIcon from "@mui/icons-material/Send";
 import {
     Autocomplete,
     Box,
@@ -13,29 +23,9 @@ import {
     TextField,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import {
-    BACKEND_PATH,
-    EDIT_DATASET,
-    GET_DATASET_FOR_EDITING,
-    GET_DATASETS_OF_USER_PATH,
-} from "../../../helpers/Constants";
-import * as CookieManager from "../../../helpers/CookiesManager";
-import * as Helper from "../../../helpers/Helper";
-import {
-    DatasetForEditing,
-    DatasetInfo,
-    FetchRequest,
-    RequestResult,
-    Row,
-} from "../../../helpers/Types";
-import Layout from "../../layout/Layout";
-import "./DatasetEditor.css";
 
-import AddIcon from "@mui/icons-material/Add";
-import SendIcon from "@mui/icons-material/Send";
-import { ChangeEvent, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useUtility } from "../../../helpers/UtilityProvider";
+import * as React from "react";
+import * as ReactRouter from "react-router-dom";
 
 const Item = styled(Paper)(({}) => ({
     textAlign: "center",
@@ -44,43 +34,42 @@ const Item = styled(Paper)(({}) => ({
 }));
 
 function DatasetEditor() {
-    const { openModal, closeModal, openNotification } = useUtility();
+    const { openModal, closeModal, openNotification } = Utility.useUtility();
 
-    const location = useLocation();
-    const navigate = useNavigate();
+    const location = ReactRouter.useLocation();
+    const navigate = ReactRouter.useNavigate();
 
-    const [datasetInfos, setDatasetInfos] = useState<DatasetInfo[]>([]);
-    const [selectedDatasetInfo, setSelectedDatasetInfo] =
-        useState<DatasetInfo | null>(null);
-    const [datasetForEditing, setDatasetForEditing] =
-        useState<DatasetForEditing | null>(null);
-
-    const [newColumnName, setNewColumnName] = useState<string>("");
-    const [changedValues, setChangedValues] = useState<Map<number, string>>(
-        new Map(),
+    const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
+        [],
     );
 
-    const handleNewColumnNameChange = (newColumnName: string) => {
-        setNewColumnName(newColumnName);
-    };
+    const [selectedDatasetInfo, setSelectedDatasetInfo] =
+        React.useState<Type.DatasetInfo | null>(null);
+    const [datasetForEditing, setDatasetForEditing] =
+        React.useState<Type.DatasetForEditing | null>(null);
+
+    const [newColumnName, setNewColumnName] = React.useState<string>("");
+    const [changedValues, setChangedValues] = React.useState<
+        Map<number, string>
+    >(new Map());
 
     const [buttonConfirmDisabled, setButtonConfirmDisabled] =
-        useState<boolean>(true);
+        React.useState<boolean>(true);
 
-    useEffect(() => {
+    React.useEffect(() => {
         loadDatasetInfos();
     }, []);
 
-    useEffect(() => {
+    React.useEffect(() => {
         initializeAutocomplete();
     }, [datasetInfos]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         loadDatasetForEditing();
         clearChangedValuesInputs();
     }, [selectedDatasetInfo]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (changedValues.size <= 0 && newColumnName.trim() === "") {
             setButtonConfirmDisabled(true);
         } else {
@@ -90,8 +79,10 @@ function DatasetEditor() {
 
     const loadDatasetInfos = async () => {
         try {
-            const request: FetchRequest = {
-                url: BACKEND_PATH + GET_DATASETS_OF_USER_PATH,
+            const request: Type.FetchRequest = {
+                url:
+                    Constants.BACKEND_PATH +
+                    Constants.GET_DATASETS_OF_USER_PATH,
                 options: {
                     method: "get",
                 },
@@ -102,9 +93,10 @@ function DatasetEditor() {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                const responseBody = (await response.json()) as RequestResult;
 
-                responseBody.data.forEach((element: DatasetInfo) => {
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
+                responseBody.data.forEach((element: Type.DatasetInfo) => {
                     setDatasetInfos((prevDatasetInfos) => [
                         ...prevDatasetInfos,
                         element,
@@ -119,6 +111,7 @@ function DatasetEditor() {
             const dataset = datasetInfos.find(
                 (dataset) => dataset.idDataset === location.state.idDataset,
             );
+
             if (dataset) {
                 setSelectedDatasetInfo(dataset);
             }
@@ -138,8 +131,8 @@ function DatasetEditor() {
                 selectedDatasetInfo.idDataset.toString(),
             );
 
-            const request: FetchRequest = {
-                url: BACKEND_PATH + GET_DATASET_FOR_EDITING,
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.GET_DATASET_FOR_EDITING,
                 options: {
                     method: "post",
                     body: formData,
@@ -151,9 +144,10 @@ function DatasetEditor() {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                const responseBody = (await response.json()) as RequestResult;
 
-                let datasetForEditing: DatasetForEditing = {
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
+                let datasetForEditing: Type.DatasetForEditing = {
                     datasetInfo: {
                         idDataset: -1,
                         datasetName: "",
@@ -177,7 +171,7 @@ function DatasetEditor() {
 
                 const rows = responseBody.data.rows;
                 for (let i = 0; i < rows.length; ++i) {
-                    let newRow: Row = {
+                    let newRow: Type.Row = {
                         date: new Date(),
                         value: "",
                     };
@@ -190,14 +184,18 @@ function DatasetEditor() {
 
                 setDatasetForEditing(datasetForEditing);
             } else {
-                navigate("/data");
+                navigate(Constants.UPLOAD_DATASET_LINK);
             }
         } catch {}
     };
 
+    const handleNewColumnNameChange = (newColumnName: string) => {
+        setNewColumnName(newColumnName);
+    };
+
     const handleNewValueChange = (
         index: number,
-        event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     ) => {
         const value = event.target.value.trim();
         const numberValue: number = Number(value);
@@ -231,14 +229,14 @@ function DatasetEditor() {
             return;
         }
 
-        let changedRows: Row[] = [];
+        let changedRows: Type.Row[] = [];
 
         changedValues.forEach((_, key) => {
             const row: HTMLTableRowElement = document.getElementById(
                 "dataset-for-editing-table-row-" + key,
             ) as HTMLTableRowElement;
 
-            let changedRow: Row = { date: "", value: "" };
+            let changedRow: Type.Row = { date: "", value: "" };
 
             const cells: HTMLTableCellElement[] = [...row.cells];
             cells.forEach((element: HTMLTableCellElement) => {
@@ -272,8 +270,8 @@ function DatasetEditor() {
             );
             formData.append("rows", JSON.stringify(changedRows));
 
-            const request: FetchRequest = {
-                url: BACKEND_PATH + EDIT_DATASET,
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.EDIT_DATASET,
                 options: {
                     method: "post",
                     body: formData,
@@ -282,10 +280,11 @@ function DatasetEditor() {
 
             CookieManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
-            const responseBody = (await response.json()) as RequestResult;
+            const responseBody = (await response.json()) as Type.RequestResult;
 
             if (response.ok) {
                 CookieManager.processResponse(response);
+
                 openNotification(responseBody.message, "white", "green");
 
                 loadDatasetForEditing();
@@ -367,9 +366,9 @@ function DatasetEditor() {
         const frequency = datasetForEditing!.datasetInfo.frequencyType;
 
         let firstRow = datasetForEditing!.rows[0];
-        const newStartRows: Row[] = [];
+        const newStartRows: Type.Row[] = [];
         for (let i = 0; i < startCount; ++i) {
-            let newRow: Row = {
+            let newRow: Type.Row = {
                 date: new Date(),
                 value: "",
             };
@@ -385,9 +384,9 @@ function DatasetEditor() {
 
         let lastRow =
             datasetForEditing!.rows[datasetForEditing!.rows.length - 1];
-        const newEndRows: Row[] = [];
+        const newEndRows: Type.Row[] = [];
         for (let i = 0; i < endCount; ++i) {
-            let newRow: Row = {
+            let newRow: Type.Row = {
                 date: new Date(),
                 value: "",
             };
@@ -509,27 +508,8 @@ function DatasetEditor() {
         );
     };
 
-    const test = () => {
-        console.log("\n\n\n----------");
-        console.log("DATASET INFOS");
-        console.log(datasetInfos);
-        console.log("SELECTED DATASET INFO");
-        console.log(selectedDatasetInfo);
-        console.log("DATASET FOR EDITING");
-        console.log(datasetForEditing);
-        console.log("CHANGED VALUES");
-
-        changedValues.forEach((value, key) => {
-            console.log(key, value);
-        });
-    };
-
     const content = (
         <>
-            <button style={{ marginBottom: "100px" }} onClick={test}>
-                click
-            </button>
-
             <input type="hidden" id="new-start-data-count-hidden" value="0" />
             <input type="hidden" id="new-end-data-count-hidden" value="0" />
 
@@ -701,8 +681,6 @@ function DatasetEditor() {
                     </Grid>
                 </Grid>
             </div>
-
-            <p id="testik"></p>
         </>
     );
 

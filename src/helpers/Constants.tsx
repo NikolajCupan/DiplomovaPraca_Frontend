@@ -7,7 +7,13 @@ export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 export const NOTIFICATION_CLOSE_MS = 3_000;
 
 /*
- * Paths
+ * Frontend paths
+ */
+export const EDIT_DATASET_LINK = "/data/edit";
+export const UPLOAD_DATASET_LINK = "/data";
+
+/*
+ * Backend paths
  */
 export const BACKEND_PATH = "http://localhost:8080";
 

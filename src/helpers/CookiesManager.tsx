@@ -24,7 +24,7 @@ export const processResponse = (response: Response) => {
                 maxAge: Constants.SESSION_MAX_AGE_SECONDS,
             });
         }
-    } catch (_) {}
+    } catch {}
 };
 
 export const prepareRequest = (request: Type.FetchRequest) => {
@@ -40,5 +40,5 @@ export const prepareRequest = (request: Type.FetchRequest) => {
                 [Constants.SESSION_COOKIE_NAME]: sessionCookie as string,
             };
         }
-    } catch (_) {}
+    } catch {}
 };

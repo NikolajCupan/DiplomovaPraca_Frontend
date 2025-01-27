@@ -1,9 +1,7 @@
-import * as CookieManager from "../../../helpers/CookiesManager";
-import {
-    DatasetInfo,
-    FetchRequest,
-    RequestResult,
-} from "../../../helpers/Types";
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as CookieManager from "../../../helpers/CookiesManager.tsx";
+import * as Type from "../../../helpers/Types.tsx";
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import "./DatasetUploadForm.css";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -16,51 +14,46 @@ import {
     InputLabel,
     MenuItem,
     Select,
-    SelectChangeEvent,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers";
+
 import { Dayjs } from "dayjs";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-    BACKEND_PATH,
-    MAX_FILE_SIZE_BYTES,
-    UPLOAD_DATASET_PATH,
-} from "../../../helpers/Constants";
-import { useUtility } from "../../../helpers/UtilityProvider";
+
+import * as React from "react";
 
 interface DatasetUploadFormProps {
-    setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
+    setDatasetInfos: React.Dispatch<React.SetStateAction<Type.DatasetInfo[]>>;
 }
 
 function DatasetUploadForm(props: DatasetUploadFormProps) {
-    const { openModal, closeModal, openNotification } = useUtility();
+    const { openNotification } = Utility.useUtility();
 
-    const [datasetName, setDatasetName] = useState<string>("");
-    const [file, setFile] = useState<File | null>(null);
+    const [datasetName, setDatasetName] = React.useState<string>("");
+    const [file, setFile] = React.useState<File | null>(null);
 
-    const [startDate, setStartDate] = useState<Dayjs | null>(null);
-    const [startHour, setStartHour] = useState<number>(0);
+    const [startDate, setStartDate] = React.useState<Dayjs | null>(null);
+    const [startHour, setStartHour] = React.useState<number>(0);
 
-    const [frequency, setFrequency] = useState<string>("");
+    const [frequency, setFrequency] = React.useState<string>("");
 
-    const [dateColumnName, setDateColumnName] = useState<string>("");
-    const [dataColumnName, setDataColumnName] = useState<string>("");
-    const [dateFormat, setDateFormat] = useState<string>("");
+    const [dateColumnName, setDateColumnName] = React.useState<string>("");
+    const [dataColumnName, setDataColumnName] = React.useState<string>("");
+    const [dateFormat, setDateFormat] = React.useState<string>("");
 
     const [datasetHasDateColumn, setDatasetHasDateColumn] =
-        useState<boolean>(false);
+        React.useState<boolean>(false);
     const [datasetHasHeaderColumn, setDatasetHasHeaderColumn] =
-        useState<boolean>(false);
+        React.useState<boolean>(false);
 
-    const [submitDisabled, setSubmitDisabled] = useState<boolean>(true);
+    const [submitDisabled, setSubmitDisabled] = React.useState<boolean>(true);
 
     const [startDateElementLoaded, setStartDateElementLoaded] =
-        useState<boolean>(true);
+        React.useState<boolean>(true);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (
             datasetName.trim() === "" ||
             file === null ||
@@ -97,7 +90,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
             setFile(null);
         } else {
             const file = fileList[0];
-            if (file.size > MAX_FILE_SIZE_BYTES) {
+
+            if (file.size > Constants.MAX_FILE_SIZE_BYTES) {
                 fileList = null;
                 setFile(null);
             } else {
@@ -121,12 +115,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         }
     };
 
-    const handleDateFormatChange = (newDateFormat: string) => {
-        setDateFormat(newDateFormat);
-    };
-
-    const handleFrequencyChange = (event: SelectChangeEvent) => {
-        setFrequency(event.target.value);
+    const handleFrequencyChange = (frequency: string) => {
+        setFrequency(frequency);
     };
 
     const handleDateColumnNameChange = (newDateColumnName: string) => {
@@ -137,19 +127,17 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         setDataColumnName(newDataColumnName);
     };
 
-    const handleDatasetHasHeaderChange = (
-        event: React.SyntheticEvent<Element, Event>,
-    ) => {
-        const element = event.target as HTMLInputElement;
-        setDatasetHasHeaderColumn(element.checked);
+    const handleDateFormatChange = (newDateFormat: string) => {
+        setDateFormat(newDateFormat);
     };
 
-    const handleDatasetHasDateColumnChange = (
-        event: React.SyntheticEvent<Element, Event>,
-    ) => {
-        const element = event.target as HTMLInputElement;
-        setDatasetHasDateColumn(element.checked);
-        setStartDateElementLoaded((prev) => !prev);
+    const handleDatasetHasDateColumnChange = (checked: boolean) => {
+        setDatasetHasDateColumn(checked);
+        setStartDateElementLoaded(!checked);
+    };
+
+    const handleDatasetHasHeaderChange = (checked: boolean) => {
+        setDatasetHasHeaderColumn(checked);
     };
 
     const resetForm = () => {
@@ -164,11 +152,14 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         }
 
         setStartDate(null);
-        setDateFormat("");
         setStartHour(0);
+
         setFrequency("");
+
         setDateColumnName("");
         setDataColumnName("");
+        setDateFormat("");
+
         setDatasetHasDateColumn(false);
         setDatasetHasHeaderColumn(false);
     };
@@ -179,6 +170,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         if (datasetName.trim() === "" || !file || frequency.trim() === "") {
             return;
         }
+
         if (
             (datasetHasDateColumn && dateFormat.trim() === "") ||
             (!datasetHasDateColumn && !startDate)
@@ -221,8 +213,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                 datasetHasHeaderColumn.toString(),
             );
 
-            const request: FetchRequest = {
-                url: BACKEND_PATH + UPLOAD_DATASET_PATH,
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.UPLOAD_DATASET_PATH,
                 options: {
                     method: "post",
                     body: formData,
@@ -234,17 +226,20 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                const responseBody = (await response.json()) as RequestResult;
+                
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
                 openNotification(responseBody.message, "white", "green");
 
                 props.setDatasetInfos((prevDatasets) => [
-                    responseBody.data as DatasetInfo,
+                    responseBody.data as Type.DatasetInfo,
                     ...prevDatasets,
                 ]);
 
                 resetForm();
             } else {
-                const responseBody = (await response.json()) as RequestResult;
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
                 openNotification(responseBody.message, "white", "red");
             }
         } catch {
@@ -292,7 +287,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
         </div>
     );
 
-    const formatDateHTMLElemenet = (
+    const formatDateHTMLElemenent = (
         <div className="data-upload-group">
             <p className="data-upload-group-label">
                 Formát dátumu <span style={{ color: "red" }}>*</span>
@@ -376,7 +371,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                         <div>
                             {startDateElementLoaded
                                 ? startDateHTMLElement
-                                : formatDateHTMLElemenet}
+                                : formatDateHTMLElemenent}
                         </div>
 
                         <div className="data-upload-group">
@@ -400,7 +395,9 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                     value={frequency}
                                     label="Frekvencia"
                                     onChange={(event) => {
-                                        handleFrequencyChange(event);
+                                        handleFrequencyChange(
+                                            event.target.value,
+                                        );
                                     }}
                                 >
                                     <MenuItem value={"hourly"}>
@@ -486,7 +483,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                                     }
                                                     onChange={(event) => {
                                                         handleDatasetHasDateColumnChange(
-                                                            event,
+                                                            event.target
+                                                                .checked,
                                                         );
                                                     }}
                                                 />
@@ -511,7 +509,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                                     }
                                                     onChange={(event) => {
                                                         handleDatasetHasHeaderChange(
-                                                            event,
+                                                            event.target
+                                                                .checked,
                                                         );
                                                     }}
                                                 />

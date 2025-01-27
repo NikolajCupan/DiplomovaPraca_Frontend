@@ -47,20 +47,6 @@
     text-align: center;
 }
 
-.data-upload-submit-result-success {
-    color: green;
-    font-weight: bold;
-}
-
-.data-upload-submit-result-failure {
-    color: red;
-    font-weight: bold;
-}
-
-.data-upload-submit-result-invisible {
-    display: none;
-}
-
 fieldset {
     border: none;
 }

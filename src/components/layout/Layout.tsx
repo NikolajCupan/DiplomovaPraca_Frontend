@@ -14,7 +14,7 @@ import Menu from "@mui/material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import React from "react";
+import * as React from "react";
 
 interface InternalComponentProps {
     component: React.ReactNode;

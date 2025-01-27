@@ -5,7 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import { RouterProvider } from "react-router-dom";
+import * as ReactRouter from "react-router-dom";
 
 const globalTheme = createTheme({
     typography: {
@@ -19,7 +19,7 @@ export default function App() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <div className="App">
                     <UtilityProvider>
-                        <RouterProvider router={router} />
+                        <ReactRouter.RouterProvider router={router} />
                     </UtilityProvider>
                 </div>
             </LocalizationProvider>

@@ -1,17 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import {
-    BACKEND_PATH,
-    DELETE_DATASET,
-    DOWNLOAD_DATASET_PATH,
-    GET_DATASETS_OF_USER_PATH,
-} from "../../../helpers/Constants";
-import * as CookieManager from "../../../helpers/CookiesManager";
-import * as Helper from "../../../helpers/Helper";
-import {
-    DatasetInfo,
-    FetchRequest,
-    RequestResult,
-} from "../../../helpers/Types";
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as CookieManager from "../../../helpers/CookiesManager.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
+import * as Type from "../../../helpers/Types.tsx";
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import "./Data.css";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -28,26 +19,29 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { useUtility } from "../../../helpers/UtilityProvider";
+
+import * as React from "react";
+import * as ReactRouter from "react-router-dom";
 
 interface DatasetTableProps {
-    datasetInfos: DatasetInfo[];
-    setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
+    datasetInfos: Type.DatasetInfo[];
+    setDatasetInfos: React.Dispatch<React.SetStateAction<Type.DatasetInfo[]>>;
 }
 
 function DatasetTable(props: DatasetTableProps) {
-    const { openModal, closeModal, openNotification } = useUtility();
-    const navigate = useNavigate();
+    const { openModal, closeModal, openNotification } = Utility.useUtility();
+    const navigate = ReactRouter.useNavigate();
 
-    useEffect(() => {
+    React.useEffect(() => {
         loadDatasets();
     }, []);
 
     const loadDatasets = async () => {
         try {
-            const request: FetchRequest = {
-                url: BACKEND_PATH + GET_DATASETS_OF_USER_PATH,
+            const request: Type.FetchRequest = {
+                url:
+                    Constants.BACKEND_PATH +
+                    Constants.GET_DATASETS_OF_USER_PATH,
                 options: {
                     method: "get",
                 },
@@ -58,9 +52,11 @@ function DatasetTable(props: DatasetTableProps) {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                const responseBody = (await response.json()) as RequestResult;
-                const newDatasets: DatasetInfo[] = responseBody.data.map(
-                    (arrayElement: unknown) => arrayElement as DatasetInfo,
+
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
+                const newDatasets: Type.DatasetInfo[] = responseBody.data.map(
+                    (arrayElement: unknown) => arrayElement as Type.DatasetInfo,
                 );
 
                 props.setDatasetInfos((prevDatasets) => [
@@ -76,8 +72,8 @@ function DatasetTable(props: DatasetTableProps) {
             const formData = new FormData();
             formData.append("idDataset", idDataset.toString());
 
-            const request: FetchRequest = {
-                url: BACKEND_PATH + DOWNLOAD_DATASET_PATH,
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.DOWNLOAD_DATASET_PATH,
                 options: {
                     method: "post",
                     body: formData,
@@ -108,13 +104,12 @@ function DatasetTable(props: DatasetTableProps) {
                 link.parentNode!.removeChild(link);
 
                 window.URL.revokeObjectURL(blobUrl);
-            } else {
             }
         } catch {}
     };
 
     const handleEditClick = (idDataset: number) => {
-        navigate("/data/edit", { state: { idDataset } });
+        navigate(Constants.EDIT_DATASET_LINK, { state: { idDataset } });
     };
 
     const handleDeleteClick = (idDataset: number) => {
@@ -167,12 +162,14 @@ function DatasetTable(props: DatasetTableProps) {
     };
 
     const handleDeleteDataset = async (idDataset: number) => {
+        closeModal();
+
         try {
             const formData = new FormData();
             formData.append("idDataset", idDataset.toString());
 
-            const request: FetchRequest = {
-                url: BACKEND_PATH + DELETE_DATASET,
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.DELETE_DATASET,
                 options: {
                     method: "delete",
                     body: formData,
@@ -181,18 +178,21 @@ function DatasetTable(props: DatasetTableProps) {
 
             CookieManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
-            closeModal();
 
             if (response.ok) {
                 CookieManager.processResponse(response);
+
                 openNotification(
                     "Dataset bol úspešne zmazaný",
                     "white",
                     "green",
                 );
 
-                const responseBody = (await response.json()) as RequestResult;
-                const deletedDatasetInfo = responseBody.data as DatasetInfo;
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
+                const deletedDatasetInfo =
+                    responseBody.data as Type.DatasetInfo;
+
                 props.setDatasetInfos((prevDatasets) =>
                     prevDatasets.filter(
                         (dataset) =>

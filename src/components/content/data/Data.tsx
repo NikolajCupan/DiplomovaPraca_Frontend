@@ -1,19 +1,17 @@
-import { DatasetInfo } from "../../../helpers/Types";
-import DatasetTable from "./DatasetTable";
-import DatasetUploadForm from "./DatasetUploadForm";
-
-import { useRef, useState } from "react";
+import { DatasetInfo } from "../../../helpers/Types.tsx";
 import Layout from "../../layout/Layout";
+import DatasetTable from "./DatasetTable.tsx";
+import DatasetUploadForm from "./DatasetUploadForm.tsx";
+
+import * as React from "react";
 
 function Data() {
-    const [datasetInfos, setDatasetInfos] = useState<DatasetInfo[]>([]);
+    const [datasetInfos, setDatasetInfos] = React.useState<DatasetInfo[]>([]);
 
     const content = (
         <>
             <div style={{ marginBottom: "50px" }}>
-                <DatasetUploadForm
-                    setDatasetInfos={setDatasetInfos}
-                />
+                <DatasetUploadForm setDatasetInfos={setDatasetInfos} />
             </div>
 
             <div style={{ marginBottom: "20px" }}>
