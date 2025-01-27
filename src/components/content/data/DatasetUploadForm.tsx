@@ -497,7 +497,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                                     }}
                                                 />
                                             }
-                                            label="Dataset obsahuje stlpec s&nbsp;dátumom"
+                                            label="Dataset obsahuje stĺpec s&nbsp;dátumom"
                                         />
                                     </Box>
                                 </Grid>

@@ -104,7 +104,7 @@ export default function CustomizedMenus() {
                 <a href="/data">
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        Nový dataset
+                        Zoznam a pridávanie datasetov
                     </MenuItem>
                 </a>
 
