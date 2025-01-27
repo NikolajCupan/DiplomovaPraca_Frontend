@@ -1,4 +1,4 @@
-import Layout from "../layout/Layout";
+import Layout from "../layout/Layout.tsx";
 
 function LinearRegressionComponent() {
     const content = (

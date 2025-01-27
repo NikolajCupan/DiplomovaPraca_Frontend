@@ -28,3 +28,4 @@ dist-ssr
 ### Custom ###
 learning/
 .vscode/
+src/testing
