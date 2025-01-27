@@ -95,6 +95,7 @@ function DatasetEditor() {
 
                 const responseBody =
                     (await response.json()) as Type.RequestResult;
+                responseBody.data.reverse();
                 responseBody.data.forEach((element: Type.DatasetInfo) => {
                     setDatasetInfos((prevDatasetInfos) => [
                         ...prevDatasetInfos,
@@ -183,6 +184,7 @@ function DatasetEditor() {
                 setDatasetForEditing(datasetForEditing);
             } else {
                 openNotification(responseBody.message, "white", "red");
+                setSelectedDatasetInfo(null);
                 setDatasetForEditing(null);
             }
         } catch {}

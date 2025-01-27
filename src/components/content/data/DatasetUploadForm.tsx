@@ -20,7 +20,7 @@ import Grid from "@mui/material/Grid2";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from "@mui/x-date-pickers";
 
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 import * as React from "react";
 
@@ -226,7 +226,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                
+
                 const responseBody =
                     (await response.json()) as Type.RequestResult;
                 openNotification(responseBody.message, "white", "green");
@@ -258,6 +258,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                     <DatePicker
                         sx={{ width: 1 }}
                         format="YYYY/MM/DD"
+                        minDate={dayjs(new Date(100, 0, 1).setFullYear(0))}
+                        maxDate={dayjs(new Date(9999, 11, 31))}
                         value={startDate}
                         onChange={(date) => {
                             handleStartDateChange(date);
