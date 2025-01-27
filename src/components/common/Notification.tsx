@@ -18,6 +18,8 @@ interface State extends SnackbarOrigin {
 
 export interface NotificationRef {
     open: (message?: string, color?: string, backgroundColor?: string) => void;
+    close: () => void;
+    isOpen: () => boolean;
 }
 
 interface NotificationProps {
@@ -62,6 +64,17 @@ const Notification = forwardRef<NotificationRef, NotificationProps>(
                         open: false,
                     }));
                 }, 3000);
+            },
+
+            close: () => {
+                setNotificationState((prevState) => ({
+                    ...prevState,
+                    open: false,
+                }));
+            },
+
+            isOpen: () => {
+                return notificationState.open;
             },
         }));
 

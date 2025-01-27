@@ -427,9 +427,15 @@ function DatasetEditor() {
         });
 
         setChangedValues(newMap);
+        handleNewDataModalClose();
     };
 
-    const handleAddDataClick = () => {
+    const handleAddDataClick = async () => {
+        if (notificationRef.current!.isOpen()) {
+            notificationRef.current!.close();
+            await Helper.timeout(150);
+        }
+
         modalRef.current!.open(
             <>
                 <p

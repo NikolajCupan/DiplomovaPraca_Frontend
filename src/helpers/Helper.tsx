@@ -83,3 +83,7 @@ export function getNextDate(date: Date, frequency: string): Date {
 
     return newDate;
 }
+
+export function timeout(delayMs: number) {
+    return new Promise((res) => setTimeout(res, delayMs));
+}
