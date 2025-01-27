@@ -28,15 +28,14 @@ import {
     RequestResult,
     Row,
 } from "../../../helpers/Types";
-import Modal, { ModalRef } from "../../common/Modal";
-import Notification, { NotificationRef } from "../../common/Notification";
 import Layout from "../../layout/Layout";
 import "./DatasetEditor.css";
 
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUtility } from "../../../helpers/UtilityProvider";
 
 const Item = styled(Paper)(({}) => ({
     textAlign: "center",
@@ -45,16 +44,7 @@ const Item = styled(Paper)(({}) => ({
 }));
 
 function DatasetEditor() {
-    const notificationRef = useRef<NotificationRef>(null);
-
-    const modalRef = useRef<ModalRef>(null);
-    const openNotification = (
-        message?: string,
-        color?: string,
-        backgroundColor?: string,
-    ) => {
-        notificationRef.current!.open(message, color, backgroundColor);
-    };
+    const { openModal, closeModal, openNotification } = useUtility();
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -329,7 +319,7 @@ function DatasetEditor() {
     };
 
     const handleNewDataModalClose = () => {
-        modalRef.current!.close();
+        closeModal();
 
         const inputElementStart = document.getElementById(
             "new-start-data-count-hidden",
@@ -354,8 +344,7 @@ function DatasetEditor() {
         let endCount = parseInt(inputElementEnd.value);
 
         if (Number.isNaN(startCount) && Number.isNaN(endCount)) {
-            notificationRef.current!.open("Neplatné hodnoty", "white", "red");
-
+            openNotification("Neplatné hodnoty", "white", "red");
             return;
         }
 
@@ -368,7 +357,7 @@ function DatasetEditor() {
             startCount > 100 ||
             endCount > 100
         ) {
-            notificationRef.current!.open(
+            openNotification(
                 "Hodnoty musia byť z rozsahu <0, 100>",
                 "white",
                 "red",
@@ -431,12 +420,7 @@ function DatasetEditor() {
     };
 
     const handleAddDataClick = async () => {
-        if (notificationRef.current!.isOpen()) {
-            notificationRef.current!.close();
-            await Helper.timeout(150);
-        }
-
-        modalRef.current!.open(
+        openModal(
             <>
                 <p
                     style={{
@@ -542,15 +526,6 @@ function DatasetEditor() {
 
     const content = (
         <>
-            <Notification
-                ref={notificationRef}
-                message="n/a"
-                color="white"
-                backgroundColor="black"
-            />
-
-            <Modal ref={modalRef}></Modal>
-
             <button style={{ marginBottom: "100px" }} onClick={test}>
                 click
             </button>

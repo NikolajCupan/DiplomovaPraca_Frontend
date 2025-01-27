@@ -12,7 +12,6 @@ import {
     FetchRequest,
     RequestResult,
 } from "../../../helpers/Types";
-import Modal, { ModalRef } from "../../common/Modal";
 import "./Data.css";
 
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -29,20 +28,16 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { useUtility } from "../../../helpers/UtilityProvider";
 
 interface DatasetTableProps {
     datasetInfos: DatasetInfo[];
     setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
-    openNotification: (
-        message?: string,
-        color?: string,
-        backgroundColor?: string,
-    ) => void;
 }
 
 function DatasetTable(props: DatasetTableProps) {
-    const modalRef = useRef<ModalRef>(null);
+    const { openModal, closeModal, openNotification } = useUtility();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -123,7 +118,7 @@ function DatasetTable(props: DatasetTableProps) {
     };
 
     const handleDeleteClick = (idDataset: number) => {
-        modalRef.current!.open(
+        openModal(
             <>
                 <p
                     style={{
@@ -152,7 +147,7 @@ function DatasetTable(props: DatasetTableProps) {
                         type="submit"
                         size="medium"
                         variant="contained"
-                        onClick={modalRef.current!.close}
+                        onClick={closeModal}
                         style={{ backgroundColor: "green" }}
                     >
                         Zrušiť
@@ -186,11 +181,11 @@ function DatasetTable(props: DatasetTableProps) {
 
             CookieManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
-            modalRef.current!.close();
+            closeModal();
 
             if (response.ok) {
                 CookieManager.processResponse(response);
-                props.openNotification(
+                openNotification(
                     "Dataset bol úspešne zmazaný",
                     "white",
                     "green",
@@ -205,19 +200,13 @@ function DatasetTable(props: DatasetTableProps) {
                     ),
                 );
             } else {
-                props.openNotification(
-                    "Dataset nebolo možné zmazať",
-                    "white",
-                    "red",
-                );
+                openNotification("Dataset nebolo možné zmazať", "white", "red");
             }
         } catch {}
     };
 
     return (
         <>
-            <Modal ref={modalRef}></Modal>
-
             <div className="data-table-container">
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table sx={{ minWidth: 650 }}>

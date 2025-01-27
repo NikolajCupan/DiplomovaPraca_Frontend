@@ -29,17 +29,15 @@ import {
     MAX_FILE_SIZE_BYTES,
     UPLOAD_DATASET_PATH,
 } from "../../../helpers/Constants";
+import { useUtility } from "../../../helpers/UtilityProvider";
 
 interface DatasetUploadFormProps {
     setDatasetInfos: Dispatch<SetStateAction<DatasetInfo[]>>;
-    openNotification: (
-        message?: string,
-        color?: string,
-        backgroundColor?: string,
-    ) => void;
 }
 
 function DatasetUploadForm(props: DatasetUploadFormProps) {
+    const { openModal, closeModal, openNotification } = useUtility();
+
     const [datasetName, setDatasetName] = useState<string>("");
     const [file, setFile] = useState<File | null>(null);
 
@@ -237,7 +235,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
             if (response.ok) {
                 CookieManager.processResponse(response);
                 const responseBody = (await response.json()) as RequestResult;
-                props.openNotification(responseBody.message, "white", "green");
+                openNotification(responseBody.message, "white", "green");
 
                 props.setDatasetInfos((prevDatasets) => [
                     responseBody.data as DatasetInfo,
@@ -247,14 +245,10 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                 resetForm();
             } else {
                 const responseBody = (await response.json()) as RequestResult;
-                props.openNotification(responseBody.message, "white", "red");
+                openNotification(responseBody.message, "white", "red");
             }
         } catch {
-            props.openNotification(
-                "Dataset sa nepodarilo uložiť",
-                "white",
-                "red",
-            );
+            openNotification("Dataset sa nepodarilo uložiť", "white", "red");
         }
     };
 

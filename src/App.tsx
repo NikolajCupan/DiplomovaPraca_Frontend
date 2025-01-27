@@ -4,7 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { RouterProvider } from "react-router-dom";
-import { UtilityProvider } from "./testing/UtilityProvider";
+import { UtilityProvider } from "./helpers/UtilityProvider";
 
 const globalTheme = createTheme({
     typography: {
