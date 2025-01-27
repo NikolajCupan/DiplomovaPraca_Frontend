@@ -5,8 +5,8 @@ import Divider from "@mui/material/Divider";
 import Menu, { MenuProps } from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { alpha, styled } from "@mui/material/styles";
+
 import * as React from "react";
-import { useEffect } from "react";
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -62,9 +62,8 @@ export default function CustomizedMenus() {
         setAnchorEl(null);
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         window.addEventListener("resize", handleClose);
-
         return () => {
             window.removeEventListener("resize", handleClose);
         };
@@ -76,14 +75,13 @@ export default function CustomizedMenus() {
                 className="menu-button"
                 id="menu-tests-button"
                 aria-controls={open ? "menu-tests" : undefined}
-                aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
                 endIcon={<BiotechIcon />}
             >
-                <div className="custom-font">Testy a analýza</div>
+                Testy a analýza
             </Button>
             <StyledMenu
                 id="menu-tests"

@@ -4,8 +4,8 @@ import Button from "@mui/material/Button";
 import Menu, { MenuProps } from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { alpha, styled } from "@mui/material/styles";
+
 import * as React from "react";
-import { useEffect } from "react";
 
 const StyledMenu = styled((props: MenuProps) => (
     <Menu
@@ -61,9 +61,8 @@ export default function CustomizedMenus() {
         setAnchorEl(null);
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         window.addEventListener("resize", handleClose);
-
         return () => {
             window.addEventListener("resize", handleClose);
         };
@@ -75,14 +74,13 @@ export default function CustomizedMenus() {
                 className="menu-button"
                 id="menu-models-button"
                 aria-controls={open ? "menu-models" : undefined}
-                aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 variant="contained"
                 disableElevation
                 onClick={handleClick}
                 endIcon={<LightbulbIcon />}
             >
-                <div className="custom-font">Modely</div>
+                Modely
             </Button>
             <StyledMenu
                 id="menu-models"

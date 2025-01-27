@@ -1,3 +1,9 @@
+import "./LayoutStyles.css";
+import MenuData from "./Menus/MenuData.tsx";
+import MenuModels from "./Menus/MenuModels.tsx";
+import MenuTests from "./Menus/MenuTests.tsx";
+import MenuTransformations from "./Menus/MenuTransformations.tsx";
+
 import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
 import AppBar from "@mui/material/AppBar";
@@ -7,19 +13,17 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
-import "./LayoutStyles.css";
-import MenuData from "./Menus/MenuData";
-import MenuModels from "./Menus/MenuModels";
-import MenuTests from "./Menus/MenuTests";
-import MenuTransformations from "./Menus/MenuTransformations";
+
+import React from "react";
 
 interface InternalComponentProps {
     component: React.ReactNode;
 }
 
 function ResponsiveAppBar(props: InternalComponentProps) {
-    const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+    const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+        null,
+    );
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElNav(event.currentTarget);
@@ -28,14 +32,6 @@ function ResponsiveAppBar(props: InternalComponentProps) {
     const handleCloseNavMenu = () => {
         setAnchorElNav(null);
     };
-
-    useEffect(() => {
-        window.addEventListener("resize", handleCloseNavMenu);
-
-        return () => {
-            window.removeEventListener("resize", handleCloseNavMenu);
-        };
-    }, []);
 
     const handleResize = () => {
         const header = document.getElementById("header");
@@ -46,11 +42,15 @@ function ResponsiveAppBar(props: InternalComponentProps) {
         );
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         handleResize();
+
         window.addEventListener("resize", handleResize);
+        window.addEventListener("resize", handleCloseNavMenu);
+
         return () => {
             window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", handleCloseNavMenu);
         };
     }, []);
 
@@ -68,9 +68,6 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                             >
                                 <IconButton
                                     size="large"
-                                    aria-label="account of current user"
-                                    aria-controls="menu-appbar"
-                                    aria-haspopup="true"
                                     onClick={handleOpenNavMenu}
                                     color="inherit"
                                 >
@@ -143,6 +140,7 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                             >
                                 LOGO
                             </Typography>
+
                             <Box
                                 sx={{
                                     flexGrow: 1,
