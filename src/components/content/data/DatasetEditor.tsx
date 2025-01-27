@@ -37,7 +37,6 @@ function DatasetEditor() {
     const { openModal, closeModal, openNotification } = Utility.useUtility();
 
     const location = ReactRouter.useLocation();
-    const navigate = ReactRouter.useNavigate();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -141,12 +140,11 @@ function DatasetEditor() {
 
             CookieManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
+            const responseBody = (await response.json()) as Type.RequestResult;
 
             if (response.ok) {
                 CookieManager.processResponse(response);
 
-                const responseBody =
-                    (await response.json()) as Type.RequestResult;
                 let datasetForEditing: Type.DatasetForEditing = {
                     datasetInfo: {
                         idDataset: -1,
@@ -184,7 +182,8 @@ function DatasetEditor() {
 
                 setDatasetForEditing(datasetForEditing);
             } else {
-                navigate(Constants.UPLOAD_DATASET_LINK);
+                openNotification(responseBody.message, "white", "red");
+                setDatasetForEditing(null);
             }
         } catch {}
     };

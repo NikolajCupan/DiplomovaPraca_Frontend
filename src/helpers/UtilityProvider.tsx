@@ -38,7 +38,6 @@ interface UtilityContextProps {
         textColor: string,
         backgroundColor: string,
     ) => void;
-    closeNotification: () => void;
 }
 
 interface UtilityProviderProps {
@@ -60,6 +59,8 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
         React.useState<NotificationContent | null>();
 
     const openModal = React.useCallback((modalContent: React.ReactNode) => {
+        closeNotification();
+
         setModalContent(modalContent);
         setIsModalOpen(true);
     }, []);
@@ -101,7 +102,6 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
                 isNotificationOpen: isNotificationOpen,
                 notificationContent,
                 openNotification,
-                closeNotification,
             }}
         >
             {props.children}

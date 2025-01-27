@@ -104,6 +104,12 @@ function DatasetTable(props: DatasetTableProps) {
                 link.parentNode!.removeChild(link);
 
                 window.URL.revokeObjectURL(blobUrl);
+            } else {
+                openNotification(
+                    "Dataset nebolo možné stiahnuť",
+                    "white",
+                    "red",
+                );
             }
         } catch {}
     };
