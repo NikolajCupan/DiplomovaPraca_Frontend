@@ -22,25 +22,5 @@
     },
     "include": [
         "src",
-        "learning/09learning/App.tsx",
-        "learning/09learning/ArrayComponent.tsx",
-        "learning/09learning/ArrayComponent2.tsx",
-        "learning/09learning/ColorPicker.tsx",
-        "learning/09learning/Counter.tsx",
-        "learning/09learning/main.tsx",
-        "learning/09learning/MyComponent.tsx",
-        "learning/09learning/vite-env.d.ts",
-        "learning/10learning/App.tsx",
-        "learning/10learning/main.tsx",
-        "learning/10learning/ToDoList.tsx",
-        "learning/10learning/vite-env.d.ts",
-        "learning/12learning/App.tsx",
-        "learning/12learning/DigitalClock.tsx",
-        "learning/12learning/main.tsx",
-        "learning/12learning/vite-env.d.ts",
-        "learning/15learning/App.tsx",
-        "learning/15learning/main.tsx",
-        "learning/15learning/StopWatch.tsx",
-        "learning/15learning/vite-env.d.ts"
     ]
 }

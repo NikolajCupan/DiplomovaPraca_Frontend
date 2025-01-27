@@ -1,8 +1,7 @@
-import Data from "../components/content/data/Data";
-import DatasetEditor from "../components/content/data/DatasetEditor";
-import Home from "../components/content/Home";
-import LinearRegression from "../components/content/LinearRegression";
-import Test from "../testing/Test";
+import Data from "../components/content/data/Data.tsx";
+import DatasetEditor from "../components/content/data/DatasetEditor.tsx";
+import Home from "../components/content/Home.tsx";
+import LinearRegression from "../components/content/LinearRegression.tsx";
 
 export const ROUTES = [
     {
@@ -20,9 +19,5 @@ export const ROUTES = [
     {
         path: "/linear-regression",
         element: <LinearRegression />,
-    },
-    {
-        path: "/test",
-        element: <Test />,
     },
 ];

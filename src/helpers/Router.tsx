@@ -1,4 +1,4 @@
-import { ROUTES } from "./Routes";
+import { ROUTES } from "./Routes.tsx";
 
 import {
     createBrowserRouter,

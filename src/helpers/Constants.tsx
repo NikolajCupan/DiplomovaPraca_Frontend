@@ -4,6 +4,11 @@ export const MAX_FILE_SIZE_BYTES = 25_000_000;
 export const SESSION_COOKIE_NAME = "session_cookie_id";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
+export const NOTIFICATION_CLOSE_MS = 3_000;
+
+/*
+ * Paths
+ */
 export const BACKEND_PATH = "http://localhost:8080";
 
 export const UPLOAD_DATASET_PATH = "/dataset/upload";

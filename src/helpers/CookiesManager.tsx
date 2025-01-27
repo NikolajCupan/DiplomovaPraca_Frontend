@@ -1,40 +1,43 @@
 /* eslint-disable no-empty */
+import * as Constants from "./Constants.tsx";
+import * as Type from "./Types.tsx";
+
 import Cookies from "universal-cookie";
-import { SESSION_COOKIE_NAME, SESSION_MAX_AGE_SECONDS } from "./Constants";
-import { FetchRequest } from "./Types";
 
 export const processResponse = (response: Response) => {
     try {
         const cookies = new Cookies();
 
         const currentSessionCookie = cookies.get(
-            SESSION_COOKIE_NAME,
+            Constants.SESSION_COOKIE_NAME,
         ) as unknown;
-        const newSessionCookieID = response.headers.get(SESSION_COOKIE_NAME);
+        const newSessionCookieID = response.headers.get(
+            Constants.SESSION_COOKIE_NAME,
+        );
 
-        if (!currentSessionCookie) {
-            cookies.set(SESSION_COOKIE_NAME, newSessionCookieID, {
+        if (
+            !currentSessionCookie ||
+            currentSessionCookie !== newSessionCookieID
+        ) {
+            cookies.set(Constants.SESSION_COOKIE_NAME, newSessionCookieID, {
                 path: "/",
-                maxAge: SESSION_MAX_AGE_SECONDS,
-            });
-        } else if (currentSessionCookie !== newSessionCookieID) {
-            cookies.set(SESSION_COOKIE_NAME, newSessionCookieID, {
-                path: "/",
-                maxAge: SESSION_MAX_AGE_SECONDS,
+                maxAge: Constants.SESSION_MAX_AGE_SECONDS,
             });
         }
     } catch (_) {}
 };
 
-export const prepareRequest = (request: FetchRequest) => {
+export const prepareRequest = (request: Type.FetchRequest) => {
     try {
         const cookies = new Cookies();
-        const sessionCookie = cookies.get(SESSION_COOKIE_NAME) as unknown;
+        const sessionCookie = cookies.get(
+            Constants.SESSION_COOKIE_NAME,
+        ) as unknown;
 
         if (sessionCookie) {
             request.options.headers = {
                 ...request.options.headers,
-                [SESSION_COOKIE_NAME]: sessionCookie as string,
+                [Constants.SESSION_COOKIE_NAME]: sessionCookie as string,
             };
         }
     } catch (_) {}

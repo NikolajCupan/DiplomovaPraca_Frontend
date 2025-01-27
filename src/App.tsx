@@ -1,10 +1,11 @@
-import { router } from "./helpers/Router";
+import { router } from "./helpers/Router.tsx";
+import { UtilityProvider } from "./helpers/UtilityProvider.tsx";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 import { RouterProvider } from "react-router-dom";
-import { UtilityProvider } from "./helpers/UtilityProvider";
 
 const globalTheme = createTheme({
     typography: {

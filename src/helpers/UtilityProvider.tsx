@@ -1,13 +1,10 @@
+import * as Constants from "./Constants.tsx";
+
 import { Box, SnackbarContent } from "@mui/material";
 import MuiModal from "@mui/material/Modal";
 import Snackbar from "@mui/material/Snackbar";
-import {
-    createContext,
-    useCallback,
-    useContext,
-    useRef,
-    useState,
-} from "react";
+
+import * as React from "react";
 
 const modalStyle = {
     position: "absolute",
@@ -25,7 +22,7 @@ const modalStyle = {
 
 interface NotificationContent {
     message: string;
-    color: string;
+    textColor: string;
     backgroundColor: string;
 }
 
@@ -35,48 +32,48 @@ interface UtilityContextProps {
     closeModal: () => void;
 
     isNotificationOpen: boolean;
-    notificationContent: NotificationContent | null | undefined;
+    notificationContent: NotificationContent | undefined | null;
     openNotification: (
         message: string,
-        color: string,
+        textColor: string,
         backgroundColor: string,
     ) => void;
     closeNotification: () => void;
 }
 
-const UtilityContext = createContext<UtilityContextProps | undefined>(
-    undefined,
-);
-
 interface UtilityProviderProps {
     children: React.ReactNode;
 }
 
-export const UtilityProvider = (props: UtilityProviderProps) => {
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [modalContent, setModalContent] = useState<React.ReactNode>(null);
+const UtilityContext = React.createContext<UtilityContextProps | null>(null);
 
-    const openModal = useCallback((modalContent: React.ReactNode) => {
+export const UtilityProvider = (props: UtilityProviderProps) => {
+    const timeoutRef = React.useRef<number | undefined>(undefined);
+
+    const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+    const [modalContent, setModalContent] =
+        React.useState<React.ReactNode>(null);
+
+    const [isNotificationOpen, setIsNotificationOpen] =
+        React.useState<boolean>(false);
+    const [notificationContent, setNotificationContent] =
+        React.useState<NotificationContent | null>();
+
+    const openModal = React.useCallback((modalContent: React.ReactNode) => {
         setModalContent(modalContent);
         setIsModalOpen(true);
     }, []);
 
-    const closeModal = useCallback(() => {
+    const closeModal = React.useCallback(() => {
         setModalContent(null);
         setIsModalOpen(false);
     }, []);
 
-    const [isNotificationOpen, setIsNotificationOpen] =
-        useState<boolean>(false);
-    const [notificationContent, setNotificationContent] =
-        useState<NotificationContent | null>();
-    const timeoutRef = useRef<number | undefined>(undefined);
-
-    const openNotification = useCallback(
-        (message: string, color: string, backgroundColor: string) => {
+    const openNotification = React.useCallback(
+        (message: string, textColor: string, backgroundColor: string) => {
             setNotificationContent({
                 message: message,
-                color: color,
+                textColor: textColor,
                 backgroundColor: backgroundColor,
             });
             setIsNotificationOpen(true);
@@ -84,12 +81,12 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = setTimeout(function () {
                 closeNotification();
-            }, 3000);
+            }, Constants.NOTIFICATION_CLOSE_MS);
         },
         [],
     );
 
-    const closeNotification = useCallback(() => {
+    const closeNotification = React.useCallback(() => {
         clearTimeout(timeoutRef.current);
         setNotificationContent(null);
         setIsNotificationOpen(false);
@@ -111,12 +108,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
 
             {isModalOpen && (
                 <div>
-                    <MuiModal
-                        open={isModalOpen}
-                        onClose={closeModal}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
-                    >
+                    <MuiModal open={isModalOpen} onClose={closeModal}>
                         <Box sx={modalStyle}>{modalContent}</Box>
                     </MuiModal>
                 </div>
@@ -136,7 +128,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
                             sx={{
                                 backgroundColor:
                                     notificationContent?.backgroundColor,
-                                color: notificationContent?.color,
+                                color: notificationContent?.textColor,
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
@@ -152,7 +144,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
 };
 
 export const useUtility = (): UtilityContextProps => {
-    const context = useContext(UtilityContext);
+    const context = React.useContext(UtilityContext);
     if (!context) {
         throw new Error("Invalid usage of utility provider");
     }

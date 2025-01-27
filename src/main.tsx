@@ -1,23 +1,23 @@
-import { STRICT_MODE } from "./helpers/Constants.tsx";
+import App from "./App.tsx";
+import * as Constants from "./helpers/Constants.tsx";
+import "./index.css";
 
 import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { StrictMode } from "react";
+import * as React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
 
 const rootElement: HTMLElement | null = document.getElementById("root");
 
 if (rootElement) {
-    if (STRICT_MODE) {
+    if (Constants.STRICT_MODE) {
         createRoot(rootElement).render(
-            <StrictMode>
+            <React.StrictMode>
                 <App />
-            </StrictMode>,
+            </React.StrictMode>,
         );
     } else {
         createRoot(rootElement).render(<App />);
