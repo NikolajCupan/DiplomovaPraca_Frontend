@@ -23,6 +23,7 @@ import {
     TextField,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { LineChart } from "@mui/x-charts/LineChart";
 
 import * as React from "react";
 import * as ReactRouter from "react-router-dom";
@@ -509,29 +510,80 @@ function DatasetEditor() {
         );
     };
 
+    const getChartData = (): (number | null)[] => {
+        if (!datasetForEditing) {
+            return [];
+        }
+
+        let processedData: (number | null)[] = [];
+        datasetForEditing.rows.forEach(function (row: Type.Row) {
+            if (row.value.trim() === "") {
+                processedData.push(null);
+            } else {
+                processedData.push(Number(row.value));
+            }
+        });
+
+        return processedData;
+    };
+
+    const getChartAxisX = (): Date[] => {
+        if (!datasetForEditing) {
+            return [];
+        }
+
+        let processedData: Date[] = [];
+        datasetForEditing.rows.forEach(function (row: Type.Row) {
+            if (typeof row.date === "string") {
+                processedData.push(Helper.stringToDate(row.date));
+            } else {
+                processedData.push(row.date);
+            }
+        });
+
+        return processedData;
+    };
+
+    const handleDebug = () => {
+        console.log(datasetForEditing);
+        getChartAxisX();
+    };
+
     const content = (
         <>
+            <button onClick={handleDebug}>DEBUG</button>
+
             <input type="hidden" id="new-start-data-count-hidden" value="0" />
             <input type="hidden" id="new-end-data-count-hidden" value="0" />
 
-            <Autocomplete
-                value={selectedDatasetInfo}
-                options={datasetInfos}
-                getOptionLabel={(option) =>
-                    `${option.datasetName} (ID: ${option.idDataset})`
-                }
-                isOptionEqualToValue={(option, value) =>
-                    option.idDataset === value.idDataset
-                }
-                sx={{ width: 500 }}
-                renderInput={(params) => (
-                    <TextField {...params} label="Dataset" />
-                )}
-                onChange={(_, newValue) => {
-                    setSelectedDatasetInfo(newValue);
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBottom: "50px",
                 }}
-                noOptionsText="Daný dataset neexistuje"
-            />
+            >
+                <Autocomplete
+                    value={selectedDatasetInfo}
+                    options={datasetInfos}
+                    getOptionLabel={(option) =>
+                        `${option.datasetName} (ID: ${option.idDataset})`
+                    }
+                    isOptionEqualToValue={(option, value) =>
+                        option.idDataset === value.idDataset
+                    }
+                    sx={{ width: 500, marginTop: "20px" }}
+                    renderInput={(params) => (
+                        <TextField {...params} label="Dataset" />
+                    )}
+                    onChange={(_, newValue) => {
+                        setSelectedDatasetInfo(newValue);
+                    }}
+                    noOptionsText="Daný dataset neexistuje"
+                />
+            </div>
 
             <div className="data-table-container">
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
@@ -682,6 +734,30 @@ function DatasetEditor() {
                     </Grid>
                 </Grid>
             </div>
+
+            {datasetForEditing && (
+                <div style={{ marginTop: "20px", pointerEvents: "none" }}>
+                    <LineChart
+                        xAxis={[
+                            {
+                                data: getChartAxisX(),
+                                hideTooltip: true,
+                            },
+                        ]}
+                        series={[
+                            {
+                                curve: "linear",
+                                data: getChartData(),
+                                showMark: false,
+                            },
+                        ]}
+                        height={500}
+                        sx={{
+                            width: "100%",
+                        }}
+                    />
+                </div>
+            )}
         </>
     );
 

@@ -1,4 +1,4 @@
-export function translateFrequency(frequency: string) {
+export function translateFrequency(frequency: string): string {
     switch (frequency.toLowerCase()) {
         case "hourly":
             return "hodinová";
@@ -17,7 +17,7 @@ export function translateFrequency(frequency: string) {
     }
 }
 
-export function formatDate(date: Date) {
+export function formatDate(date: Date): string {
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString();
     const day = date.getDate().toString();
@@ -26,7 +26,7 @@ export function formatDate(date: Date) {
     return `${year}/${month.padStart(2, "0")}/${day.padStart(2, "0")}-${hour.padStart(2, "0")}`;
 }
 
-export function getPreviousDate(date: Date, frequency: string) {
+export function getPreviousDate(date: Date, frequency: string): Date {
     const newDate = new Date(date);
 
     switch (frequency.toLowerCase()) {
@@ -82,6 +82,21 @@ export function getNextDate(date: Date, frequency: string): Date {
     }
 
     return newDate;
+}
+
+export function stringToDate(string: string): Date {
+    const year = Number(string.substring(0, 4));
+    const month = Number(string.substring(5, 7));
+    const day = Number(string.substring(8, 10));
+    const hour = Number(string.substring(11, 13));
+
+    let date = new Date();
+    date.setFullYear(year);
+    date.setMonth(month - 1);
+    date.setDate(day);
+    date.setHours(hour);
+
+    return date;
 }
 
 export function timeout(delayMs: number) {
