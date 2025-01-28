@@ -34,9 +34,57 @@ const Item = styled(Paper)(({}) => ({
     border: "none",
 }));
 
+let newColumnName: string = "";
+const changeNewColumnNameValue = (value: string) => {
+    newColumnName = value;
+};
+const clearNewColumnName = () => {
+    newColumnName = "";
+
+    (
+        document.getElementById(
+            "dataset-data-new-column-name",
+        ) as HTMLInputElement
+    ).value = "";
+};
+
+let updatedData: Map<number, string> = new Map();
+const changeUpdatedDataValue = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+) => {
+    const value = event.target.value.trim();
+    const numberValue: number = Number(value);
+    const previousValue: string | null = updatedData.has(index)
+        ? (updatedData.get(index) as string)
+        : null;
+
+    if (value !== "" && !Number.isNaN(numberValue)) {
+        updatedData.set(index, value);
+    } else if (value === "-") {
+        updatedData.set(index, "-");
+    } else if (previousValue != null && value === "") {
+        updatedData.delete(index);
+    }
+
+    event.target.value = updatedData.get(index) || "";
+};
+
+const clearUpdatedData = () => {
+    updatedData = new Map();
+    clearInputsDOM();
+};
+
+const clearInputsDOM = () => {
+    const divs = document.getElementsByClassName("updated-data-field");
+    for (let i = 0; i < divs.length; ++i) {
+        const input = divs[i].querySelector("input");
+        (input as HTMLInputElement).value = "";
+    }
+};
+
 function DatasetEditor() {
     const { openModal, closeModal, openNotification } = Utility.useUtility();
-
     const location = ReactRouter.useLocation();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -47,14 +95,6 @@ function DatasetEditor() {
         React.useState<Type.DatasetInfo | null>(null);
     const [datasetForEditing, setDatasetForEditing] =
         React.useState<Type.DatasetForEditing | null>(null);
-
-    const [newColumnName, setNewColumnName] = React.useState<string>("");
-    const [changedValues, setChangedValues] = React.useState<
-        Map<number, string>
-    >(new Map());
-
-    const [buttonConfirmDisabled, setButtonConfirmDisabled] =
-        React.useState<boolean>(true);
 
     React.useEffect(() => {
         loadDatasetInfos();
@@ -68,14 +108,6 @@ function DatasetEditor() {
         loadDatasetForEditing();
         clearChangedValuesInputs();
     }, [selectedDatasetInfo]);
-
-    React.useEffect(() => {
-        if (changedValues.size <= 0 && newColumnName.trim() === "") {
-            setButtonConfirmDisabled(true);
-        } else {
-            setButtonConfirmDisabled(false);
-        }
-    }, [newColumnName, changedValues]);
 
     const loadDatasetInfos = async () => {
         try {
@@ -191,49 +223,15 @@ function DatasetEditor() {
         } catch {}
     };
 
-    const handleNewColumnNameChange = (newColumnName: string) => {
-        setNewColumnName(newColumnName);
-    };
-
-    const handleNewValueChange = (
-        index: number,
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    ) => {
-        const value = event.target.value.trim();
-        const numberValue: number = Number(value);
-        const previousValue: string | null = changedValues.has(index)
-            ? (changedValues.get(index) as string)
-            : null;
-
-        if (value !== "" && !Number.isNaN(numberValue)) {
-            setChangedValues((prevChangedValues) => {
-                const newMap = new Map(prevChangedValues);
-                newMap.set(index, value);
-                return newMap;
-            });
-        } else if (value === "-") {
-            setChangedValues((prevChangedValues) => {
-                const newMap = new Map(prevChangedValues);
-                newMap.set(index, "-");
-                return newMap;
-            });
-        } else if (previousValue != null && value === "") {
-            setChangedValues((prevChangedValues) => {
-                const newMap = new Map(prevChangedValues);
-                newMap.delete(index);
-                return newMap;
-            });
-        }
-    };
-
     const handleConfirmChanges = async () => {
-        if (buttonConfirmDisabled) {
+        if (newColumnName === "" && updatedData.size === 0) {
+            openNotification("Neboli zadané žiadne zmeny", "white", "red");
             return;
         }
 
         let changedRows: Type.Row[] = [];
 
-        changedValues.forEach((_, key) => {
+        updatedData.forEach((_, key) => {
             const row: HTMLTableRowElement = document.getElementById(
                 "dataset-for-editing-table-row-" + key,
             ) as HTMLTableRowElement;
@@ -298,11 +296,8 @@ function DatasetEditor() {
     };
 
     const clearChangedValuesInputs = () => {
-        setChangedValues(() => {
-            const newMap = new Map();
-            return newMap;
-        });
-        setNewColumnName("");
+        clearUpdatedData();
+        clearNewColumnName();
     };
 
     const handleNewStartDataCountChange = (value: number) => {
@@ -363,6 +358,7 @@ function DatasetEditor() {
                 "white",
                 "red",
             );
+            return;
         }
 
         const frequency = datasetForEditing!.datasetInfo.frequencyType;
@@ -409,14 +405,7 @@ function DatasetEditor() {
             return prevState;
         });
 
-        const originalMap = changedValues;
-        const newMap = new Map();
-
-        originalMap.forEach((value, index) => {
-            newMap.set(index + startCount, value);
-        });
-
-        setChangedValues(newMap);
+        clearUpdatedData();
         handleNewDataModalClose();
     };
 
@@ -428,9 +417,23 @@ function DatasetEditor() {
                         marginTop: "0",
                         fontWeight: "bold",
                         fontSize: "25px",
+                        marginBottom: "0",
                     }}
                 >
                     Pridanie dát
+                </p>
+
+                <p
+                    style={{
+                        marginTop: "5px",
+                        marginBottom: "25px",
+                        fontSize: "15px",
+                    }}
+                >
+                    <span style={{ color: "red", fontWeight: "bold" }}>
+                        Varovanie:{" "}
+                    </span>
+                    pridanie nových dát spôsobí zmazanie zadaných hodnôt
                 </p>
 
                 <Grid container>
@@ -544,15 +547,8 @@ function DatasetEditor() {
         return processedData;
     };
 
-    const handleDebug = () => {
-        console.log(datasetForEditing);
-        getChartAxisX();
-    };
-
     const content = (
         <>
-            <button onClick={handleDebug}>DEBUG</button>
-
             <input type="hidden" id="new-start-data-count-hidden" value="0" />
             <input type="hidden" id="new-end-data-count-hidden" value="0" />
 
@@ -639,21 +635,18 @@ function DatasetEditor() {
                                             <TableCell className="dataset-for-editing-changed-value-cell editor-input-cell">
                                                 <label className="editor-input-cell-label">
                                                     <TextField
-                                                        value={
-                                                            changedValues.has(
-                                                                index,
-                                                            )
-                                                                ? changedValues.get(
-                                                                      index,
-                                                                  )
-                                                                : ""
-                                                        }
+                                                        className="updated-data-field"
                                                         onChange={(event) =>
-                                                            handleNewValueChange(
+                                                            changeUpdatedDataValue(
                                                                 index,
                                                                 event,
                                                             )
                                                         }
+                                                        slotProps={{
+                                                            htmlInput: {
+                                                                maxLength: 100,
+                                                            },
+                                                        }}
                                                         variant="standard"
                                                     />
                                                 </label>
@@ -689,9 +682,8 @@ function DatasetEditor() {
                                         },
                                     }}
                                     style={{ width: "100%" }}
-                                    value={newColumnName}
                                     onChange={(event) => {
-                                        handleNewColumnNameChange(
+                                        changeNewColumnNameValue(
                                             event.currentTarget.value,
                                         );
                                     }}
@@ -720,7 +712,6 @@ function DatasetEditor() {
                             <div className="dataset-data-submit-button">
                                 <Button
                                     id="data-upload-submit-button"
-                                    disabled={buttonConfirmDisabled}
                                     type="submit"
                                     size="large"
                                     variant="contained"
