@@ -1,3 +1,4 @@
+import HelperElement from "./HelperElement.tsx";
 import "./LayoutStyles.css";
 import MenuData from "./Menus/MenuData.tsx";
 import MenuModels from "./Menus/MenuModels.tsx";
@@ -189,6 +190,7 @@ function ResponsiveAppBar(props: InternalComponentProps) {
             </div>
 
             <div id="content">{props.component}</div>
+            <HelperElement />
         </>
     );
 }

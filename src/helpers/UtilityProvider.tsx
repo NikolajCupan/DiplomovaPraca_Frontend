@@ -38,6 +38,7 @@ interface UtilityContextProps {
         textColor: string,
         backgroundColor: string,
     ) => void;
+    closeNotification: () => void;
 }
 
 interface UtilityProviderProps {
@@ -102,6 +103,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
                 isNotificationOpen: isNotificationOpen,
                 notificationContent,
                 openNotification,
+                closeNotification
             }}
         >
             {props.children}

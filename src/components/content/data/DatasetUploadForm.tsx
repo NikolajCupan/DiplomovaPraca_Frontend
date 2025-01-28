@@ -258,7 +258,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                     <DatePicker
                         sx={{ width: 1 }}
                         format="YYYY/MM/DD"
-                        minDate={dayjs(new Date(100, 0, 1).setFullYear(0))}
+                        minDate={dayjs(new Date(100, 0, 1))}
                         maxDate={dayjs(new Date(9999, 11, 31))}
                         value={startDate}
                         onChange={(date) => {
