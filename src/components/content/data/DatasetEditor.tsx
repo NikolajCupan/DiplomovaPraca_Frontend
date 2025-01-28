@@ -547,6 +547,25 @@ function DatasetEditor() {
         return processedData;
     };
 
+    const formatChartValueX = (value: Date): string => {
+        const formattedDate = Helper.formatDate(value);
+
+        switch (selectedDatasetInfo?.frequencyType) {
+            case "hourly":
+                return formattedDate;
+            case "daily":
+            case "weekly":
+                return formattedDate.substring(0, 10);
+            case "monthly":
+            case "quarterly":
+                return formattedDate.substring(0, 7);
+            case "yearly":
+                return formattedDate.substring(0, 4);
+        }
+
+        return "n/a";
+    };
+
     const content = (
         <>
             <input type="hidden" id="new-start-data-count-hidden" value="0" />
@@ -581,7 +600,7 @@ function DatasetEditor() {
                 />
             </div>
 
-            <div className="data-table-container">
+            <div className="data-element-container">
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table
                         id="dataset-for-editing-table"
@@ -726,29 +745,58 @@ function DatasetEditor() {
                 </Grid>
             </div>
 
-            {datasetForEditing && (
-                <div style={{ marginTop: "20px", pointerEvents: "none" }}>
-                    <LineChart
-                        xAxis={[
-                            {
-                                data: getChartAxisX(),
-                                hideTooltip: true,
-                            },
-                        ]}
-                        series={[
-                            {
-                                curve: "linear",
-                                data: getChartData(),
-                                showMark: false,
-                            },
-                        ]}
-                        height={500}
-                        sx={{
+            <div className="data-element-container">
+                <Box
+                    sx={{
+                        display: "flex",
+                        overflowX: "auto",
+                        whiteSpace: "nowrap",
+                        maxWidth: "100%",
+                        "@media (max-width: 1000px)": {
+                            overflowX: "scroll",
+                        },
+                    }}
+                >
+                    <div
+                        style={{
                             width: "100%",
+                            minWidth: 1000,
                         }}
-                    />
-                </div>
-            )}
+                    >
+                        {datasetForEditing !== null ? (
+                            <LineChart
+                                xAxis={[
+                                    {
+                                        data: getChartAxisX(),
+                                        scaleType: "time",
+                                        valueFormatter: (value) => {
+                                            return formatChartValueX(value);
+                                        },
+                                        tickNumber:
+                                            getChartAxisX().length < 25
+                                                ? getChartAxisX().length
+                                                : 15,
+                                    },
+                                ]}
+                                series={[
+                                    {
+                                        curve: "linear",
+                                        data: getChartData(),
+                                        showMark: false,
+                                    },
+                                ]}
+                                height={500}
+                                sx={{
+                                    width: "100%",
+                                    pointerEvents: "none",
+                                }}
+                            />
+                        ) : (
+                            <p style={{ fontSize: "14px" }}>Zvoľte dataset</p>
+                        )}
+                    </div>
+                </Box>
+            </div>
         </>
     );
 

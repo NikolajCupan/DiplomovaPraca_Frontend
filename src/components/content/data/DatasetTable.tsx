@@ -213,7 +213,7 @@ function DatasetTable(props: DatasetTableProps) {
 
     return (
         <>
-            <div className="data-table-container">
+            <div className="data-element-container">
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table sx={{ minWidth: 650 }}>
                         <colgroup>
