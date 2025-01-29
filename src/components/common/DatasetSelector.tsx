@@ -1,17 +1,22 @@
-import * as Type from "../../helpers/Types.tsx";
 import * as Constants from "../../helpers/Constants.tsx";
 import * as CookiesManager from "../../helpers/CookiesManager.tsx";
+import * as Type from "../../helpers/Types.tsx";
 
 import { Autocomplete, TextField } from "@mui/material";
 
 import * as React from "react";
 
-function DatasetSelector() {
+interface DatasetSelectorProps {
+    selectedDatasetInfo: Type.DatasetInfo | null;
+    setSelectedDatasetInfo: React.Dispatch<
+        React.SetStateAction<Type.DatasetInfo | null>
+    >;
+}
+
+function DatasetSelector(props: DatasetSelectorProps) {
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
     );
-    const [selectedDatasetInfo, setSelectedDatasetInfo] =
-        React.useState<Type.DatasetInfo | null>(null);
 
     React.useEffect(() => {
         loadDatasetInfos();
@@ -58,7 +63,7 @@ function DatasetSelector() {
             }}
         >
             <Autocomplete
-                value={selectedDatasetInfo}
+                value={props.selectedDatasetInfo}
                 options={datasetInfos}
                 getOptionLabel={(option) =>
                     `${option.datasetName} (ID: ${option.idDataset})`
@@ -71,7 +76,7 @@ function DatasetSelector() {
                     <TextField {...params} label="Dataset" />
                 )}
                 onChange={(_, newValue) => {
-                    setSelectedDatasetInfo(newValue);
+                    props.setSelectedDatasetInfo(newValue);
                 }}
                 noOptionsText="Žiadny dataset nie je k dispozícii"
             />
