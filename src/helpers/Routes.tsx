@@ -25,7 +25,7 @@ export const ROUTES = [
         element: <LinearRegression />,
     },
     {
-        path: Constants.DICKER_FULLER_TEST_LINK,
+        path: Constants.DICKEY_FULLER_TEST_LINK,
         element: <DickerFullerTest />,
     },
     {

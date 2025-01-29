@@ -95,7 +95,7 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href={Constants.DICKER_FULLER_TEST_LINK}>
+                <a href={Constants.DICKEY_FULLER_TEST_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>

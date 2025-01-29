@@ -22,6 +22,4 @@ if (rootElement) {
     } else {
         createRoot(rootElement).render(<App />);
     }
-} else {
-    console.error("Root element was not found");
 }
