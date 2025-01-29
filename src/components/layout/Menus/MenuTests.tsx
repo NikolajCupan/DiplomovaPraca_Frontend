@@ -1,3 +1,5 @@
+import * as Constants from "../../../helpers/Constants.tsx";
+
 import BiotechIcon from "@mui/icons-material/Biotech";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Button from "@mui/material/Button";
@@ -93,7 +95,7 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href="/">
+                <a href={Constants.DICKER_FULLER_TEST_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>
@@ -102,7 +104,7 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>
@@ -113,7 +115,7 @@ export default function CustomizedMenus() {
 
                 <Divider sx={{ my: 0.5 }} />
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>
@@ -122,14 +124,14 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Periodogram
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Korelogram
@@ -138,14 +140,14 @@ export default function CustomizedMenus() {
 
                 <Divider sx={{ my: 0.5 }} />
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         ARCH test
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>

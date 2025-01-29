@@ -1,3 +1,5 @@
+import * as Constants from "../../../helpers/Constants.tsx";
+
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Button from "@mui/material/Button";
@@ -92,21 +94,21 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Domovská stránka
                     </MenuItem>
                 </a>
 
-                <a href="/data">
+                <a href={Constants.UPLOAD_DATASET_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Zoznam a pridávanie datasetov
                     </MenuItem>
                 </a>
 
-                <a href="/data/edit">
+                <a href={Constants.EDIT_DATASET_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Editovanie datasetu

@@ -9,8 +9,16 @@ export const NOTIFICATION_CLOSE_MS = 3_000;
 /*
  * Frontend paths
  */
-export const EDIT_DATASET_LINK = "/data/edit";
+export const HOME_LINK = "/";
+
 export const UPLOAD_DATASET_LINK = "/data";
+export const EDIT_DATASET_LINK = "/data/edit";
+
+export const DICKER_FULLER_TEST_LINK = "/test/dicker-fuller-test";
+export const LINEAR_REGRESSION_LINK = "/model/linear-regression";
+
+export const TESTING_LINK = "/debug/testing";
+export const TODO_LINK = "/debug/todo";
 
 /*
  * Backend paths

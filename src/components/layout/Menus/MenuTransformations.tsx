@@ -1,3 +1,5 @@
+import * as Constants from "../../../helpers/Constants.tsx";
+
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import Button from "@mui/material/Button";
@@ -92,28 +94,28 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Diferencia
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Logaritmovanie
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Normalizácia
                     </MenuItem>
                 </a>
 
-                <a href="/">
+                <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Štandardizácia
