@@ -1,5 +1,5 @@
 import * as Constants from "../../../helpers/Constants.tsx";
-import * as CookieManager from "../../../helpers/CookiesManager.tsx";
+import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
@@ -120,11 +120,11 @@ function DatasetEditor() {
                 },
             };
 
-            CookieManager.prepareRequest(request);
+            CookiesManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
 
             if (response.ok) {
-                CookieManager.processResponse(response);
+                CookiesManager.processResponse(response);
 
                 const responseBody =
                     (await response.json()) as Type.RequestResult;
@@ -172,12 +172,12 @@ function DatasetEditor() {
                 },
             };
 
-            CookieManager.prepareRequest(request);
+            CookiesManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
             const responseBody = (await response.json()) as Type.RequestResult;
 
             if (response.ok) {
-                CookieManager.processResponse(response);
+                CookiesManager.processResponse(response);
 
                 let datasetForEditing: Type.DatasetForEditing = {
                     datasetInfo: {
@@ -278,12 +278,12 @@ function DatasetEditor() {
                 },
             };
 
-            CookieManager.prepareRequest(request);
+            CookiesManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
             const responseBody = (await response.json()) as Type.RequestResult;
 
             if (response.ok) {
-                CookieManager.processResponse(response);
+                CookiesManager.processResponse(response);
 
                 openNotification(responseBody.message, "white", "green");
 
@@ -596,7 +596,7 @@ function DatasetEditor() {
                     onChange={(_, newValue) => {
                         setSelectedDatasetInfo(newValue);
                     }}
-                    noOptionsText="Daný dataset neexistuje"
+                    noOptionsText="Žiadny dataset nie je k dispozícii"
                 />
             </div>
 

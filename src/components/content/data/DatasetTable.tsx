@@ -1,5 +1,5 @@
 import * as Constants from "../../../helpers/Constants.tsx";
-import * as CookieManager from "../../../helpers/CookiesManager.tsx";
+import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
@@ -47,11 +47,11 @@ function DatasetTable(props: DatasetTableProps) {
                 },
             };
 
-            CookieManager.prepareRequest(request);
+            CookiesManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
 
             if (response.ok) {
-                CookieManager.processResponse(response);
+                CookiesManager.processResponse(response);
 
                 const responseBody =
                     (await response.json()) as Type.RequestResult;
@@ -80,11 +80,11 @@ function DatasetTable(props: DatasetTableProps) {
                 },
             };
 
-            CookieManager.prepareRequest(request);
+            CookiesManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
 
             if (response.ok) {
-                CookieManager.processResponse(response);
+                CookiesManager.processResponse(response);
 
                 const blob = await response.blob();
                 const newBlob = new Blob([blob]);
@@ -182,11 +182,11 @@ function DatasetTable(props: DatasetTableProps) {
                 },
             };
 
-            CookieManager.prepareRequest(request);
+            CookiesManager.prepareRequest(request);
             const response = await fetch(request.url, request.options);
 
             if (response.ok) {
-                CookieManager.processResponse(response);
+                CookiesManager.processResponse(response);
 
                 openNotification(
                     "Dataset bol úspešne zmazaný",
