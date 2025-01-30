@@ -4,6 +4,7 @@ import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import DatasetSelector from "../../common/DatasetSelector.tsx";
 import NumberInput from "../../common/NumberInput.tsx";
+import SelectInput from "../../common/SelectInput.tsx";
 import Layout from "../../layout/Layout.tsx";
 
 import Grid from "@mui/material/Grid2";
@@ -21,7 +22,17 @@ function DickerFullerTest() {
     const [maxLag, setMaxLag] = React.useState<number>(0);
     const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(true);
 
+    const [regression, setRegression] = React.useState<string>("");
+    const [regressionEnabled, setRegressionEnabled] =
+        React.useState<boolean>(false);
+
     const handleSubmit = async () => {
+        console.log(pValue);
+        console.log(maxLag);
+        console.log(maxLagEnabled);
+        console.log(regression);
+        console.log(regressionEnabled);
+
         if (!selectedDatasetInfo) {
             return;
         }
@@ -75,6 +86,23 @@ function DickerFullerTest() {
                 selectedDatasetInfo={selectedDatasetInfo}
                 setSelectedDatasetInfo={setSelectedDatasetInfo}
             />
+
+            <SelectInput
+                label={"Regresia"}
+                value={regression}
+                setValue={setRegression}
+                toggleable={true}
+                inputEnabled={regressionEnabled}
+                setInputEnabled={setRegressionEnabled}
+                menuItems={[
+                    ["c", "Konštanta"],
+                    ["ct", "Konštanta, trend"],
+                    ["ctt", "Konštanta, lineárny a kvadratický trend"],
+                    ["n", "Bez konštanty a trendu"],
+                ]}
+            />
+
+            <div style={{ marginBottom: "50px" }}></div>
 
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>

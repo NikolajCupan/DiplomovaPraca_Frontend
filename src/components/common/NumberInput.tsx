@@ -65,9 +65,7 @@ function NumberInput(props: NumberInputProps) {
                     endAdornment: props.toggleable ? (
                         <InputAdornment position="end">
                             <Checkbox
-                                {...(props.inputEnabled
-                                    ? { defaultChecked: true }
-                                    : {})}
+                                checked={props.inputEnabled}
                                 onChange={(event) =>
                                     handleInputEnabledChange(
                                         event.target.checked,
