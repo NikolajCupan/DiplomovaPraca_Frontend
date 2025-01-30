@@ -1,31 +1,33 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import DatasetSelector from "../../common/DatasetSelector.tsx";
+import NumberInput from "../../common/NumberInput.tsx";
 import Layout from "../../layout/Layout.tsx";
+
+import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
 function DickerFullerTest() {
+    const { openNotification } = Utility.useUtility();
+
     const [selectedDatasetInfo, setSelectedDatasetInfo] =
         React.useState<Type.DatasetInfo | null>(null);
-    const [pValue, setPValue] = React.useState<string>(
-        Constants.DEFAULT_P_VALUE.toString(),
-    );
 
-    const validatePValue = () => {
-        const numericPValue = Number(pValue);
-        if (isNaN(numericPValue) || numericPValue < 0 || numericPValue > 1) {
-            setPValue(Constants.DEFAULT_P_VALUE.toString());
-        }
-    };
+    const [pValue, setPValue] = React.useState<number>(0);
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const [maxLag, setMaxLag] = React.useState<number>(0);
+    const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(true);
 
+    const handleSubmit = async () => {
         if (!selectedDatasetInfo) {
             return;
         }
+
+        let success: boolean = true;
+        let responseBodyData: JSON = {} as JSON;
 
         try {
             const formData = new FormData();
@@ -33,7 +35,7 @@ function DickerFullerTest() {
                 "idDataset",
                 selectedDatasetInfo.idDataset.toString(),
             );
-            formData.append("pValue", pValue);
+            formData.append("pValue", pValue.toString());
 
             const request: Type.FetchRequest = {
                 url: Constants.BACKEND_PATH + Constants.DICKEY_FULLER_TEST,
@@ -48,8 +50,23 @@ function DickerFullerTest() {
 
             if (response.ok) {
                 CookiesManager.processResponse(response);
+
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
+                responseBodyData = JSON.parse(responseBody.data);
+            } else {
+                success = false;
             }
-        } catch {}
+        } catch {
+            success = false;
+        }
+
+        if (!success) {
+            openNotification("Chyba pri vykonávaní testu", "white", "red");
+            return;
+        }
+
+        console.log(responseBodyData);
     };
 
     const content = (
@@ -59,16 +76,37 @@ function DickerFullerTest() {
                 setSelectedDatasetInfo={setSelectedDatasetInfo}
             />
 
-            <form action="#" method="post" onSubmit={handleSubmit}>
-                <input
-                    className="numeric-input-no-arrows"
-                    type="number"
-                    value={pValue}
-                    onChange={(event) => setPValue(event.target.value)}
-                    onBlur={validatePValue}
-                />
-                <button type="submit">Odoslať</button>
-            </form>
+            <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        value={pValue}
+                        setValue={setPValue}
+                        toggleable={false}
+                        inputEnabled={true}
+                        label={"Hladina významnosti"}
+                        defaultValue={0.15}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        value={maxLag}
+                        setValue={setMaxLag}
+                        toggleable={true}
+                        inputEnabled={maxLagEnabled}
+                        setInputEnabled={setMaxLagEnabled}
+                        label={"Maximálny lag"}
+                        defaultValue={0.05}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+            </Grid>
+
+            <button onClick={handleSubmit}>click</button>
         </div>
     );
 
