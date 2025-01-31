@@ -17,6 +17,8 @@ interface DatasetSelectorProps {
     >;
 
     keepArrow?: boolean;
+    customClass?: string;
+    customStyle?: React.CSSProperties;
 }
 
 function DatasetSelector(props: DatasetSelectorProps) {
@@ -74,6 +76,7 @@ function DatasetSelector(props: DatasetSelectorProps) {
 
     return (
         <Autocomplete
+            className={props.customClass}
             value={props.selectedDatasetInfo}
             options={props.datasetInfos}
             getOptionLabel={(option) =>
@@ -88,7 +91,7 @@ function DatasetSelector(props: DatasetSelectorProps) {
             }}
             forcePopupIcon={props.keepArrow ?? true}
             noOptionsText="Žiadny dataset nie je k dispozícii"
-            style={{ width: "100%" }}
+            style={{ ...props.customStyle, width: "100%" }}
         />
     );
 }

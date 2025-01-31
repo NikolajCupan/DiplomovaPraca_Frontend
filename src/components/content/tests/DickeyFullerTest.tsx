@@ -2,7 +2,9 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
+import ConfirmButton from "../../common/ConfirmButton.tsx";
 import DatasetSelector from "../../common/DatasetSelector.tsx";
+import FormTitle from "../../common/FormTitle.tsx";
 import NumberInput from "../../common/NumberInput.tsx";
 import SelectInput from "../../common/SelectInput.tsx";
 import Layout from "../../layout/Layout.tsx";
@@ -89,6 +91,8 @@ function DickerFullerTest() {
 
     const content = (
         <div className="custom-form-container">
+            <FormTitle text={"Dickey-Fuller test"} />
+
             <DatasetSelector
                 datasetInfos={datasetInfos}
                 setDatasetInfos={setDatasetInfos}
@@ -96,39 +100,10 @@ function DickerFullerTest() {
                 setSelectedDatasetInfo={setSelectedDatasetInfo}
             />
 
-            <SelectInput
-                label={"Regresia"}
-                value={regression}
-                setValue={setRegression}
-                toggleable={true}
-                inputEnabled={regressionEnabled}
-                setInputEnabled={setRegressionEnabled}
-                menuItems={[
-                    ["c", "Konštanta"],
-                    ["ct", "Konštanta, trend"],
-                    ["ctt", "Konštanta, lineárny a kvadratický trend"],
-                    ["n", "Bez konštanty a trendu"],
-                ]}
-            />
-
-            <SelectInput
-                label={"Autolag"}
-                value={autolag}
-                setValue={setAutolag}
-                toggleable={true}
-                inputEnabled={autolagEnabled}
-                setInputEnabled={setAutolagEnabled}
-                menuItems={[
-                    ["AIC", "AIC"],
-                    ["BIC", "BIC"],
-                    ["t-stat", "t-stat"],
-                    ["None", "Žiadny"],
-                ]}
-            />
-
-            <Grid container spacing={2}>
+            <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
+                        customClass="custom-form-component-margin-top"
                         value={pValue}
                         setValue={setPValue}
                         toggleable={false}
@@ -142,6 +117,7 @@ function DickerFullerTest() {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
+                        customClass="custom-form-component-margin-top"
                         value={maxLag}
                         setValue={setMaxLag}
                         toggleable={true}
@@ -156,7 +132,49 @@ function DickerFullerTest() {
                 </Grid>
             </Grid>
 
-            <button onClick={handleSubmit}>click</button>
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <SelectInput
+                        customClass="custom-form-component-margin-top"
+                        label={"Regresia"}
+                        value={regression}
+                        setValue={setRegression}
+                        toggleable={true}
+                        inputEnabled={regressionEnabled}
+                        setInputEnabled={setRegressionEnabled}
+                        menuItems={[
+                            ["c", "Konštanta"],
+                            ["ct", "Konštanta, trend"],
+                            ["ctt", "Konštanta, lineárny a kvadratický trend"],
+                            ["n", "Bez konštanty a trendu"],
+                        ]}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <SelectInput
+                        customClass="custom-form-component-margin-top"
+                        label={"Autolag"}
+                        value={autolag}
+                        setValue={setAutolag}
+                        toggleable={true}
+                        inputEnabled={autolagEnabled}
+                        setInputEnabled={setAutolagEnabled}
+                        menuItems={[
+                            ["AIC", "AIC"],
+                            ["BIC", "BIC"],
+                            ["t-stat", "t-stat"],
+                            ["None", "Žiadny"],
+                        ]}
+                    />
+                </Grid>
+            </Grid>
+
+            <ConfirmButton
+                text={"Vykonať test"}
+                customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
+                toggleable={false}
+                submitEnabled={true}
+            />
         </div>
     );
 

@@ -15,6 +15,9 @@ interface NumberInputProps {
     minValue: number;
     maxValue: number;
     step: number;
+
+    customClass?: string;
+    customStyle?: React.CSSProperties;
 }
 
 function NumberInput(props: NumberInputProps) {
@@ -46,9 +49,10 @@ function NumberInput(props: NumberInputProps) {
 
     return (
         <TextField
+            className={props.customClass}
             label={props.label}
             variant="outlined"
-            style={{ width: "100%" }}
+            style={{ ...props.customStyle, width: "100%" }}
             type="number"
             value={props.value}
             onChange={(event) => handleChangeValue(event.target.value)}

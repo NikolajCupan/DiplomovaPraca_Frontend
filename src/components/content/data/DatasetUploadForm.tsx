@@ -23,6 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 
 import * as React from "react";
+import FormTitle from "../../common/FormTitle.tsx";
 
 interface DatasetUploadFormProps {
     setDatasetInfos: React.Dispatch<React.SetStateAction<Type.DatasetInfo[]>>;
@@ -314,7 +315,7 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
     return (
         <>
             <div className="data-upload-container">
-                <h1 className="data-upload-main-title">Upload nového súboru</h1>
+                <FormTitle text={"Upload nového súboru"} />
 
                 <fieldset>
                     <form action="#" method="post" onSubmit={handleSubmit}>
@@ -525,7 +526,6 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                         </div>
 
                         <Button
-                            id="data-upload-submit-button"
                             disabled={submitDisabled}
                             style={{
                                 marginTop: "20px",

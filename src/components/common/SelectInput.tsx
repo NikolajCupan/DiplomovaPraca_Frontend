@@ -12,6 +12,9 @@ interface SelectInputProps {
 
     label: string;
     menuItems: [string, string][];
+
+    customClass?: string;
+    customStyle?: React.CSSProperties;
 }
 
 function SelectInput(props: SelectInputProps) {
@@ -23,15 +26,16 @@ function SelectInput(props: SelectInputProps) {
 
     return (
         <TextField
+            className={props.customClass}
             label={props.label}
             variant="outlined"
-            style={{ width: "100%" }}
+            style={{ ...props.customStyle, width: "100%" }}
             value={props.value}
             onChange={(event) => props.setValue(event.target.value)}
             disabled={!props.inputEnabled}
             slotProps={{
                 input: {
-                    endAdornment: (
+                    endAdornment: props.toggleable ? (
                         <Checkbox
                             checked={props.inputEnabled}
                             onChange={(event) =>
@@ -39,7 +43,7 @@ function SelectInput(props: SelectInputProps) {
                             }
                             disabled={false}
                         />
-                    ),
+                    ) : null,
                 },
                 select: {
                     IconComponent: () => <></>,

@@ -658,7 +658,6 @@ function DatasetEditor() {
                         <Item>
                             <div className="dataset-data-submit-button">
                                 <Button
-                                    id="data-upload-submit-button"
                                     type="submit"
                                     size="large"
                                     variant="contained"
