@@ -3,6 +3,7 @@ import { Box, Button } from "@mui/material";
 
 interface ConfirmButtonProps {
     text: string;
+    action: () => void;
 
     toggleable: boolean;
     submitEnabled: boolean;
@@ -32,6 +33,7 @@ function ConfirmButton(props: ConfirmButtonProps) {
                 }}
             >
                 <Button
+                    onClick={props.action}
                     className={props.customClass}
                     style={{ ...props.customStyle, width: "100%" }}
                     disabled={!props.submitEnabled}

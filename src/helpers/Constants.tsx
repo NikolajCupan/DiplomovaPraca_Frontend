@@ -8,6 +8,16 @@ export const NOTIFICATION_CLOSE_MS = 3_000;
 
 export const DEFAULT_P_VALUE = 0.05;
 
+export const OUTPUT_ELEMENT_TITLE_KEY = "title";
+export const OUTPUT_ELEMENT_RESULT_KEY = "result";
+
+export const SUCCESS_KEY = "success";
+export const EXCEPTION_KEY = "exception";
+
+export const EVALUATION_KEY = "evaluation";
+export const NULL_HYPOTHESIS_KEY = "null_hypothesis";
+export const ALTERNATIVE_HYPOTHESIS_KEY = "alternative_hypothesis";
+
 /*
  * Frontend paths
  */

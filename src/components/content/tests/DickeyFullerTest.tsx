@@ -1,181 +1,36 @@
-import * as Constants from "../../../helpers/Constants.tsx";
-import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../helpers/Types.tsx";
-import * as Utility from "../../../helpers/UtilityProvider.tsx";
-import ConfirmButton from "../../common/ConfirmButton.tsx";
-import DatasetSelector from "../../common/DatasetSelector.tsx";
-import FormTitle from "../../common/FormTitle.tsx";
-import NumberInput from "../../common/NumberInput.tsx";
-import SelectInput from "../../common/SelectInput.tsx";
-import Layout from "../../layout/Layout.tsx";
-import "./Test.css";
 
-import Grid from "@mui/material/Grid2";
+import ResultElement from "../../common/ResultElement.tsx";
+import Layout from "../../layout/Layout.tsx";
+import DickeyFullerTestForm from "./DickeyFullerTestForm.tsx";
+import "./Test.css";
 
 import * as React from "react";
 
 function DickerFullerTest() {
-    const { openNotification } = Utility.useUtility();
-
-    const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
-        [],
-    );
-    const [selectedDatasetInfo, setSelectedDatasetInfo] =
-        React.useState<Type.DatasetInfo | null>(null);
-
-    const [pValue, setPValue] = React.useState<number>(0);
-
-    const [maxLag, setMaxLag] = React.useState<number>(0);
-    const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(true);
-
-    const [regression, setRegression] = React.useState<string>("");
-    const [regressionEnabled, setRegressionEnabled] =
+    const [actionInProgress, setActionInProgress] =
         React.useState<boolean>(false);
-
-    const [autolag, setAutolag] = React.useState<string>("");
-    const [autolagEnabled, setAutolagEnabled] = React.useState<boolean>(false);
-
-    const handleSubmit = async () => {
-        console.log(pValue);
-        console.log(maxLag);
-        console.log(maxLagEnabled);
-        console.log(regression);
-        console.log(regressionEnabled);
-
-        if (!selectedDatasetInfo) {
-            return;
-        }
-
-        let success: boolean = true;
-        let responseBodyData: JSON = {} as JSON;
-
-        try {
-            const formData = new FormData();
-            formData.append(
-                "idDataset",
-                selectedDatasetInfo.idDataset.toString(),
-            );
-            formData.append("pValue", pValue.toString());
-
-            const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.DICKEY_FULLER_TEST,
-                options: {
-                    method: "post",
-                    body: formData,
-                },
-            };
-
-            CookiesManager.prepareRequest(request);
-            const response = await fetch(request.url, request.options);
-
-            if (response.ok) {
-                CookiesManager.processResponse(response);
-
-                const responseBody =
-                    (await response.json()) as Type.RequestResult;
-                responseBodyData = JSON.parse(responseBody.data);
-            } else {
-                success = false;
-            }
-        } catch {
-            success = false;
-        }
-
-        if (!success) {
-            openNotification("Chyba pri vykonávaní testu", "white", "red");
-            return;
-        }
-
-        console.log(responseBodyData);
-    };
+    const [responseBody, setResponseBody] =
+        React.useState<Type.RequestResult | null>(null);
 
     const content = (
-        <div className="custom-form-container">
-            <FormTitle text={"Dickey-Fuller test"} />
+        <>
+            <div className="custom-container">
+                <DickeyFullerTestForm
+                    actionInProgress={actionInProgress}
+                    setActionInProgress={setActionInProgress}
+                    responseBody={responseBody}
+                    setResponseBody={setResponseBody}
+                />
+            </div>
 
-            <DatasetSelector
-                datasetInfos={datasetInfos}
-                setDatasetInfos={setDatasetInfos}
-                selectedDatasetInfo={selectedDatasetInfo}
-                setSelectedDatasetInfo={setSelectedDatasetInfo}
-            />
-
-            <Grid container columnSpacing={4}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={pValue}
-                        setValue={setPValue}
-                        toggleable={false}
-                        inputEnabled={true}
-                        label={"Hladina významnosti"}
-                        defaultValue={0.15}
-                        minValue={0}
-                        maxValue={1}
-                        step={0.01}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={maxLag}
-                        setValue={setMaxLag}
-                        toggleable={true}
-                        inputEnabled={maxLagEnabled}
-                        setInputEnabled={setMaxLagEnabled}
-                        label={"Maximálny lag"}
-                        defaultValue={0.05}
-                        minValue={0}
-                        maxValue={1}
-                        step={0.01}
-                    />
-                </Grid>
-            </Grid>
-
-            <Grid container columnSpacing={4}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <SelectInput
-                        customClass="custom-form-component-margin-top"
-                        label={"Regresia"}
-                        value={regression}
-                        setValue={setRegression}
-                        toggleable={true}
-                        inputEnabled={regressionEnabled}
-                        setInputEnabled={setRegressionEnabled}
-                        menuItems={[
-                            ["c", "Konštanta"],
-                            ["ct", "Konštanta, trend"],
-                            ["ctt", "Konštanta, lineárny a kvadratický trend"],
-                            ["n", "Bez konštanty a trendu"],
-                        ]}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <SelectInput
-                        customClass="custom-form-component-margin-top"
-                        label={"Autolag"}
-                        value={autolag}
-                        setValue={setAutolag}
-                        toggleable={true}
-                        inputEnabled={autolagEnabled}
-                        setInputEnabled={setAutolagEnabled}
-                        menuItems={[
-                            ["AIC", "AIC"],
-                            ["BIC", "BIC"],
-                            ["t-stat", "t-stat"],
-                            ["None", "Žiadny"],
-                        ]}
-                    />
-                </Grid>
-            </Grid>
-
-            <ConfirmButton
-                text={"Vykonať test"}
-                customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
-                toggleable={false}
-                submitEnabled={true}
-            />
-        </div>
+            <div className="custom-container" style={{ marginBottom: "20px" }}>
+                <ResultElement
+                    actionInProgress={actionInProgress}
+                    responseBody={responseBody}
+                />
+            </div>
+        </>
     );
 
     return <Layout component={content} />;

@@ -1,4 +1,4 @@
-.custom-form-container {
+.custom-container {
     border-radius: var(--default-border-radius);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
@@ -8,25 +8,25 @@
 }
 
 @media (max-width: 1600px) {
-    .custom-form-container {
+    .custom-container {
         width: 70%;
     }
 }
 
 @media (max-width: 1200px) {
-    .custom-form-container {
+    .custom-container {
         width: 80%;
     }
 }
 
 @media (max-width: 1025px) {
-    .custom-form-container {
+    .custom-container {
         width: 90%;
     }
 }
 
 @media (max-width: 420px) {
-    .custom-form-container {
+    .custom-container {
         width: 85%;
     }
 }

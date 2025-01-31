@@ -102,3 +102,16 @@ export function stringToDate(string: string): Date {
 export function timeout(delayMs: number) {
     return new Promise((res) => setTimeout(res, delayMs));
 }
+
+export function appendIfAvailable<T>(
+    formData: FormData,
+    name: string,
+    value: T,
+    available: boolean,
+) {
+    if (available) {
+        if ((value as string).toString().trim() !== "") {
+            formData.append(name, (value as string).toString().trim());
+        }
+    }
+}

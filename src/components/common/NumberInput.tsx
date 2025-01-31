@@ -12,8 +12,8 @@ interface NumberInputProps {
 
     label: string;
     defaultValue: number;
-    minValue: number;
-    maxValue: number;
+    minValue?: number;
+    maxValue?: number;
     step: number;
 
     customClass?: string;
@@ -36,7 +36,10 @@ function NumberInput(props: NumberInputProps) {
             return;
         }
 
-        if (numericValue < props.minValue || numericValue > props.maxValue) {
+        if (
+            (props.minValue !== undefined && numericValue < props.minValue) ||
+            (props.maxValue !== undefined && numericValue > props.maxValue)
+        ) {
             props.setValue(props.defaultValue);
         }
     };
@@ -61,8 +64,12 @@ function NumberInput(props: NumberInputProps) {
             slotProps={{
                 htmlInput: {
                     type: "number",
-                    max: props.maxValue,
-                    min: props.minValue,
+                    ...(props.maxValue !== undefined && {
+                        max: props.maxValue,
+                    }),
+                    ...(props.minValue !== undefined && {
+                        min: props.minValue,
+                    }),
                     step: props.step,
                 },
                 input: {
