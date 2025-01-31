@@ -3,13 +3,13 @@ import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
+import DatasetSelector from "../../common/DatasetSelector.tsx";
 import Layout from "../../layout/Layout.tsx";
 import "./DatasetEditor.css";
 
 import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send";
 import {
-    Autocomplete,
     Box,
     Button,
     Paper,
@@ -26,7 +26,6 @@ import Grid from "@mui/material/Grid2";
 import { LineChart } from "@mui/x-charts/LineChart";
 
 import * as React from "react";
-import * as ReactRouter from "react-router-dom";
 
 const Item = styled(Paper)(({}) => ({
     textAlign: "center",
@@ -85,7 +84,6 @@ const clearInputsDOM = () => {
 
 function DatasetEditor() {
     const { openModal, closeModal, openNotification } = Utility.useUtility();
-    const location = ReactRouter.useLocation();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -97,59 +95,9 @@ function DatasetEditor() {
         React.useState<Type.DatasetForEditing | null>(null);
 
     React.useEffect(() => {
-        loadDatasetInfos();
-    }, []);
-
-    React.useEffect(() => {
-        initializeAutocomplete();
-    }, [datasetInfos]);
-
-    React.useEffect(() => {
         loadDatasetForEditing();
         clearChangedValuesInputs();
     }, [selectedDatasetInfo]);
-
-    const loadDatasetInfos = async () => {
-        try {
-            const request: Type.FetchRequest = {
-                url:
-                    Constants.BACKEND_PATH +
-                    Constants.GET_DATASETS_OF_USER_PATH,
-                options: {
-                    method: "get",
-                },
-            };
-
-            CookiesManager.prepareRequest(request);
-            const response = await fetch(request.url, request.options);
-
-            if (response.ok) {
-                CookiesManager.processResponse(response);
-
-                const responseBody =
-                    (await response.json()) as Type.RequestResult;
-                responseBody.data.reverse();
-                responseBody.data.forEach((element: Type.DatasetInfo) => {
-                    setDatasetInfos((prevDatasetInfos) => [
-                        ...prevDatasetInfos,
-                        element,
-                    ]);
-                });
-            }
-        } catch {}
-    };
-
-    const initializeAutocomplete = () => {
-        if (location.state?.idDataset != null) {
-            const dataset = datasetInfos.find(
-                (dataset) => dataset.idDataset === location.state.idDataset,
-            );
-
-            if (dataset) {
-                setSelectedDatasetInfo(dataset);
-            }
-        }
-    };
 
     const loadDatasetForEditing = async () => {
         try {
@@ -571,36 +519,16 @@ function DatasetEditor() {
             <input type="hidden" id="new-start-data-count-hidden" value="0" />
             <input type="hidden" id="new-end-data-count-hidden" value="0" />
 
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: "50px",
-                }}
-            >
-                <Autocomplete
-                    value={selectedDatasetInfo}
-                    options={datasetInfos}
-                    getOptionLabel={(option) =>
-                        `${option.datasetName} (ID: ${option.idDataset})`
-                    }
-                    isOptionEqualToValue={(option, value) =>
-                        option.idDataset === value.idDataset
-                    }
-                    sx={{ width: 500, marginTop: "20px" }}
-                    renderInput={(params) => (
-                        <TextField {...params} label="Dataset" />
-                    )}
-                    onChange={(_, newValue) => {
-                        setSelectedDatasetInfo(newValue);
-                    }}
-                    noOptionsText="Žiadny dataset nie je k dispozícii"
-                />
-            </div>
-
             <div className="data-element-container">
+                <div className="dataset-selector">
+                    <DatasetSelector
+                        datasetInfos={datasetInfos}
+                        setDatasetInfos={setDatasetInfos}
+                        selectedDatasetInfo={selectedDatasetInfo}
+                        setSelectedDatasetInfo={setSelectedDatasetInfo}
+                    />
+                </div>
+
                 <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                     <Table
                         id="dataset-for-editing-table"
@@ -745,7 +673,10 @@ function DatasetEditor() {
                 </Grid>
             </div>
 
-            <div className="data-element-container">
+            <div
+                style={{ marginBottom: "20px" }}
+                className="data-element-container"
+            >
                 <Box
                     sx={{
                         display: "flex",

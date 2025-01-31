@@ -6,6 +6,7 @@ import DatasetSelector from "../../common/DatasetSelector.tsx";
 import NumberInput from "../../common/NumberInput.tsx";
 import SelectInput from "../../common/SelectInput.tsx";
 import Layout from "../../layout/Layout.tsx";
+import "./Test.css";
 
 import Grid from "@mui/material/Grid2";
 
@@ -14,6 +15,9 @@ import * as React from "react";
 function DickerFullerTest() {
     const { openNotification } = Utility.useUtility();
 
+    const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
+        [],
+    );
     const [selectedDatasetInfo, setSelectedDatasetInfo] =
         React.useState<Type.DatasetInfo | null>(null);
 
@@ -25,6 +29,9 @@ function DickerFullerTest() {
     const [regression, setRegression] = React.useState<string>("");
     const [regressionEnabled, setRegressionEnabled] =
         React.useState<boolean>(false);
+
+    const [autolag, setAutolag] = React.useState<string>("");
+    const [autolagEnabled, setAutolagEnabled] = React.useState<boolean>(false);
 
     const handleSubmit = async () => {
         console.log(pValue);
@@ -81,8 +88,10 @@ function DickerFullerTest() {
     };
 
     const content = (
-        <div>
+        <div className="custom-form-container">
             <DatasetSelector
+                datasetInfos={datasetInfos}
+                setDatasetInfos={setDatasetInfos}
                 selectedDatasetInfo={selectedDatasetInfo}
                 setSelectedDatasetInfo={setSelectedDatasetInfo}
             />
@@ -102,7 +111,20 @@ function DickerFullerTest() {
                 ]}
             />
 
-            <div style={{ marginBottom: "50px" }}></div>
+            <SelectInput
+                label={"Autolag"}
+                value={autolag}
+                setValue={setAutolag}
+                toggleable={true}
+                inputEnabled={autolagEnabled}
+                setInputEnabled={setAutolagEnabled}
+                menuItems={[
+                    ["AIC", "AIC"],
+                    ["BIC", "BIC"],
+                    ["t-stat", "t-stat"],
+                    ["None", "Žiadny"],
+                ]}
+            />
 
             <Grid container spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }}>

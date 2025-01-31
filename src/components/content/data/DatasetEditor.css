@@ -45,3 +45,16 @@
         margin-bottom: 10px !important;
     }
 }
+
+.dataset-selector {
+    width: 50%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 900px) {
+    .dataset-selector {
+        width: 100%;
+    }
+}

@@ -5,22 +5,30 @@ import * as Type from "../../helpers/Types.tsx";
 import { Autocomplete, TextField } from "@mui/material";
 
 import * as React from "react";
+import * as ReactRouter from "react-router-dom";
 
 interface DatasetSelectorProps {
+    datasetInfos: Type.DatasetInfo[];
+    setDatasetInfos: React.Dispatch<React.SetStateAction<Type.DatasetInfo[]>>;
+
     selectedDatasetInfo: Type.DatasetInfo | null;
     setSelectedDatasetInfo: React.Dispatch<
         React.SetStateAction<Type.DatasetInfo | null>
     >;
+
+    keepArrow?: boolean;
 }
 
 function DatasetSelector(props: DatasetSelectorProps) {
-    const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
-        [],
-    );
+    const location = ReactRouter.useLocation();
 
     React.useEffect(() => {
         loadDatasetInfos();
     }, []);
+
+    React.useEffect(() => {
+        initializeAutocomplete();
+    }, [props.datasetInfos]);
 
     const loadDatasetInfos = async () => {
         try {
@@ -43,7 +51,7 @@ function DatasetSelector(props: DatasetSelectorProps) {
                     (await response.json()) as Type.RequestResult;
                 responseBody.data.reverse();
                 responseBody.data.forEach((element: Type.DatasetInfo) => {
-                    setDatasetInfos((prevDatasetInfos) => [
+                    props.setDatasetInfos((prevDatasetInfos) => [
                         ...prevDatasetInfos,
                         element,
                     ]);
@@ -52,35 +60,36 @@ function DatasetSelector(props: DatasetSelectorProps) {
         } catch {}
     };
 
+    const initializeAutocomplete = () => {
+        if (location.state?.idDataset != null) {
+            const dataset = props.datasetInfos.find(
+                (dataset) => dataset.idDataset === location.state.idDataset,
+            );
+
+            if (dataset) {
+                props.setSelectedDatasetInfo(dataset);
+            }
+        }
+    };
+
     return (
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: "50px",
+        <Autocomplete
+            value={props.selectedDatasetInfo}
+            options={props.datasetInfos}
+            getOptionLabel={(option) =>
+                `${option.datasetName} (ID: ${option.idDataset})`
+            }
+            isOptionEqualToValue={(option, value) =>
+                option.idDataset === value.idDataset
+            }
+            renderInput={(params) => <TextField {...params} label="Dataset" />}
+            onChange={(_, newValue) => {
+                props.setSelectedDatasetInfo(newValue);
             }}
-        >
-            <Autocomplete
-                value={props.selectedDatasetInfo}
-                options={datasetInfos}
-                getOptionLabel={(option) =>
-                    `${option.datasetName} (ID: ${option.idDataset})`
-                }
-                isOptionEqualToValue={(option, value) =>
-                    option.idDataset === value.idDataset
-                }
-                sx={{ width: 500, marginTop: "20px" }}
-                renderInput={(params) => (
-                    <TextField {...params} label="Dataset" />
-                )}
-                onChange={(_, newValue) => {
-                    props.setSelectedDatasetInfo(newValue);
-                }}
-                noOptionsText="Žiadny dataset nie je k dispozícii"
-            />
-        </div>
+            forcePopupIcon={props.keepArrow ?? true}
+            noOptionsText="Žiadny dataset nie je k dispozícii"
+            style={{ width: "100%" }}
+        />
     );
 }
 
