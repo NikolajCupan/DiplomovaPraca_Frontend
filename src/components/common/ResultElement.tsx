@@ -1,4 +1,5 @@
 import * as Constants from "../../helpers/Constants.tsx";
+import * as Helper from "../../helpers/Helper.tsx";
 import * as Type from "../../helpers/Types.tsx";
 import ScrollableContainer from "../common/ScrollableContainer.tsx";
 
@@ -63,12 +64,22 @@ function ResultElement(props: ResultElementProps) {
         const success = responseCopy[Constants.SUCCESS_KEY];
         delete responseCopy[Constants.SUCCESS_KEY];
 
-        let pairs: [string, string][] = [];
+        let pairs: [boolean, string, string][] = [];
         if (success) {
+            const usedPValueJson: Record<string, any> =
+                responseCopy[Constants.USED_P_VALUE_KEY];
+            delete responseCopy[Constants.USED_P_VALUE_KEY];
+            pairs.push([
+                true,
+                usedPValueJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
+                usedPValueJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
+            ]);
+
             const nullHypothesisJson: Record<string, any> =
                 responseCopy[Constants.NULL_HYPOTHESIS_KEY];
             delete responseCopy[Constants.NULL_HYPOTHESIS_KEY];
             pairs.push([
+                true,
                 nullHypothesisJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
                 nullHypothesisJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
             ]);
@@ -77,6 +88,7 @@ function ResultElement(props: ResultElementProps) {
                 responseCopy[Constants.ALTERNATIVE_HYPOTHESIS_KEY];
             delete responseCopy[Constants.ALTERNATIVE_HYPOTHESIS_KEY];
             pairs.push([
+                true,
                 alternativeHypothesisJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
                 alternativeHypothesisJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
             ]);
@@ -85,6 +97,7 @@ function ResultElement(props: ResultElementProps) {
                 responseCopy[Constants.EVALUATION_KEY];
             delete responseCopy[Constants.EVALUATION_KEY];
             pairs.push([
+                true,
                 evaluationJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
                 evaluationJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
             ]);
@@ -93,6 +106,7 @@ function ResultElement(props: ResultElementProps) {
                 responseCopy[Constants.EXCEPTION_KEY];
             delete responseCopy[Constants.EXCEPTION_KEY];
             pairs.push([
+                true,
                 exceptionJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
                 exceptionJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
             ]);
@@ -100,26 +114,46 @@ function ResultElement(props: ResultElementProps) {
 
         Object.entries(responseCopy).forEach(([_, value]) => {
             const jsonItem = value as Record<string, any>;
+            let result = jsonItem[Constants.OUTPUT_ELEMENT_RESULT_KEY];
+            if (typeof result === "object") {
+                result = Helper.formatJSON(result);
+            }
+
             pairs.push([
-                jsonItem[Constants.OUTPUT_ELEMENT_RESULT_KEY],
+                false,
+                result,
                 jsonItem[Constants.OUTPUT_ELEMENT_TITLE_KEY],
             ]);
         });
-
-        console.log(pairs);
 
         return (
             <ScrollableContainer breakpointWidth={600}>
                 <div style={innerContainerStyleSuccess}>
                     <List>
-                        {pairs.map(([first, second], index) => (
+                        {pairs.map(([important, first, second], index) => (
                             <ListItem key={index}>
                                 <ListItemAvatar>
-                                    <ArrowForwardIosIcon />
+                                    <ArrowForwardIosIcon
+                                        sx={
+                                            important
+                                                ? { color: "black" }
+                                                : { color: "gray" }
+                                        }
+                                    />
                                 </ListItemAvatar>
                                 <ListItemText
-                                    primary={first.toString()}
-                                    secondary={second.toString()}
+                                    primary={first}
+                                    secondary={
+                                        <span
+                                            style={
+                                                important
+                                                    ? { fontWeight: "bold" }
+                                                    : { fontWeight: "normal" }
+                                            }
+                                        >
+                                            {second}
+                                        </span>
+                                    }
                                 />
                             </ListItem>
                         ))}

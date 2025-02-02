@@ -115,3 +115,20 @@ export function appendIfAvailable<T>(
         }
     }
 }
+
+export function formatJSON(object: any): string {
+    const json: Record<string, any> = JSON.parse(JSON.stringify(object));
+    let result: string = "";
+
+    let first = true;
+    Object.entries(json).forEach(([key, value]) => {
+        if (!first) {
+            result += ";";
+        }
+        result += " " + key + ": " + value;
+
+        first = false;
+    });
+
+    return result;
+}
