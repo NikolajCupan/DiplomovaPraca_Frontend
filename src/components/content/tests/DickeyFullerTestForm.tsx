@@ -2,12 +2,12 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
+import Header from "../../common/elements/Header.tsx";
 import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
-import Header from "../../common/elements/Header.tsx";
 import NumberInput from "../../common/inputs/NumberInput.tsx";
 import SelectInput from "../../common/inputs/SelectInput.tsx";
-import * as Utility from "../../../helpers/UtilityProvider.tsx";
 
 import Grid from "@mui/material/Grid2";
 
@@ -94,6 +94,7 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
 
                 props.setResponseBody(responseBody);
             } else {
+                props.setResponseBody(null);
                 openNotification(
                     responseBody.message.trim() === ""
                         ? "Pri vykonávaní testu nastala neznáma chyba"
@@ -103,6 +104,7 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
                 );
             }
         } catch {
+            props.setResponseBody(null);
             openNotification(
                 "Pri vykonávaní testu nastala neznáma chyba",
                 "white",

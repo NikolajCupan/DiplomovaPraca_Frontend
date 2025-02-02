@@ -21,7 +21,6 @@ function Header(props: HeaderProps) {
     }, []);
 
     const handleResize = () => {
-        console.log("hi");
         const header = document.getElementById("header-container");
 
         if (header!.offsetWidth < props.breakpointWidth) {

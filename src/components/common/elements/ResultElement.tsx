@@ -39,6 +39,7 @@ function ResultElement(props: ResultElementProps) {
 
     React.useEffect(() => {
         if (!props.responseBody) {
+            setResponseBodyData(null);
             return;
         }
 
