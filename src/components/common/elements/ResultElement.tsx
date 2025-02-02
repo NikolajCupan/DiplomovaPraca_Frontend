@@ -73,7 +73,9 @@ function ResultElement(props: ResultElementProps) {
             delete responseCopy[Constants.USED_P_VALUE_KEY];
             pairs.push([
                 true,
-                usedPValueJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
+                Helper.formatDecimalNumber(
+                    usedPValueJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
+                ),
                 usedPValueJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
             ]);
 
@@ -114,11 +116,16 @@ function ResultElement(props: ResultElementProps) {
             ]);
         }
 
-        Object.entries(responseCopy).forEach(([_, value]) => {
+        Object.entries(responseCopy).forEach(([key, value]) => {
             const jsonItem = value as Record<string, any>;
             let result = jsonItem[Constants.OUTPUT_ELEMENT_RESULT_KEY];
+
             if (typeof result === "object") {
                 result = Helper.formatJSON(result);
+            }
+
+            if (key == Constants.RESULT_P_VALUE_KEY) {
+                result = Helper.formatDecimalNumber(result);
             }
 
             pairs.push([

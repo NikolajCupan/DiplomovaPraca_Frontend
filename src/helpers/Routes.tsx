@@ -3,6 +3,7 @@ import DatasetEditor from "../components/content/data/DatasetEditor.tsx";
 import Home from "../components/content/Home.tsx";
 import LinearRegression from "../components/content/LinearRegression.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
+import KPSSTest from "../components/content/tests/KPSSTest.tsx";
 import * as Constants from "../helpers/Constants.tsx";
 import Test from "../testing/Test.tsx";
 import Todo from "../testing/Todo.tsx";
@@ -27,6 +28,10 @@ export const ROUTES = [
     {
         path: Constants.DICKEY_FULLER_TEST_LINK,
         element: <DickerFullerTest />,
+    },
+    {
+        path: Constants.KPSS_TEST_LINK,
+        element: <KPSSTest />,
     },
     {
         path: Constants.TESTING_LINK,

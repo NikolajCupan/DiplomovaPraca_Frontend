@@ -132,3 +132,17 @@ export function formatJSON(object: any): string {
 
     return result;
 }
+
+export function formatDecimalNumber(value: any): string {
+    const rawString = value.toString();
+    let result = rawString;
+
+    if (rawString.includes(".")) {
+        const [integerPart, decimalPart] = rawString.split(".");
+        if (decimalPart.length === 1) {
+            result = `${integerPart}.${decimalPart}0`;
+        }
+    }
+
+    return result;
+}

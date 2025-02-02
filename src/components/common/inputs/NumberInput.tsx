@@ -12,6 +12,7 @@ interface NumberInputProps {
 
     label: string;
     defaultValue: number;
+    limitValuesAllowed?: boolean;
     minValue?: number;
     maxValue?: number;
     step: number;
@@ -37,10 +38,24 @@ function NumberInput(props: NumberInputProps) {
         }
 
         if (
-            (props.minValue !== undefined && numericValue < props.minValue) ||
-            (props.maxValue !== undefined && numericValue > props.maxValue)
+            props.limitValuesAllowed === undefined ||
+            props.limitValuesAllowed
         ) {
-            props.setValue(props.defaultValue);
+            if (
+                (props.minValue !== undefined &&
+                    numericValue < props.minValue) ||
+                (props.maxValue !== undefined && numericValue > props.maxValue)
+            ) {
+                props.setValue(props.defaultValue);
+            }
+        } else {
+            if (
+                (props.minValue !== undefined &&
+                    numericValue <= props.minValue) ||
+                (props.maxValue !== undefined && numericValue >= props.maxValue)
+            ) {
+                props.setValue(props.defaultValue);
+            }
         }
     };
 

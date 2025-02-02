@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface DickeyFullerTestFormProps {
+interface KPSSTestFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -23,7 +23,7 @@ interface DickeyFullerTestFormProps {
     >;
 }
 
-function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
+function KPSSTestForm(props: KPSSTestFormProps) {
     const { openNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -34,15 +34,13 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
 
     const [pValue, setPValue] = React.useState<number>(0.05);
 
-    const [maxLag, setMaxLag] = React.useState<number>(1);
-    const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(false);
-
     const [regression, setRegression] = React.useState<string>("");
     const [regressionEnabled, setRegressionEnabled] =
         React.useState<boolean>(false);
 
-    const [autolag, setAutolag] = React.useState<string>("");
-    const [autolagEnabled, setAutolagEnabled] = React.useState<boolean>(false);
+    const [lagsCount, setLagsCount] = React.useState<number>(1);
+    const [lagsCountEnabled, setLagsCountEnabled] =
+        React.useState<boolean>(false);
 
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
@@ -63,7 +61,6 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
                 selectedDatasetInfo.idDataset.toString(),
             );
             formData.append("pValue", pValue.toString());
-            Helper.appendIfAvailable(formData, "maxlag", maxLag, maxLagEnabled);
             Helper.appendIfAvailable(
                 formData,
                 "regression",
@@ -72,13 +69,13 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
             );
             Helper.appendIfAvailable(
                 formData,
-                "autolag",
-                autolag,
-                autolagEnabled,
+                "nlags",
+                lagsCount,
+                lagsCountEnabled,
             );
 
             const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.DICKEY_FULLER_TEST,
+                url: Constants.BACKEND_PATH + Constants.KPSS_TEST,
                 options: {
                     method: "post",
                     body: formData,
@@ -118,10 +115,10 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
     return (
         <>
             <Header
-                text={"Dickey-Fuller test"}
-                breakpointWidth={500}
+                text={"Kwiatkowski-Phillips-Schmidt-Shin test (KPSS)"}
+                breakpointWidth={880}
                 link={
-                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.stattools.adfuller.html"
+                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.stattools.kpss.html"
                 }
             />
 
@@ -149,23 +146,6 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={maxLag}
-                        setValue={setMaxLag}
-                        toggleable={true}
-                        inputEnabled={maxLagEnabled}
-                        setInputEnabled={setMaxLagEnabled}
-                        label={"Maximálny lag"}
-                        defaultValue={1}
-                        minValue={1}
-                        step={1}
-                    />
-                </Grid>
-            </Grid>
-
-            <Grid container columnSpacing={4}>
-                <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-top"
                         label={"Regresia"}
@@ -175,31 +155,25 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
                         inputEnabled={regressionEnabled}
                         setInputEnabled={setRegressionEnabled}
                         menuItems={[
-                            ["c", "Konštanta"],
-                            ["ct", "Konštanta, trend"],
-                            ["ctt", "Konštanta, lineárny a kvadratický trend"],
-                            ["n", "Bez konštanty a trendu"],
-                        ]}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <SelectInput
-                        customClass="custom-form-component-margin-top"
-                        label={"Autolag"}
-                        value={autolag}
-                        setValue={setAutolag}
-                        toggleable={true}
-                        inputEnabled={autolagEnabled}
-                        setInputEnabled={setAutolagEnabled}
-                        menuItems={[
-                            ["AIC", "AIC"],
-                            ["BIC", "BIC"],
-                            ["t-stat", "t-stat"],
-                            ["None", "Žiadny"],
+                            ["c", "Dáta sú stacionárne okolo konštanty"],
+                            ["ct", "Dáta sú stacionárne okolo trendu"],
                         ]}
                     />
                 </Grid>
             </Grid>
+
+            <NumberInput
+                customClass="custom-form-component-margin-top"
+                value={lagsCount}
+                setValue={setLagsCount}
+                toggleable={true}
+                inputEnabled={lagsCountEnabled}
+                setInputEnabled={setLagsCountEnabled}
+                label={"Počet lagov"}
+                defaultValue={1}
+                minValue={1}
+                step={1}
+            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}
@@ -212,4 +186,4 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
     );
 }
 
-export default DickeyFullerTestForm;
+export default KPSSTestForm;

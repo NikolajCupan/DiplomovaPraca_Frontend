@@ -104,7 +104,7 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.KPSS_TEST_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>
