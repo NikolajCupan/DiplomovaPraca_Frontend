@@ -1,9 +1,9 @@
 import * as Constants from "../../helpers/Constants.tsx";
 import * as Type from "../../helpers/Types.tsx";
+import ScrollableContainer from "../common/ScrollableContainer.tsx";
 
-import FolderIcon from "@mui/icons-material/Folder";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {
-    Avatar,
     CircularProgress,
     List,
     ListItem,
@@ -30,7 +30,6 @@ interface ResultElementProps {
 }
 
 function ResultElement(props: ResultElementProps) {
-    console.log("kk");
     const [responseBodyData, setResponseBodyData] = React.useState<Record<
         string,
         any
@@ -110,23 +109,23 @@ function ResultElement(props: ResultElementProps) {
         console.log(pairs);
 
         return (
-            <div style={innerContainerStyleSuccess}>
-                <List>
-                    {pairs.map(([first, second], index) => (
-                        <ListItem key={index}>
-                            <ListItemAvatar>
-                                <Avatar>
-                                    <FolderIcon />
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={first.toString()}
-                                secondary={second.toString()}
-                            />
-                        </ListItem>
-                    ))}
-                </List>
-            </div>
+            <ScrollableContainer breakpointWidth={600}>
+                <div style={innerContainerStyleSuccess}>
+                    <List>
+                        {pairs.map(([first, second], index) => (
+                            <ListItem key={index}>
+                                <ListItemAvatar>
+                                    <ArrowForwardIosIcon />
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={first.toString()}
+                                    secondary={second.toString()}
+                                />
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            </ScrollableContainer>
         );
     };
 
