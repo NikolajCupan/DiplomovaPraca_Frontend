@@ -1,6 +1,7 @@
 import * as Constants from "../../helpers/Constants.tsx";
 import * as Helper from "../../helpers/Helper.tsx";
 import * as Type from "../../helpers/Types.tsx";
+import "../../index.css";
 import ScrollableContainer from "../common/ScrollableContainer.tsx";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -130,33 +131,57 @@ function ResultElement(props: ResultElementProps) {
             <ScrollableContainer breakpointWidth={600}>
                 <div style={innerContainerStyleSuccess}>
                     <List>
-                        {pairs.map(([important, first, second], index) => (
-                            <ListItem key={index}>
-                                <ListItemAvatar>
-                                    <ArrowForwardIosIcon
-                                        sx={
-                                            important
-                                                ? { color: "black" }
-                                                : { color: "gray" }
+                        {pairs.map(
+                            ([elementIsImportant, first, second], index) => (
+                                <ListItem key={index}>
+                                    <ListItemAvatar>
+                                        <ArrowForwardIosIcon
+                                            sx={
+                                                elementIsImportant
+                                                    ? {
+                                                          color: "var(--primary-color)",
+                                                      }
+                                                    : { color: "gray" }
+                                            }
+                                        />
+                                    </ListItemAvatar>
+                                    <ListItemText
+                                        primary={
+                                            <span
+                                                style={
+                                                    elementIsImportant
+                                                        ? {
+                                                              color: "var(--primary-color)",
+                                                              fontWeight:
+                                                                  "bold",
+                                                          }
+                                                        : {}
+                                                }
+                                            >
+                                                {first}
+                                            </span>
+                                        }
+                                        secondary={
+                                            <span
+                                                style={
+                                                    elementIsImportant
+                                                        ? {
+                                                              fontWeight:
+                                                                  "bold",
+                                                          }
+                                                        : {
+                                                              fontWeight:
+                                                                  "normal",
+                                                          }
+                                                }
+                                            >
+                                                {second}
+                                            </span>
                                         }
                                     />
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={first}
-                                    secondary={
-                                        <span
-                                            style={
-                                                important
-                                                    ? { fontWeight: "bold" }
-                                                    : { fontWeight: "normal" }
-                                            }
-                                        >
-                                            {second}
-                                        </span>
-                                    }
-                                />
-                            </ListItem>
-                        ))}
+                                </ListItem>
+                            ),
+                        )}
                     </List>
                 </div>
             </ScrollableContainer>

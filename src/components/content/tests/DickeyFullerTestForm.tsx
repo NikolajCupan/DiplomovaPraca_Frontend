@@ -5,7 +5,7 @@ import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import ConfirmButton from "../../common/ConfirmButton.tsx";
 import DatasetSelector from "../../common/DatasetSelector.tsx";
-import FormTitle from "../../common/FormTitle.tsx";
+import Header from "../../common/Header.tsx";
 import NumberInput from "../../common/NumberInput.tsx";
 import SelectInput from "../../common/SelectInput.tsx";
 
@@ -35,7 +35,7 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
     const [pValue, setPValue] = React.useState<number>(0.05);
 
     const [maxLag, setMaxLag] = React.useState<number>(1);
-    const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(true);
+    const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(false);
 
     const [regression, setRegression] = React.useState<string>("");
     const [regressionEnabled, setRegressionEnabled] =
@@ -115,7 +115,13 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
 
     return (
         <>
-            <FormTitle text={"Dickey-Fuller test"} />
+            <Header
+                text={"Dickey-Fuller test"}
+                breakpointWidth={500}
+                link={
+                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.stattools.adfuller.html"
+                }
+            />
 
             <DatasetSelector
                 datasetInfos={datasetInfos}
