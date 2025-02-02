@@ -2,12 +2,12 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
+import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
+import Header from "../../common/elements/Header.tsx";
+import NumberInput from "../../common/inputs/NumberInput.tsx";
+import SelectInput from "../../common/inputs/SelectInput.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
-import ConfirmButton from "../../common/ConfirmButton.tsx";
-import DatasetSelector from "../../common/DatasetSelector.tsx";
-import Header from "../../common/Header.tsx";
-import NumberInput from "../../common/NumberInput.tsx";
-import SelectInput from "../../common/SelectInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 

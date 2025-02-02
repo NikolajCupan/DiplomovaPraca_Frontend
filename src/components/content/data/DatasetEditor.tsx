@@ -2,8 +2,8 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
-import DatasetSelector from "../../common/DatasetSelector.tsx";
 import Layout from "../../layout/Layout.tsx";
 import "./DatasetEditor.css";
 

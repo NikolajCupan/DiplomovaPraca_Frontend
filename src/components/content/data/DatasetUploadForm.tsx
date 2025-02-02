@@ -23,7 +23,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 
 import * as React from "react";
-import FormTitle from "../../common/FormTitle.tsx";
+import FormTitle from "../../common/elements/FormTitle.tsx";
 
 interface DatasetUploadFormProps {
     setDatasetInfos: React.Dispatch<React.SetStateAction<Type.DatasetInfo[]>>;

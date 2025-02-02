@@ -1,6 +1,6 @@
-import * as Constants from "../../helpers/Constants.tsx";
-import * as CookiesManager from "../../helpers/CookiesManager.tsx";
-import * as Type from "../../helpers/Types.tsx";
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
+import * as Type from "../../../helpers/Types.tsx";
 
 import { Autocomplete, TextField } from "@mui/material";
 

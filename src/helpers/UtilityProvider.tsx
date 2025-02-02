@@ -103,7 +103,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
                 isNotificationOpen: isNotificationOpen,
                 notificationContent,
                 openNotification,
-                closeNotification
+                closeNotification,
             }}
         >
             {props.children}

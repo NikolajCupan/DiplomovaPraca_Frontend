@@ -1,8 +1,8 @@
-import * as Constants from "../../helpers/Constants.tsx";
-import * as Helper from "../../helpers/Helper.tsx";
-import * as Type from "../../helpers/Types.tsx";
-import "../../index.css";
-import ScrollableContainer from "../common/ScrollableContainer.tsx";
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
+import * as Type from "../../../helpers/Types.tsx";
+import "../../../index.css";
+import ScrollableContainer from "../elements/ScrollableContainer.tsx";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import {

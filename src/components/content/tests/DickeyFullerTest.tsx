@@ -1,8 +1,8 @@
 import * as Type from "../../../helpers/Types.tsx";
-import ResultElement from "../../common/ResultElement.tsx";
+import ResultElement from "../../common/elements/ResultElement.tsx";
 import Layout from "../../layout/Layout.tsx";
 import DickeyFullerTestForm from "./DickeyFullerTestForm.tsx";
-import "./Test.css";
+import "./TestStyles.css";
 
 import * as React from "react";
 
