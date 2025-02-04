@@ -30,6 +30,7 @@ export const EDIT_DATASET_LINK = "/data/edit";
 
 export const DICKEY_FULLER_TEST_LINK = "/test/dicker-fuller-test";
 export const KPSS_TEST_LINK = "/test/kpss-test";
+export const LJUNG_BOX_TEST_LINK = "/test/ljung-box-test";
 export const LINEAR_REGRESSION_LINK = "/model/linear-regression";
 
 export const TESTING_LINK = "/debug/testing";
@@ -51,3 +52,4 @@ export const DELETE_DATASET = "/dataset/delete";
 
 export const DICKEY_FULLER_TEST = "/test/dickey-fuller-test";
 export const KPSS_TEST = "/test/kpss-test";
+export const LJUNG_BOX_TEST = "/test/ljung-box-test";

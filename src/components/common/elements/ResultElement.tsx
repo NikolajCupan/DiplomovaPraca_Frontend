@@ -125,7 +125,11 @@ function ResultElement(props: ResultElementProps) {
             }
 
             if (key == Constants.RESULT_P_VALUE_KEY) {
-                result = Helper.formatDecimalNumber(result);
+                if (result === -1) {
+                    result = "nie je k dispozícii";
+                } else {
+                    result = Helper.formatDecimalNumber(result);
+                }
             }
 
             pairs.push([

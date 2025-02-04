@@ -13,7 +13,7 @@ import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface KPSSTestFormProps {
+interface LjungBoxTestFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -23,7 +23,7 @@ interface KPSSTestFormProps {
     >;
 }
 
-function KPSSTestForm(props: KPSSTestFormProps) {
+function LjungBoxTestFrom(props: LjungBoxTestFormProps) {
     const { openNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -34,13 +34,18 @@ function KPSSTestForm(props: KPSSTestFormProps) {
 
     const [pValue, setPValue] = React.useState<number>(0.05);
 
-    const [regression, setRegression] = React.useState<string>("");
-    const [regressionEnabled, setRegressionEnabled] =
-        React.useState<boolean>(false);
+    const [period, setPeriod] = React.useState<number>(2);
+    const [periodEnabled, setPeriodEnabled] = React.useState<boolean>(false);
 
     const [lagsCount, setLagsCount] = React.useState<number>(1);
     const [lagsCountEnabled, setLagsCountEnabled] =
         React.useState<boolean>(false);
+
+    const [autoLag, setAutoLag] = React.useState<string>("");
+    const [autoLagEnabled, setAutoLagEnabled] = React.useState<boolean>(false);
+
+    const [dfCount, setDfCount] = React.useState<number>(0);
+    const [dfCountEnabled, setDfCountEnabled] = React.useState<boolean>(false);
 
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
@@ -61,21 +66,28 @@ function KPSSTestForm(props: KPSSTestFormProps) {
                 selectedDatasetInfo.idDataset.toString(),
             );
             formData.append("pValue", pValue.toString());
+            Helper.appendIfAvailable(formData, "period", period, periodEnabled);
             Helper.appendIfAvailable(
                 formData,
-                "regression",
-                regression,
-                regressionEnabled,
-            );
-            Helper.appendIfAvailable(
-                formData,
-                "nlags",
+                "lags",
                 lagsCount,
                 lagsCountEnabled,
             );
+            Helper.appendIfAvailable(
+                formData,
+                "auto_lag",
+                autoLag,
+                autoLagEnabled,
+            );
+            Helper.appendIfAvailable(
+                formData,
+                "model_df",
+                dfCount,
+                dfCountEnabled,
+            );
 
             const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.KPSS_TEST,
+                url: Constants.BACKEND_PATH + Constants.LJUNG_BOX_TEST,
                 options: {
                     method: "post",
                     body: formData,
@@ -90,6 +102,7 @@ function KPSSTestForm(props: KPSSTestFormProps) {
                 CookiesManager.processResponse(response);
 
                 props.setResponseBody(responseBody);
+
             } else {
                 props.setResponseBody(null);
                 openNotification(
@@ -115,10 +128,10 @@ function KPSSTestForm(props: KPSSTestFormProps) {
     return (
         <>
             <Header
-                text={"Kwiatkowski-Phillips-Schmidt-Shin test (KPSS)"}
-                breakpointWidth={880}
+                text={"Ljung-Box test"}
+                breakpointWidth={500}
                 link={
-                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.stattools.kpss.html"
+                    "https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.acorr_ljungbox.html"
                 }
             />
 
@@ -146,17 +159,48 @@ function KPSSTestForm(props: KPSSTestFormProps) {
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={period}
+                        setValue={setPeriod}
+                        toggleable={true}
+                        inputEnabled={periodEnabled}
+                        setInputEnabled={setPeriodEnabled}
+                        label={"Perióda časového radu"}
+                        defaultValue={2}
+                        minValue={2}
+                        step={1}
+                    />
+                </Grid>
+            </Grid>
+
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={lagsCount}
+                        setValue={setLagsCount}
+                        toggleable={true}
+                        inputEnabled={lagsCountEnabled}
+                        setInputEnabled={setLagsCountEnabled}
+                        label={"Počet lagov"}
+                        defaultValue={1}
+                        minValue={1}
+                        step={1}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-top"
-                        label={"Regresia"}
-                        value={regression}
-                        setValue={setRegression}
+                        label={"Automatický lag"}
+                        value={autoLag}
+                        setValue={setAutoLag}
                         toggleable={true}
-                        inputEnabled={regressionEnabled}
-                        setInputEnabled={setRegressionEnabled}
+                        inputEnabled={autoLagEnabled}
+                        setInputEnabled={setAutoLagEnabled}
                         menuItems={[
-                            ["c", "Dáta sú stacionárne okolo konštanty"],
-                            ["ct", "Dáta sú stacionárne okolo trendu"],
+                            ["True", "Automatický výber lagov"],
+                            ["False", "Manuálne nastavenie lagov"],
                         ]}
                     />
                 </Grid>
@@ -164,12 +208,12 @@ function KPSSTestForm(props: KPSSTestFormProps) {
 
             <NumberInput
                 customClass="custom-form-component-margin-top"
-                value={lagsCount}
-                setValue={setLagsCount}
+                value={dfCount}
+                setValue={setDfCount}
                 toggleable={true}
-                inputEnabled={lagsCountEnabled}
-                setInputEnabled={setLagsCountEnabled}
-                label={"Počet lagov"}
+                inputEnabled={dfCountEnabled}
+                setInputEnabled={setDfCountEnabled}
+                label={"Počet stupňov voľnosti"}
                 defaultValue={0}
                 minValue={0}
                 step={1}
@@ -186,4 +230,4 @@ function KPSSTestForm(props: KPSSTestFormProps) {
     );
 }
 
-export default KPSSTestForm;
+export default LjungBoxTestFrom;
