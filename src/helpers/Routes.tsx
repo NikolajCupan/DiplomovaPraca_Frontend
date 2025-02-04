@@ -2,6 +2,7 @@ import Data from "../components/content/data/Data.tsx";
 import DatasetEditor from "../components/content/data/DatasetEditor.tsx";
 import Home from "../components/content/Home.tsx";
 import LinearRegression from "../components/content/LinearRegression.tsx";
+import ArchTest from "../components/content/tests/ArchTest.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
 import KPSSTest from "../components/content/tests/KPSSTest.tsx";
 import LjungBoxTest from "../components/content/tests/LjungBoxTest.tsx";
@@ -33,6 +34,10 @@ export const ROUTES = [
     {
         path: Constants.KPSS_TEST_LINK,
         element: <KPSSTest />,
+    },
+    {
+        path: Constants.ARCH_TEST_LINK,
+        element: <ArchTest />,
     },
     {
         path: Constants.LJUNG_BOX_TEST_LINK,

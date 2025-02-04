@@ -140,7 +140,7 @@ export default function CustomizedMenus() {
 
                 <Divider sx={{ my: 0.5 }} />
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.ARCH_TEST}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         ARCH test
