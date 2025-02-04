@@ -1,5 +1,8 @@
 export const STRICT_MODE = false;
 
+export const STRING_TRUE = "True";
+export const STRING_FALSE = "False";
+
 export const MAX_FILE_SIZE_BYTES = 25_000_000;
 export const SESSION_COOKIE_NAME = "session_cookie_id";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
@@ -30,6 +33,7 @@ export const EDIT_DATASET_LINK = "/data/edit";
 
 export const DICKEY_FULLER_TEST_LINK = "/test/dicker-fuller-test";
 export const KPSS_TEST_LINK = "/test/kpss-test";
+export const SEASONAL_DECOMPOSE_LINK = "/test/seasonal-decompose";
 export const ARCH_TEST_LINK = "/test/arch-test";
 export const LJUNG_BOX_TEST_LINK = "/test/ljung-box-test";
 export const LINEAR_REGRESSION_LINK = "/model/linear-regression";
@@ -53,5 +57,6 @@ export const DELETE_DATASET = "/dataset/delete";
 
 export const DICKEY_FULLER_TEST = "/test/dickey-fuller-test";
 export const KPSS_TEST = "/test/kpss-test";
+export const SEASONAL_DECOMPOSE = "/test/seasonal-decompose";
 export const ARCH_TEST = "/test/arch-test";
 export const LJUNG_BOX_TEST = "/test/ljung-box-test";

@@ -102,7 +102,6 @@ function LjungBoxTestFrom(props: LjungBoxTestFormProps) {
                 CookiesManager.processResponse(response);
 
                 props.setResponseBody(responseBody);
-
             } else {
                 props.setResponseBody(null);
                 openNotification(
@@ -129,7 +128,7 @@ function LjungBoxTestFrom(props: LjungBoxTestFormProps) {
         <>
             <Header
                 text={"Ljung-Box test"}
-                breakpointWidth={500}
+                breakpointWidth={400}
                 link={
                     "https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.acorr_ljungbox.html"
                 }
@@ -199,8 +198,11 @@ function LjungBoxTestFrom(props: LjungBoxTestFormProps) {
                         inputEnabled={autoLagEnabled}
                         setInputEnabled={setAutoLagEnabled}
                         menuItems={[
-                            ["True", "Automatický výber lagov"],
-                            ["False", "Manuálne nastavenie lagov"],
+                            [Constants.STRING_TRUE, "Automatický výber lagov"],
+                            [
+                                Constants.STRING_FALSE,
+                                "Manuálne nastavenie lagov",
+                            ],
                         ]}
                     />
                 </Grid>

@@ -115,7 +115,7 @@ export default function CustomizedMenus() {
 
                 <Divider sx={{ my: 0.5 }} />
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.SEASONAL_DECOMPOSE_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         <div style={{ textWrap: "balance" }}>

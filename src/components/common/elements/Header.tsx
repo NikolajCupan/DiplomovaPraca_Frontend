@@ -61,7 +61,7 @@ function Header(props: HeaderProps) {
                 }}
             >
                 <Tooltip
-                    title="Pre nepoužité parametre bude nastavená predvolená hodnota. Viac informácií nájdete v dokumentácii."
+                    title="Pre nepoužité parametre bude nastavená predvolená hodnota. Viac informácií nájdete v oficiálnej dokumentácii."
                     arrow
                 >
                     <a>

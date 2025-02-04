@@ -7,12 +7,14 @@ import Header from "../../common/elements/Header.tsx";
 import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../common/inputs/NumberInput.tsx";
+import SelectInput from "../../common/inputs/SelectInput.tsx";
+import TextInput from "../../common/inputs/TextInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface ArchTestFormProps {
+interface SeasonalDecomposeFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -22,7 +24,7 @@ interface ArchTestFormProps {
     >;
 }
 
-function ArchTestForm(props: ArchTestFormProps) {
+function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
     const { openNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -30,14 +32,14 @@ function ArchTestForm(props: ArchTestFormProps) {
     );
     const [selectedDatasetInfo, setSelectedDatasetInfo] =
         React.useState<Type.DatasetInfo | null>(null);
+    const [selectedDatasetFrequency, setSelectedDatasetFrequency] =
+        React.useState<string>("");
 
-    const [pValue, setPValue] = React.useState<number>(0.05);
+    const [period, setPeriod] = React.useState<number>(1);
 
-    const [maxLag, setMaxLag] = React.useState<number>(1);
-    const [maxLagEnabled, setMaxLagEnabled] = React.useState<boolean>(false);
-
-    const [dfCount, setDfCount] = React.useState<number>(0);
-    const [dfCountEnabled, setDfCountEnabled] = React.useState<boolean>(false);
+    const [modelType, setModelType] = React.useState<string>("");
+    const [modelTypeEnabled, setModelTypeEnabled] =
+        React.useState<boolean>(false);
 
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
@@ -57,12 +59,16 @@ function ArchTestForm(props: ArchTestFormProps) {
                 "idDataset",
                 selectedDatasetInfo.idDataset.toString(),
             );
-            formData.append("pValue", pValue.toString());
-            Helper.appendIfAvailable(formData, "nlags", maxLag, maxLagEnabled);
-            Helper.appendIfAvailable(formData, "ddof", dfCount, dfCountEnabled);
+            formData.append("period", period.toString());
+            Helper.appendIfAvailable(
+                formData,
+                "model",
+                modelType,
+                modelTypeEnabled,
+            );
 
             const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.ARCH_TEST,
+                url: Constants.BACKEND_PATH + Constants.SEASONAL_DECOMPOSE,
                 options: {
                     method: "post",
                     body: formData,
@@ -81,7 +87,7 @@ function ArchTestForm(props: ArchTestFormProps) {
                 props.setResponseBody(null);
                 openNotification(
                     responseBody.message.trim() === ""
-                        ? "Pri vykonávaní testu nastala neznáma chyba"
+                        ? "Pri vykonávaní akcie nastala neznáma chyba"
                         : responseBody.message,
                     "white",
                     "red",
@@ -90,7 +96,7 @@ function ArchTestForm(props: ArchTestFormProps) {
         } catch {
             props.setResponseBody(null);
             openNotification(
-                "Pri vykonávaní testu nastala neznáma chyba",
+                "Pri vykonávaní akcie nastala neznáma chyba",
                 "white",
                 "red",
             );
@@ -99,71 +105,82 @@ function ArchTestForm(props: ArchTestFormProps) {
         props.setActionInProgress(false);
     };
 
+    React.useEffect(() => {
+        if (selectedDatasetInfo) {
+            setSelectedDatasetFrequency(
+                Helper.translateFrequency(selectedDatasetInfo.frequencyType),
+            );
+        } else {
+            setSelectedDatasetFrequency("");
+        }
+    }, [selectedDatasetInfo]);
+
     return (
         <>
             <Header
-                text={"ARCH test"}
-                breakpointWidth={300}
+                text={"Dekompozícia časového radu"}
+                breakpointWidth={600}
                 link={
-                    "https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_arch.html"
+                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.seasonal.seasonal_decompose.html"
                 }
             />
 
-            <DatasetSelector
-                datasetInfos={datasetInfos}
-                setDatasetInfos={setDatasetInfos}
-                selectedDatasetInfo={selectedDatasetInfo}
-                setSelectedDatasetInfo={setSelectedDatasetInfo}
-            />
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 9 }}>
+                    <DatasetSelector
+                        datasetInfos={datasetInfos}
+                        setDatasetInfos={setDatasetInfos}
+                        selectedDatasetInfo={selectedDatasetInfo}
+                        setSelectedDatasetInfo={setSelectedDatasetInfo}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 3 }}>
+                    <TextInput
+                        customClass="custom-form-component-margin-top-sm"
+                        value={selectedDatasetFrequency}
+                        setValue={setSelectedDatasetFrequency}
+                        toggleable={false}
+                        inputEnabled={true}
+                        readOnly={true}
+                        label={"Frekvencia"}
+                    />
+                </Grid>
+            </Grid>
 
             <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
                         customClass="custom-form-component-margin-top"
-                        value={pValue}
-                        setValue={setPValue}
+                        value={period}
+                        setValue={setPeriod}
                         toggleable={false}
                         inputEnabled={true}
-                        limitValuesAllowed={false}
-                        label={"Hladina významnosti"}
-                        defaultValue={0.05}
-                        minValue={0}
-                        maxValue={1}
-                        step={0.01}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={maxLag}
-                        setValue={setMaxLag}
-                        toggleable={true}
-                        inputEnabled={maxLagEnabled}
-                        setInputEnabled={setMaxLagEnabled}
-                        label={"Maximálny lag"}
+                        label={"Perióda časového radu"}
                         defaultValue={1}
                         minValue={1}
                         step={1}
                     />
                 </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <SelectInput
+                        customClass="custom-form-component-margin-top"
+                        label={"Typ sezónej zložky modelu"}
+                        value={modelType}
+                        setValue={setModelType}
+                        toggleable={true}
+                        inputEnabled={modelTypeEnabled}
+                        setInputEnabled={setModelTypeEnabled}
+                        menuItems={[
+                            ["additive", "Aditívny"],
+                            ["multiplicative", "Multiplikatívny"],
+                        ]}
+                    />
+                </Grid>
             </Grid>
-
-            <NumberInput
-                customClass="custom-form-component-margin-top"
-                value={dfCount}
-                setValue={setDfCount}
-                toggleable={true}
-                inputEnabled={dfCountEnabled}
-                setInputEnabled={setDfCountEnabled}
-                label={"Počet stupňov voľnosti"}
-                defaultValue={0}
-                minValue={0}
-                step={1}
-            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}
-                text={"Vykonať test"}
+                text={"Spracovať časový rad"}
                 customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
                 toggleable={false}
                 submitEnabled={!props.actionInProgress}
@@ -172,4 +189,4 @@ function ArchTestForm(props: ArchTestFormProps) {
     );
 }
 
-export default ArchTestForm;
+export default SeasonalDecomposeForm;

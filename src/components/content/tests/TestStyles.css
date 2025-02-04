@@ -46,3 +46,9 @@
 .custom-form-component-margin-bottom-small {
     margin-bottom: 20px !important;
 }
+
+@media (max-width: 599px) {
+    .custom-form-component-margin-top-sm {
+        margin-top: 40px !important;
+    }
+}
