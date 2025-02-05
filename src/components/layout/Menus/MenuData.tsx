@@ -1,4 +1,5 @@
 import * as Constants from "../../../helpers/Constants.tsx";
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
 
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -52,10 +53,13 @@ const StyledMenu = styled((props: MenuProps) => (
 }));
 
 export default function CustomizedMenus() {
+    const { closeNotification } = Utility.useUtility();
+
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        closeNotification();
         setAnchorEl(event.currentTarget);
     };
 

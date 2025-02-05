@@ -6,7 +6,6 @@ import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import SeasonalDecomposeForm from "./SeasonalDecomposeForm.tsx";
 import "./TestStyles.css";
-
 import * as HelperElements from "../../../helpers/HelperElements.tsx";
 
 import * as React from "react";

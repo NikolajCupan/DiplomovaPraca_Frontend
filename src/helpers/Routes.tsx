@@ -6,6 +6,7 @@ import ArchTest from "../components/content/tests/ArchTest.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
 import KPSSTest from "../components/content/tests/KPSSTest.tsx";
 import LjungBoxTest from "../components/content/tests/LjungBoxTest.tsx";
+import Periodogram from "../components/content/tests/Periodogram.tsx";
 import SeasonalDecompose from "../components/content/tests/SeasonalDecompose.tsx";
 import * as Constants from "../helpers/Constants.tsx";
 import Test from "../testing/Test.tsx";
@@ -39,6 +40,10 @@ export const ROUTES = [
     {
         path: Constants.SEASONAL_DECOMPOSE_LINK,
         element: <SeasonalDecompose />,
+    },
+    {
+        path: Constants.PERIODOGRAM_LINK,
+        element: <Periodogram />,
     },
     {
         path: Constants.ARCH_TEST_LINK,

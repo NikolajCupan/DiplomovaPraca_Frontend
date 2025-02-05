@@ -1,3 +1,4 @@
+import * as Utility from "../../helpers/UtilityProvider.tsx";
 import HelperElement from "./HelperElement.tsx";
 import "./LayoutStyles.css";
 import MenuData from "./Menus/MenuData.tsx";
@@ -22,11 +23,14 @@ interface InternalComponentProps {
 }
 
 function ResponsiveAppBar(props: InternalComponentProps) {
+    const { closeNotification } = Utility.useUtility();
+
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null,
     );
 
     const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+        closeNotification();
         setAnchorElNav(event.currentTarget);
     };
 
