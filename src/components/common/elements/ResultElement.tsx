@@ -1,30 +1,14 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
+import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
 import ScrollableContainer from "../elements/ScrollableContainer.tsx";
 
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import {
-    CircularProgress,
-    List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
-} from "@mui/material";
+import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 
 import * as React from "react";
-
-const innerContainerStyle: React.CSSProperties = {
-    textAlign: "center",
-    fontSize: "14px",
-    marginTop: "14px",
-    marginBottom: "14px",
-};
-
-const innerContainerStyleSuccess: React.CSSProperties = {
-    fontSize: "18px",
-};
 
 interface ResultElementProps {
     responseBody: Type.RequestResult | null;
@@ -47,14 +31,10 @@ function ResultElement(props: ResultElementProps) {
         setResponseBodyData(json);
     }, [props.responseBody]);
 
-    const actionInProgressElement = (
-        <div style={innerContainerStyle}>
-            <CircularProgress />
-        </div>
-    );
-
     const noTestDoneElement = (
-        <div style={innerContainerStyle}>Zvoľte parametre a vykonajte test</div>
+        <div className="inner-container-style">
+            Zvoľte parametre a vykonajte test
+        </div>
     );
 
     const getActionResultElement = () => {
@@ -141,7 +121,7 @@ function ResultElement(props: ResultElementProps) {
 
         return (
             <ScrollableContainer breakpointWidth={600}>
-                <div style={innerContainerStyleSuccess}>
+                <div className="inner-container-style-success">
                     <List>
                         {pairs.map(
                             ([elementIsImportant, first, second], index) => (
@@ -202,7 +182,7 @@ function ResultElement(props: ResultElementProps) {
 
     const getResultElementBody = () => {
         if (props.actionInProgress) {
-            return actionInProgressElement;
+            return HelperElements.actionInProgressElement;
         } else if (!responseBodyData) {
             return noTestDoneElement;
         } else {

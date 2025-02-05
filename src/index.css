@@ -39,3 +39,14 @@ input[type="number"].numeric-input-no-arrows::-webkit-inner-spin-button {
 input[type="number"].numeric-input-no-arrows {
     -moz-appearance: textfield;
 }
+
+.inner-container-style {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.inner-container-style-success {
+    font-size: 18px;
+}

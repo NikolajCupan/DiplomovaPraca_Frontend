@@ -87,7 +87,7 @@ function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
                 props.setResponseBody(null);
                 openNotification(
                     responseBody.message.trim() === ""
-                        ? "Pri vykonávaní akcie nastala neznáma chyba"
+                        ? "Pri vykonávaní akcie nastala chyba"
                         : responseBody.message,
                     "white",
                     "red",
@@ -96,7 +96,7 @@ function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
         } catch {
             props.setResponseBody(null);
             openNotification(
-                "Pri vykonávaní akcie nastala neznáma chyba",
+                "Pri vykonávaní akcie nastala chyba",
                 "white",
                 "red",
             );
@@ -155,6 +155,7 @@ function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
                         setValue={setPeriod}
                         toggleable={false}
                         inputEnabled={true}
+                        decimalValuesAllowed={false}
                         label={"Perióda časového radu"}
                         defaultValue={1}
                         minValue={1}
@@ -164,15 +165,15 @@ function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-top"
-                        label={"Typ sezónej zložky modelu"}
+                        label={"Typ sezónnosti"}
                         value={modelType}
                         setValue={setModelType}
                         toggleable={true}
                         inputEnabled={modelTypeEnabled}
                         setInputEnabled={setModelTypeEnabled}
                         menuItems={[
-                            ["additive", "Aditívny"],
-                            ["multiplicative", "Multiplikatívny"],
+                            ["additive", "Aditívna"],
+                            ["multiplicative", "Multiplikatívna"],
                         ]}
                     />
                 </Grid>

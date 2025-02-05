@@ -13,6 +13,7 @@ interface NumberInputProps {
     label: string;
     defaultValue: number;
     limitValuesAllowed?: boolean;
+    decimalValuesAllowed?: boolean;
     minValue?: number;
     maxValue?: number;
     step: number;
@@ -28,7 +29,14 @@ function NumberInput(props: NumberInputProps) {
             return;
         }
 
-        props.setValue(numericValue);
+        if (
+            props.decimalValuesAllowed === undefined ||
+            props.decimalValuesAllowed
+        ) {
+            props.setValue(numericValue);
+        } else {
+            props.setValue(Math.floor(numericValue));
+        }
     };
 
     const handleBlur = (newValue: string) => {

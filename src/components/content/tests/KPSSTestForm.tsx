@@ -94,7 +94,7 @@ function KPSSTestForm(props: KPSSTestFormProps) {
                 props.setResponseBody(null);
                 openNotification(
                     responseBody.message.trim() === ""
-                        ? "Pri vykonávaní testu nastala neznáma chyba"
+                        ? "Pri vykonávaní testu nastala chyba"
                         : responseBody.message,
                     "white",
                     "red",
@@ -103,7 +103,7 @@ function KPSSTestForm(props: KPSSTestFormProps) {
         } catch {
             props.setResponseBody(null);
             openNotification(
-                "Pri vykonávaní testu nastala neznáma chyba",
+                "Pri vykonávaní testu nastala chyba",
                 "white",
                 "red",
             );

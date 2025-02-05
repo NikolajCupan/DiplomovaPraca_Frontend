@@ -106,7 +106,7 @@ function LjungBoxTestFrom(props: LjungBoxTestFormProps) {
                 props.setResponseBody(null);
                 openNotification(
                     responseBody.message.trim() === ""
-                        ? "Pri vykonávaní testu nastala neznáma chyba"
+                        ? "Pri vykonávaní testu nastala chyba"
                         : responseBody.message,
                     "white",
                     "red",
@@ -115,7 +115,7 @@ function LjungBoxTestFrom(props: LjungBoxTestFormProps) {
         } catch {
             props.setResponseBody(null);
             openNotification(
-                "Pri vykonávaní testu nastala neznáma chyba",
+                "Pri vykonávaní testu nastala chyba",
                 "white",
                 "red",
             );
