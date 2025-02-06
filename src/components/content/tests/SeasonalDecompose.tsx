@@ -1,4 +1,5 @@
 import * as Constants from "../../../helpers/Constants.tsx";
+import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
 import LineChartWrapper from "../../common/elements/LineChartWrapper.tsx";
@@ -6,12 +7,8 @@ import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import SeasonalDecomposeForm from "./SeasonalDecomposeForm.tsx";
 import "./TestStyles.css";
-import * as HelperElements from "../../../helpers/HelperElements.tsx";
 
 import * as React from "react";
-
-const lineChartHeight = 400;
-const breakpointWidth = 600;
 
 function SeasonalDecompose() {
     const [actionInProgress, setActionInProgress] =
@@ -45,47 +42,49 @@ function SeasonalDecompose() {
     const chartsContent = (
         <>
             <ScrollableContainer
-                breakpointWidth={breakpointWidth}
+                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 customStyle={{ marginBottom: "20px" }}
             >
                 <LineChartWrapper
                     label={"pozorované hodnoty"}
-                    arrayKey={"observed"}
+                    yAxisArrayKey={"observed"}
                     responseBody={responseBody}
-                    height={lineChartHeight}
+                    height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
 
             <ScrollableContainer
-                breakpointWidth={breakpointWidth}
+                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 customStyle={{ marginBottom: "20px" }}
             >
                 <LineChartWrapper
                     label={"trend"}
-                    arrayKey={"trend"}
+                    yAxisArrayKey={"trend"}
                     responseBody={responseBody}
-                    height={lineChartHeight}
+                    height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
 
             <ScrollableContainer
-                breakpointWidth={breakpointWidth}
+                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 customStyle={{ marginBottom: "20px" }}
             >
                 <LineChartWrapper
                     label={"sezónna zložka"}
-                    arrayKey={"seasonal"}
+                    yAxisArrayKey={"seasonal"}
                     responseBody={responseBody}
-                    height={lineChartHeight}
+                    height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
 
-            <ScrollableContainer breakpointWidth={breakpointWidth}>
+            <ScrollableContainer
+                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+            >
                 <LineChartWrapper
                     label={"reziduá"}
-                    arrayKey={"resid"}
+                    yAxisArrayKey={"resid"}
                     responseBody={responseBody}
-                    height={lineChartHeight}
+                    height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
         </>

@@ -8,7 +8,8 @@ import * as React from "react";
 
 interface LineChartProps {
     label: string;
-    arrayKey: string;
+    yAxisArrayKey: string;
+    xAxisArrayKey?: string;
     height: number;
     color?: string;
 
@@ -17,80 +18,130 @@ interface LineChartProps {
 
 function LineChartWrapper(props: LineChartProps) {
     const [title, setTitle] = React.useState<string | null>(null);
-    const [array, setArray] = React.useState<(number | null)[] | null>(null);
+    const [yAxisArray, setYAxisArray] = React.useState<
+        (number | null)[] | null
+    >(null);
+    const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
 
     React.useEffect(() => {
+        clearState();
         if (!props.responseBody) {
-            setTitle(null);
-            setArray(null);
             return;
         }
 
         const json: Record<string, any> = JSON.parse(props.responseBody.data);
-        if (!(props.arrayKey in json)) {
-            setTitle(null);
-            setArray(null);
+        if (
+            !(props.yAxisArrayKey in json) ||
+            (props.xAxisArrayKey && !(props.xAxisArrayKey in json))
+        ) {
             return;
         }
 
-        const innerJson: Record<string, any> = json[props.arrayKey];
-        setTitle(innerJson[Constants.OUTPUT_ELEMENT_TITLE_KEY]);
-        setArray(innerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY]);
+        const yAxisInnerJson: Record<string, any> = json[props.yAxisArrayKey];
+        setTitle(yAxisInnerJson[Constants.OUTPUT_ELEMENT_TITLE_KEY]);
+        setYAxisArray(yAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY]);
+
+        if (props.xAxisArrayKey) {
+            const xAxisInnerJsonY: Record<string, any> =
+                json[props.xAxisArrayKey];
+            setXAxisArray(xAxisInnerJsonY[Constants.OUTPUT_ELEMENT_RESULT_KEY]);
+        }
     }, [props.responseBody]);
 
-    const getChartData = () => {
-        if (!array) {
-            return [];
+    const clearState = () => {
+        setTitle(null);
+        setYAxisArray(null);
+        setXAxisArray(null);
+    };
+
+    function getArrayRange(
+        array: (number | null)[],
+    ): [min: number, max: number, range: number] {
+        const filteredArray = array.filter((x) => x !== null);
+
+        const min = Math.min(...filteredArray);
+        const max = Math.max(...filteredArray);
+        const range = max - min;
+
+        return [min, max, range];
+    }
+
+    const generateXDataArray = (yDataArray: (number | null)[]): number[] => {
+        let xDataArray: number[] = [];
+        for (let i = 0; i < yDataArray.length; ++i) {
+            xDataArray[i] = i;
+        }
+
+        return xDataArray;
+    };
+
+    const getChartData = (): [
+        yDataArray: (number | null)[],
+        xDataArray: number[],
+    ] => {
+        let yDataArray: (number | null)[] = [];
+        let xDataArray: number[] = [];
+
+        if (!yAxisArray) {
+            return [yDataArray, xDataArray];
         }
 
         let startIndex = 0;
-        while (array[startIndex] === null) {
+        while (yAxisArray[startIndex] === null) {
             ++startIndex;
         }
 
-        let endIndex = array.length - 1;
-        while (array[endIndex] === null) {
+        let endIndex = yAxisArray.length - 1;
+        while (yAxisArray[endIndex] === null) {
             --endIndex;
         }
 
         if (startIndex <= endIndex) {
-            return array.slice(startIndex, endIndex + 1);
+            yDataArray = yAxisArray.slice(startIndex, endIndex + 1);
+
+            if (xAxisArray) {
+                xDataArray = xAxisArray.slice(startIndex, endIndex + 1);
+            } else {
+                xDataArray = generateXDataArray(yDataArray);
+            }
         }
 
-        return [];
-    };
-
-    const getChartLabelData = (chartArray: (number | null)[]) => {
-        let chartLabelData: number[] = [];
-        for (let i = 0; i < chartArray.length; ++i) {
-            chartLabelData[i] = i;
-        }
-
-        return chartLabelData;
+        return [yDataArray, xDataArray];
     };
 
     const getChartElement = () => {
-        const chartArray = getChartData();
-        if (chartArray.length <= 2) {
-            return <div>no data</div>;
+        const [yDataArray, xDataArray] = getChartData();
+        if (yDataArray.length <= 2) {
+            return (
+                <div className="inner-container-style">
+                    Nedostatok dát pre graf
+                </div>
+            );
         }
 
-        const chartLabelData = getChartLabelData(chartArray);
+        const [xMin, xMax] = getArrayRange(xDataArray);
+        const [yMin, yMax, yRange] = getArrayRange(yDataArray);
 
         return (
             <>
                 <LineChart
                     xAxis={[
                         {
-                            data: chartLabelData,
-                            min: chartLabelData[0],
-                            max: chartLabelData[chartLabelData.length - 1],
+                            data: xDataArray,
+                            min: 150,
+                            max: 225,
+                        },
+                    ]}
+                    yAxis={[
+                        {
+                            min: yMin - (yRange / 100) * 2.5,
+                            max: yMax + (yRange / 100) * 2.5,
                         },
                     ]}
                     series={[
                         {
                             label: props.label,
-                            data: chartArray,
+                            data: yDataArray,
                             curve: "linear",
                             showMark: false,
                             ...(props.color
@@ -105,7 +156,7 @@ function LineChartWrapper(props: LineChartProps) {
     };
 
     const getDisplayElement = () => {
-        if (array && title) {
+        if (yAxisArray && title) {
             return getChartElement();
         } else {
             return <div></div>;
