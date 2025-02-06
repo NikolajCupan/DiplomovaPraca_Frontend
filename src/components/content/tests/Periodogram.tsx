@@ -40,7 +40,7 @@ function Periodogram() {
 
     const chartsContent = (
         <>
-            {/* <ScrollableContainer
+            <ScrollableContainer
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
             >
                 <LineChartWrapper
@@ -50,7 +50,7 @@ function Periodogram() {
                     responseBody={responseBody}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
-            </ScrollableContainer> */}
+            </ScrollableContainer>
 
             <ScrollableContainer
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
@@ -58,7 +58,8 @@ function Periodogram() {
                 <LineChartWrapper
                     label={"Perióda"}
                     xAxisArrayKey={"period"}
-                    yAxisArrayKey={"power"}
+                    yAxisArrayKey={"reversed_power"}
+                    color={"green"}
                     responseBody={responseBody}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />

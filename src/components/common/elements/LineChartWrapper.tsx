@@ -128,8 +128,8 @@ function LineChartWrapper(props: LineChartProps) {
                     xAxis={[
                         {
                             data: xDataArray,
-                            min: 150,
-                            max: 225,
+                            min: xMin,
+                            max: xMax,
                         },
                     ]}
                     yAxis={[
