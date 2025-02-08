@@ -1,4 +1,5 @@
 import * as Constants from "../../../helpers/Constants.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
 
@@ -166,7 +167,8 @@ function LineChartWrapper(props: LineChartProps) {
         if (yChartDataArray.length <= 2) {
             return (
                 <div className="inner-container-style">
-                    Nedostatok dát pre graf
+                    Nedostatok dát pre graf{" "}
+                    <span style={{ fontWeight: "bold" }}>{props.label}</span>
                 </div>
             );
         }
@@ -187,6 +189,21 @@ function LineChartWrapper(props: LineChartProps) {
                         {
                             min: yMin - (yRange / 100) * 2.5,
                             max: yMax + (yRange / 100) * 2.5,
+                            valueFormatter: (value) => {
+                                if (value.toString().indexOf("e") > -1) {
+                                    return value;
+                                }
+
+                                const numberValue = Number(value);
+                                if (
+                                    Helper.getDecimalDigitsCount(numberValue) >=
+                                    5
+                                ) {
+                                    return numberValue.toExponential(0);
+                                }
+
+                                return value;
+                            },
                         },
                     ]}
                     series={[
