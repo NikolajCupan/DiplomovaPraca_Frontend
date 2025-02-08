@@ -135,7 +135,7 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.CORRELOGRAM_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Korelogram

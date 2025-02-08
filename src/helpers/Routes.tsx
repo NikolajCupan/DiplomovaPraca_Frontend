@@ -3,6 +3,7 @@ import DatasetEditor from "../components/content/data/DatasetEditor.tsx";
 import Home from "../components/content/Home.tsx";
 import LinearRegression from "../components/content/LinearRegression.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
+import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
 import KPSSTest from "../components/content/tests/KPSSTest.tsx";
 import LjungBoxTest from "../components/content/tests/LjungBoxTest.tsx";
@@ -44,6 +45,10 @@ export const ROUTES = [
     {
         path: Constants.PERIODOGRAM_LINK,
         element: <Periodogram />,
+    },
+    {
+        path: Constants.CORRELOGRAM_LINK,
+        element: <Correlogram />,
     },
     {
         path: Constants.ARCH_TEST_LINK,

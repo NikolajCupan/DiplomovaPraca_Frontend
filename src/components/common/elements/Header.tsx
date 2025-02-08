@@ -1,13 +1,13 @@
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import InfoIcon from "@mui/icons-material/Info";
-import { Tooltip } from "@mui/material";
+import ToolTipElement from "../../common/elements/ToolTipElement.tsx";
 
 import * as React from "react";
 
 interface HeaderProps {
     text: string;
     breakpointWidth: number;
-    link: string;
+    link: string | [string, string][];
 }
 
 function Header(props: HeaderProps) {
@@ -19,6 +19,12 @@ function Header(props: HeaderProps) {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+    const iconStyle = {
+        ...(isSmall ? {} : { marginTop: "5px" }),
+        height: "30px",
+        width: "30px",
+    };
 
     const handleResize = () => {
         const header = document.getElementById("header-container");
@@ -60,37 +66,36 @@ function Header(props: HeaderProps) {
                     }),
                 }}
             >
-                <Tooltip
-                    title="Pre nepoužité parametre bude nastavená predvolená hodnota. Viac informácií nájdete v oficiálnej dokumentácii."
-                    arrow
-                >
-                    <a>
-                        <InfoIcon
-                            style={{
-                                ...(!isSmall && { marginTop: "5px" }),
-                                height: "30px",
-                                width: "30px",
-                            }}
-                            color="primary"
-                        />
-                    </a>
-                </Tooltip>
-                <Tooltip title="Oficiálna dokumentácia" arrow>
-                    <a
-                        href={props.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <FindInPageIcon
-                            style={{
-                                ...(!isSmall && { marginTop: "5px" }),
-                                height: "30px",
-                                width: "30px",
-                            }}
-                            color="primary"
-                        />
-                    </a>
-                </Tooltip>
+                <ToolTipElement
+                    title={
+                        "Pre nepoužité parametre bude nastavená predvolená hodnota. Viac informácií nájdete v oficiálnej dokumentácii."
+                    }
+                    icon={<InfoIcon style={iconStyle} color="primary" />}
+                />
+                {Array.isArray(props.link) ? (
+                    props.link.map((item, key) => (
+                        <React.Fragment key={key}>
+                            <ToolTipElement
+                                title={"Oficiálna dokumentácia " + item[1]}
+                                link={item[0]}
+                                icon={
+                                    <FindInPageIcon
+                                        style={iconStyle}
+                                        color="primary"
+                                    />
+                                }
+                            />
+                        </React.Fragment>
+                    ))
+                ) : (
+                    <ToolTipElement
+                        title={"Oficiálna dokumentácia"}
+                        link={props.link}
+                        icon={
+                            <FindInPageIcon style={iconStyle} color="primary" />
+                        }
+                    />
+                )}
             </div>
         </div>
     );

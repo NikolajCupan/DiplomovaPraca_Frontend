@@ -73,7 +73,7 @@ function PeriodogramForm(props: PeriodogramFormProps) {
             Helper.appendIfAvailable(formData, "nfft", fft, fftEnabled);
             Helper.appendIfAvailable(
                 formData,
-                "spectrum",
+                "return_onesided",
                 spectrum,
                 spectrumEnabled,
             );
