@@ -17,8 +17,6 @@ interface LineChartProps {
 
     useSlider?: boolean;
     minDistance?: number;
-    defaultXMin?: number;
-    defaultXMax?: number;
 
     responseBody: Type.RequestResult;
 }
@@ -29,6 +27,8 @@ function LineChartWrapper(props: LineChartProps) {
     >(null);
     const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
     const [xAxisLimits, setXAxisLimits] = React.useState<number[]>([]);
+
+    const usedMinDistance = React.useRef<number | null>(null);
 
     React.useEffect(() => {
         clearState();
@@ -59,16 +59,7 @@ function LineChartWrapper(props: LineChartProps) {
 
         setXAxisArray(xAxisArray);
         const [xMin, xMax] = getArrayRange(xAxisArray);
-
-        if (props.useSlider !== undefined && props.useSlider) {
-            const usedXMin =
-                props.defaultXMin !== undefined ? props.defaultXMin : xMin;
-            const usedXMax =
-                props.defaultXMax !== undefined ? props.defaultXMax : xMax;
-            setXAxisLimits([usedXMin, usedXMax]);
-        } else {
-            setXAxisLimits([xMin, xMax]);
-        }
+        setXAxisLimits([xMin, xMax]);
     }, [props.responseBody]);
 
     const clearState = () => {
@@ -132,7 +123,27 @@ function LineChartWrapper(props: LineChartProps) {
         return [yChartDataArray, xChartDataArray];
     };
 
-    const getSliderElement = (xMin: number, xMax: number) => {
+    const getMinDistance = () => {
+        if (usedMinDistance.current !== null) {
+            return usedMinDistance.current;
+        }
+
+        let minDistance = 1;
+
+        if (props.minDistance !== undefined) {
+            const range =
+                Math.ceil(xAxisLimits[1]) - Math.floor(xAxisLimits[0]);
+
+            if (range > props.minDistance) {
+                minDistance = props.minDistance;
+            }
+        }
+
+        usedMinDistance.current = minDistance;
+        return minDistance;
+    };
+
+    const getSliderElement = () => {
         if (props.useSlider === undefined || !props.useSlider) {
             return;
         }
@@ -142,11 +153,9 @@ function LineChartWrapper(props: LineChartProps) {
                 <SliderDoubleInput
                     value={xAxisLimits}
                     setValue={setXAxisLimits}
-                    minValue={xMin}
-                    maxValue={xMax}
-                    minDistance={
-                        props.minDistance === undefined ? 1 : props.minDistance
-                    }
+                    minValue={xAxisLimits[0]}
+                    maxValue={xAxisLimits[1]}
+                    minDistance={getMinDistance()}
                 />
             </CenteredContainer>
         );
@@ -162,7 +171,6 @@ function LineChartWrapper(props: LineChartProps) {
             );
         }
 
-        const [xMin, xMax] = getArrayRange(xChartDataArray);
         const [yMin, yMax, yRange] = getArrayRange(yChartDataArray);
 
         return (
@@ -195,7 +203,7 @@ function LineChartWrapper(props: LineChartProps) {
                     height={props.height}
                 />
 
-                {getSliderElement(xMin, xMax)}
+                {getSliderElement()}
             </>
         );
     };

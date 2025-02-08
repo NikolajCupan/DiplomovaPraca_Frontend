@@ -61,9 +61,8 @@ function Periodogram() {
                     yAxisArrayKey={"reversed_power"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
-                    useSlider={true}
-                    defaultXMax={30}
                     minDistance={10}
+                    useSlider={true}
                 />
             </ScrollableContainer>
         </>

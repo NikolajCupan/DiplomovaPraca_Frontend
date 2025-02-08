@@ -12,6 +12,17 @@ interface SliderDoubleInputProps {
 }
 
 function SliderDoubleInput(props: SliderDoubleInputProps) {
+    const [displayedValue, setDisplayedValue] = React.useState<number[]>([]);
+    const initialMinValue = React.useRef(Math.floor(props.minValue));
+    const initialMaxValue = React.useRef(Math.ceil(props.maxValue));
+
+    React.useEffect(() => {
+        setDisplayedValue([
+            Math.floor(props.value[0]),
+            Math.ceil(props.value[1]),
+        ]);
+    }, []);
+
     const handleSliderChange = (
         _: any,
         newValues: number | number[],
@@ -30,13 +41,14 @@ function SliderDoubleInput(props: SliderDoubleInputProps) {
         }
 
         props.setValue([left, right]);
+        setDisplayedValue([left, right]);
     };
 
     return (
         <Slider
-            value={props.value}
-            min={props.minValue}
-            max={props.maxValue}
+            value={displayedValue}
+            min={initialMinValue.current}
+            max={initialMaxValue.current}
             valueLabelDisplay="auto"
             onChange={handleSliderChange}
             disableSwap
