@@ -1,13 +1,14 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
+
 import Header from "../../common/elements/Header.tsx";
 import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../common/inputs/NumberInput.tsx";
 import SelectInput from "../../common/inputs/SelectInput.tsx";
-import TextInput from "../../common/inputs/TextInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
@@ -17,9 +18,9 @@ interface CorrelogramFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
-    responseBody: Type.RequestResult | null;
+    responseBody: [Type.RequestResult, Type.RequestResult] | null;
     setResponseBody: React.Dispatch<
-        React.SetStateAction<Type.RequestResult | null>
+        React.SetStateAction<[Type.RequestResult, Type.RequestResult] | null>
     >;
 }
 
@@ -66,6 +67,66 @@ function CorrelogramForm(props: CorrelogramFormProps) {
         React.useState<boolean>(false);
     // PACF ENd
 
+    const handleAcfRequest = async () => {
+        const formData = new FormData();
+        formData.append("idDataset", selectedDatasetInfo!.idDataset.toString());
+        Helper.appendIfAvailable(
+            formData,
+            "adjusted",
+            autocovariance,
+            autocovarianceEnabled,
+        );
+        Helper.appendIfAvailable(
+            formData,
+            "nlags",
+            lagsCountAcf,
+            lagsCountAcfEnabled,
+        );
+        Helper.appendIfAvailable(formData, "fft", useFft, useFftEnabled);
+        Helper.appendIfAvailable(formData, "alpha", alfaAcf, alfaAcfEnabled);
+        Helper.appendIfAvailable(
+            formData,
+            "bartlett_confint",
+            useBartlettFormula,
+            useBartlettFormulaEnabled,
+        );
+
+        const request: Type.FetchRequest = {
+            url: Constants.BACKEND_PATH + Constants.CORRELOGRAM_ACF,
+            options: {
+                method: "post",
+                body: formData,
+            },
+        };
+
+        CookiesManager.prepareRequest(request);
+        return await fetch(request.url, request.options);
+    };
+
+    const handlePacfRequest = async () => {
+        const formData = new FormData();
+        formData.append("idDataset", selectedDatasetInfo!.idDataset.toString());
+        Helper.appendIfAvailable(
+            formData,
+            "nlags",
+            lagsCountPacf,
+            lagsCountPacfEnabled,
+        );
+        Helper.appendIfAvailable(formData, "method", method, methodEnabled);
+        Helper.appendIfAvailable(formData, "alpha", alfaPacf, alfaPacfEnabled);
+
+        const request: Type.FetchRequest = {
+            url: Constants.BACKEND_PATH + Constants.CORRELOGRAM_PACF,
+            options: {
+                method: "post",
+                body: formData,
+            },
+        };
+
+        CookiesManager.prepareRequest(request);
+        return await fetch(request.url, request.options);
+    };
+
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
             return;
@@ -79,38 +140,27 @@ function CorrelogramForm(props: CorrelogramFormProps) {
         props.setActionInProgress(true);
 
         try {
-            const formData = new FormData();
-            formData.append(
-                "idDataset",
-                selectedDatasetInfo.idDataset.toString(),
-            );
+            const acfResponse = await handleAcfRequest();
+            const pacfResponse = await handlePacfRequest();
 
-            const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.CORRELOGRAM,
-                options: {
-                    method: "post",
-                    body: formData,
-                },
-            };
-
-            CookiesManager.prepareRequest(request);
-            const response = await fetch(request.url, request.options);
-            const responseBody = (await response.json()) as Type.RequestResult;
-
-            if (response.ok) {
-                CookiesManager.processResponse(response);
-
-                props.setResponseBody(responseBody);
-            } else {
+            if (!acfResponse.ok || !pacfResponse.ok) {
                 props.setResponseBody(null);
                 openNotification(
-                    responseBody.message.trim() === ""
-                        ? "Pri vykonávaní akcie nastala chyba"
-                        : responseBody.message,
+                    "Pri vykonávaní akcie nastala chyba",
                     "white",
                     "red",
                 );
+                return;
             }
+
+            CookiesManager.processResponse(acfResponse);
+            CookiesManager.processResponse(pacfResponse);
+
+            const acfResponseBody =
+                (await acfResponse.json()) as Type.RequestResult;
+            const pacfResponseBody =
+                (await pacfResponse.json()) as Type.RequestResult;
+            props.setResponseBody([acfResponseBody, pacfResponseBody]);
         } catch {
             props.setResponseBody(null);
             openNotification(
@@ -122,8 +172,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
 
         props.setActionInProgress(false);
     };
-
-    const [value, setValue] = React.useState<string>("");
 
     return (
         <>
@@ -294,16 +342,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                     />
                 </Grid>
             </Grid>
-
-            <TextInput
-                value={value}
-                setValue={setValue}
-                toggleable={true}
-                inputEnabled={true}
-                label={
-                    "hhhhhhhhhhhhhhhhhhhhhhfdsfsdfsdfsdfsfdsdfsfdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
-                }
-            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}

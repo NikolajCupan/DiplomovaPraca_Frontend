@@ -8,8 +8,9 @@ import * as React from "react";
 function Correlogram() {
     const [actionInProgress, setActionInProgress] =
         React.useState<boolean>(false);
-    const [responseBody, setResponseBody] =
-        React.useState<Type.RequestResult | null>(null);
+    const [responseBody, setResponseBody] = React.useState<
+        [Type.RequestResult, Type.RequestResult] | null
+    >(null);
 
     const content = (
         <>
