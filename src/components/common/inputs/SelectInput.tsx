@@ -18,6 +18,9 @@ interface SelectInputProps {
 }
 
 function SelectInput(props: SelectInputProps) {
+    const [applyTransformation, setApplyTransformation] =
+        React.useState<boolean>(false);
+
     const handleInputEnabledChange = (enabled: boolean) => {
         if (props.setInputEnabled) {
             props.setInputEnabled(enabled);
@@ -26,6 +29,12 @@ function SelectInput(props: SelectInputProps) {
 
     return (
         <TextField
+            onFocus={() => {
+                setApplyTransformation(true);
+            }}
+            onBlur={() => {
+                setApplyTransformation(props.value.trim() !== "");
+            }}
             className={props.customClass}
             label={props.label}
             variant="outlined"
@@ -34,7 +43,21 @@ function SelectInput(props: SelectInputProps) {
             onChange={(event) => props.setValue(event.target.value)}
             disabled={!props.inputEnabled}
             slotProps={{
+                inputLabel: {
+                    sx: {
+                        ...(applyTransformation
+                            ? {}
+                            : {
+                                  maxWidth: `calc(100% - 80px) !important`,
+                              }),
+                    },
+                },
                 input: {
+                    sx: {
+                        "& .MuiInputBase-input": {
+                            paddingRight: "0 !important",
+                        },
+                    },
                     endAdornment: props.toggleable ? (
                         <Checkbox
                             checked={props.inputEnabled}
@@ -42,6 +65,10 @@ function SelectInput(props: SelectInputProps) {
                                 handleInputEnabledChange(event.target.checked)
                             }
                             disabled={false}
+                            style={{
+                                backgroundColor: "white",
+                                height: "100%",
+                            }}
                         />
                     ) : null,
                 },

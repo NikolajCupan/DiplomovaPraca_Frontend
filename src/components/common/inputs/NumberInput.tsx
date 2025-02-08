@@ -23,6 +23,9 @@ interface NumberInputProps {
 }
 
 function NumberInput(props: NumberInputProps) {
+    const [applyTransformation, setApplyTransformation] =
+        React.useState<boolean>(false);
+
     const handleChangeValue = (newValue: string) => {
         const numericValue = Number(newValue);
         if (isNaN(numericValue)) {
@@ -75,6 +78,9 @@ function NumberInput(props: NumberInputProps) {
 
     return (
         <TextField
+            onFocus={() => {
+                setApplyTransformation(true);
+            }}
             className={props.customClass}
             label={props.label}
             variant="outlined"
@@ -82,9 +88,21 @@ function NumberInput(props: NumberInputProps) {
             type="number"
             value={props.value}
             onChange={(event) => handleChangeValue(event.target.value)}
-            onBlur={(event) => handleBlur(event.target.value)}
+            onBlur={(event) => {
+                setApplyTransformation(props.value.toString().trim() !== "");
+                handleBlur(event.target.value);
+            }}
             disabled={!props.inputEnabled}
             slotProps={{
+                inputLabel: {
+                    sx: {
+                        ...(applyTransformation
+                            ? {}
+                            : {
+                                  maxWidth: `calc(100% - 80px) !important`,
+                              }),
+                    },
+                },
                 htmlInput: {
                     type: "number",
                     ...(props.maxValue !== undefined && {

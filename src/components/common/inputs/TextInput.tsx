@@ -1,4 +1,5 @@
 import { Checkbox, InputAdornment, TextField } from "@mui/material";
+
 import * as React from "react";
 
 interface TextInputProps {
@@ -17,6 +18,9 @@ interface TextInputProps {
 }
 
 function TextInput(props: TextInputProps) {
+    const [applyTransformation, setApplyTransformation] =
+        React.useState<boolean>(false);
+
     const handleChangeValue = (newValue: string) => {
         props.setValue(newValue);
     };
@@ -29,6 +33,12 @@ function TextInput(props: TextInputProps) {
 
     return (
         <TextField
+            onFocus={() => {
+                setApplyTransformation(true);
+            }}
+            onBlur={() => {
+                setApplyTransformation(props.value.trim() !== "");
+            }}
             className={props.customClass}
             label={props.label}
             variant="outlined"
@@ -42,6 +52,15 @@ function TextInput(props: TextInputProps) {
             onChange={(event) => handleChangeValue(event.target.value)}
             disabled={!props.inputEnabled}
             slotProps={{
+                inputLabel: {
+                    sx: {
+                        ...(applyTransformation
+                            ? {}
+                            : {
+                                  maxWidth: `calc(100% - 80px) !important`,
+                              }),
+                    },
+                },
                 input: {
                     endAdornment: props.toggleable ? (
                         <InputAdornment position="end">
