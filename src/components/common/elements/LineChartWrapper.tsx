@@ -28,7 +28,7 @@ function LineChartWrapper(props: LineChartProps) {
         (number | null)[] | null
     >(null);
     const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
-    const [sliderValues, setSliderValues] = React.useState<number[]>([]);
+    const [xAxisLimits, setXAxisLimits] = React.useState<number[]>([]);
 
     React.useEffect(() => {
         clearState();
@@ -61,16 +61,20 @@ function LineChartWrapper(props: LineChartProps) {
         const [xMin, xMax] = getArrayRange(xAxisArray);
 
         if (props.useSlider !== undefined && props.useSlider) {
-            const usedXMin = props.defaultXMin !== undefined ? props.defaultXMin : xMin;
-            const usedXMax = props.defaultXMax !== undefined ? props.defaultXMax : xMax;
-            setSliderValues([usedXMin, usedXMax]);
+            const usedXMin =
+                props.defaultXMin !== undefined ? props.defaultXMin : xMin;
+            const usedXMax =
+                props.defaultXMax !== undefined ? props.defaultXMax : xMax;
+            setXAxisLimits([usedXMin, usedXMax]);
+        } else {
+            setXAxisLimits([xMin, xMax]);
         }
     }, [props.responseBody]);
 
     const clearState = () => {
         setYAxisArray(null);
         setXAxisArray(null);
-        setSliderValues([]);
+        setXAxisLimits([]);
     };
 
     function getArrayRange(
@@ -136,8 +140,8 @@ function LineChartWrapper(props: LineChartProps) {
         return (
             <CenteredContainer widthPercent={80}>
                 <SliderDoubleInput
-                    value={sliderValues}
-                    setValue={setSliderValues}
+                    value={xAxisLimits}
+                    setValue={setXAxisLimits}
                     minValue={xMin}
                     maxValue={xMax}
                     minDistance={
@@ -167,8 +171,8 @@ function LineChartWrapper(props: LineChartProps) {
                     xAxis={[
                         {
                             data: xChartDataArray,
-                            min: sliderValues[0],
-                            max: sliderValues[1],
+                            min: xAxisLimits[0],
+                            max: xAxisLimits[1],
                         },
                     ]}
                     yAxis={[

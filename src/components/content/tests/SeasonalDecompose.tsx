@@ -48,7 +48,7 @@ function SeasonalDecompose() {
                 <LineChartWrapper
                     label={"pozorované hodnoty"}
                     yAxisArrayKey={"observed"}
-                    responseBody={responseBody}
+                    responseBody={responseBody!}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
@@ -60,7 +60,7 @@ function SeasonalDecompose() {
                 <LineChartWrapper
                     label={"trend"}
                     yAxisArrayKey={"trend"}
-                    responseBody={responseBody}
+                    responseBody={responseBody!}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
@@ -72,7 +72,7 @@ function SeasonalDecompose() {
                 <LineChartWrapper
                     label={"sezónna zložka"}
                     yAxisArrayKey={"seasonal"}
-                    responseBody={responseBody}
+                    responseBody={responseBody!}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
@@ -83,7 +83,7 @@ function SeasonalDecompose() {
                 <LineChartWrapper
                     label={"reziduá"}
                     yAxisArrayKey={"resid"}
-                    responseBody={responseBody}
+                    responseBody={responseBody!}
                     height={Constants.DEFAULT_LINE_CHART_HEIGHT}
                 />
             </ScrollableContainer>
