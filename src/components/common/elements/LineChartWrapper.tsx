@@ -5,6 +5,8 @@ import "../../../index.css";
 import { LineChart } from "@mui/x-charts/LineChart";
 
 import * as React from "react";
+import SliderDoubleInput from "../inputs/SliderDoubleInput.tsx";
+import CenteredContainer from "./CenteredContainer.tsx";
 
 interface LineChartProps {
     label: string;
@@ -13,15 +15,20 @@ interface LineChartProps {
     height: number;
     color?: string;
 
-    responseBody: Type.RequestResult | null;
+    useSlider?: boolean;
+    minDistance?: number;
+    defaultXMin?: number;
+    defaultXMax?: number;
+
+    responseBody: Type.RequestResult;
 }
 
 function LineChartWrapper(props: LineChartProps) {
-    const [title, setTitle] = React.useState<string | null>(null);
     const [yAxisArray, setYAxisArray] = React.useState<
         (number | null)[] | null
     >(null);
     const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
+    const [sliderValues, setSliderValues] = React.useState<number[]>([]);
 
     React.useEffect(() => {
         clearState();
@@ -38,20 +45,32 @@ function LineChartWrapper(props: LineChartProps) {
         }
 
         const yAxisInnerJson: Record<string, any> = json[props.yAxisArrayKey];
-        setTitle(yAxisInnerJson[Constants.OUTPUT_ELEMENT_TITLE_KEY]);
-        setYAxisArray(yAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY]);
+        const yAxisArray = yAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
+        setYAxisArray(yAxisArray);
 
+        let xAxisArray: number[] = [];
         if (props.xAxisArrayKey) {
             const xAxisInnerJsonY: Record<string, any> =
                 json[props.xAxisArrayKey];
-            setXAxisArray(xAxisInnerJsonY[Constants.OUTPUT_ELEMENT_RESULT_KEY]);
+            xAxisArray = xAxisInnerJsonY[Constants.OUTPUT_ELEMENT_RESULT_KEY];
+        } else {
+            xAxisArray = generateXDataArray(yAxisArray);
+        }
+
+        setXAxisArray(xAxisArray);
+        const [xMin, xMax] = getArrayRange(xAxisArray);
+
+        if (props.useSlider !== undefined && props.useSlider) {
+            const usedXMin = props.defaultXMin !== undefined ? props.defaultXMin : xMin;
+            const usedXMax = props.defaultXMax !== undefined ? props.defaultXMax : xMax;
+            setSliderValues([usedXMin, usedXMax]);
         }
     }, [props.responseBody]);
 
     const clearState = () => {
-        setTitle(null);
         setYAxisArray(null);
         setXAxisArray(null);
+        setSliderValues([]);
     };
 
     function getArrayRange(
@@ -76,14 +95,14 @@ function LineChartWrapper(props: LineChartProps) {
     };
 
     const getChartData = (): [
-        yDataArray: (number | null)[],
-        xDataArray: number[],
+        yChartDataArray: (number | null)[],
+        xChartDataArray: number[],
     ] => {
-        let yDataArray: (number | null)[] = [];
-        let xDataArray: number[] = [];
+        let yChartDataArray: (number | null)[] = [];
+        let xChartDataArray: number[] = [];
 
         if (!yAxisArray) {
-            return [yDataArray, xDataArray];
+            return [yChartDataArray, xChartDataArray];
         }
 
         let startIndex = 0;
@@ -97,21 +116,41 @@ function LineChartWrapper(props: LineChartProps) {
         }
 
         if (startIndex <= endIndex) {
-            yDataArray = yAxisArray.slice(startIndex, endIndex + 1);
+            yChartDataArray = yAxisArray.slice(startIndex, endIndex + 1);
 
             if (xAxisArray) {
-                xDataArray = xAxisArray.slice(startIndex, endIndex + 1);
+                xChartDataArray = xAxisArray.slice(startIndex, endIndex + 1);
             } else {
-                xDataArray = generateXDataArray(yDataArray);
+                xChartDataArray = generateXDataArray(yChartDataArray);
             }
         }
 
-        return [yDataArray, xDataArray];
+        return [yChartDataArray, xChartDataArray];
+    };
+
+    const getSliderElement = (xMin: number, xMax: number) => {
+        if (props.useSlider === undefined || !props.useSlider) {
+            return;
+        }
+
+        return (
+            <CenteredContainer widthPercent={80}>
+                <SliderDoubleInput
+                    value={sliderValues}
+                    setValue={setSliderValues}
+                    minValue={xMin}
+                    maxValue={xMax}
+                    minDistance={
+                        props.minDistance === undefined ? 1 : props.minDistance
+                    }
+                />
+            </CenteredContainer>
+        );
     };
 
     const getChartElement = () => {
-        const [yDataArray, xDataArray] = getChartData();
-        if (yDataArray.length <= 2) {
+        const [yChartDataArray, xChartDataArray] = getChartData();
+        if (yChartDataArray.length <= 2) {
             return (
                 <div className="inner-container-style">
                     Nedostatok dát pre graf
@@ -119,17 +158,17 @@ function LineChartWrapper(props: LineChartProps) {
             );
         }
 
-        const [xMin, xMax] = getArrayRange(xDataArray);
-        const [yMin, yMax, yRange] = getArrayRange(yDataArray);
+        const [xMin, xMax] = getArrayRange(xChartDataArray);
+        const [yMin, yMax, yRange] = getArrayRange(yChartDataArray);
 
         return (
             <>
                 <LineChart
                     xAxis={[
                         {
-                            data: xDataArray,
-                            min: xMin,
-                            max: xMax,
+                            data: xChartDataArray,
+                            min: sliderValues[0],
+                            max: sliderValues[1],
                         },
                     ]}
                     yAxis={[
@@ -141,7 +180,7 @@ function LineChartWrapper(props: LineChartProps) {
                     series={[
                         {
                             label: props.label,
-                            data: yDataArray,
+                            data: yChartDataArray,
                             curve: "linear",
                             showMark: false,
                             ...(props.color
@@ -151,19 +190,13 @@ function LineChartWrapper(props: LineChartProps) {
                     ]}
                     height={props.height}
                 />
+
+                {getSliderElement(xMin, xMax)}
             </>
         );
     };
 
-    const getDisplayElement = () => {
-        if (yAxisArray && title) {
-            return getChartElement();
-        } else {
-            return <div></div>;
-        }
-    };
-
-    return <div>{getDisplayElement()}</div>;
+    return <>{getChartElement()}</>;
 }
 
 export default LineChartWrapper;

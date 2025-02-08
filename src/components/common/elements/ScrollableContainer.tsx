@@ -20,6 +20,7 @@ const ScrollableContainer: React.FC<ScrollableContainerProps> = ({
             style={{
                 ...customStyle,
                 overflowX: "auto",
+                overflowY: "hidden",
                 maxWidth: "100%",
             }}
         >
