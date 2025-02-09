@@ -34,6 +34,8 @@ function CorrelogramForm(props: CorrelogramFormProps) {
         React.useState<Type.DatasetInfo | null>(null);
 
     // ACF
+    const [alphaAcf, setAlphaAcf] = React.useState<number>(0.05);
+
     const [autocovariance, setAutocovariance] = React.useState<string>("");
     const [autocovarianceEnabled, setAutocovarianceEnabled] =
         React.useState<boolean>(false);
@@ -45,9 +47,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
     const [useFft, setUseFft] = React.useState<string>("");
     const [useFftEnabled, setUseFftEnabled] = React.useState<boolean>(false);
 
-    const [alfaAcf, setAlfaAcf] = React.useState<number>(0.05);
-    const [alfaAcfEnabled, setAlfaAcfEnabled] = React.useState<boolean>(false);
-
     const [useBartlettFormula, setUseBartlettFormula] =
         React.useState<string>("");
     const [useBartlettFormulaEnabled, setUseBartlettFormulaEnabled] =
@@ -55,76 +54,88 @@ function CorrelogramForm(props: CorrelogramFormProps) {
     // ACF END
 
     // PACF
+    const [alphaPacf, setAlphaPacf] = React.useState<number>(0.05);
+
     const [lagsCountPacf, setLagsCountPacf] = React.useState<number>(1);
     const [lagsCountPacfEnabled, setLagsCountPacfEnabled] =
         React.useState<boolean>(false);
 
     const [method, setMethod] = React.useState<string>("");
     const [methodEnabled, setMethodEnabled] = React.useState<boolean>(false);
-
-    const [alfaPacf, setAlfaPacf] = React.useState<number>(0.05);
-    const [alfaPacfEnabled, setAlfaPacfEnabled] =
-        React.useState<boolean>(false);
     // PACF ENd
 
     const handleAcfRequest = async () => {
-        const formData = new FormData();
-        formData.append("idDataset", selectedDatasetInfo!.idDataset.toString());
-        Helper.appendIfAvailable(
-            formData,
-            "adjusted",
-            autocovariance,
-            autocovarianceEnabled,
-        );
-        Helper.appendIfAvailable(
-            formData,
-            "nlags",
-            lagsCountAcf,
-            lagsCountAcfEnabled,
-        );
-        Helper.appendIfAvailable(formData, "fft", useFft, useFftEnabled);
-        Helper.appendIfAvailable(formData, "alpha", alfaAcf, alfaAcfEnabled);
-        Helper.appendIfAvailable(
-            formData,
-            "bartlett_confint",
-            useBartlettFormula,
-            useBartlettFormulaEnabled,
-        );
+        try {
+            const formData = new FormData();
+            formData.append(
+                "idDataset",
+                selectedDatasetInfo!.idDataset.toString(),
+            );
+            formData.append("alpha", alphaAcf.toString());
+            Helper.appendIfAvailable(
+                formData,
+                "adjusted",
+                autocovariance,
+                autocovarianceEnabled,
+            );
+            Helper.appendIfAvailable(
+                formData,
+                "nlags",
+                lagsCountAcf,
+                lagsCountAcfEnabled,
+            );
+            Helper.appendIfAvailable(formData, "fft", useFft, useFftEnabled);
+            Helper.appendIfAvailable(
+                formData,
+                "bartlett_confint",
+                useBartlettFormula,
+                useBartlettFormulaEnabled,
+            );
 
-        const request: Type.FetchRequest = {
-            url: Constants.BACKEND_PATH + Constants.CORRELOGRAM_ACF,
-            options: {
-                method: "post",
-                body: formData,
-            },
-        };
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.CORRELOGRAM_ACF,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
 
-        CookiesManager.prepareRequest(request);
-        return await fetch(request.url, request.options);
+            CookiesManager.prepareRequest(request);
+            return await fetch(request.url, request.options);
+        } catch {
+            return null;
+        }
     };
 
     const handlePacfRequest = async () => {
-        const formData = new FormData();
-        formData.append("idDataset", selectedDatasetInfo!.idDataset.toString());
-        Helper.appendIfAvailable(
-            formData,
-            "nlags",
-            lagsCountPacf,
-            lagsCountPacfEnabled,
-        );
-        Helper.appendIfAvailable(formData, "method", method, methodEnabled);
-        Helper.appendIfAvailable(formData, "alpha", alfaPacf, alfaPacfEnabled);
+        try {
+            const formData = new FormData();
+            formData.append(
+                "idDataset",
+                selectedDatasetInfo!.idDataset.toString(),
+            );
+            formData.append("alpha", alphaPacf.toString());
+            Helper.appendIfAvailable(
+                formData,
+                "nlags",
+                lagsCountPacf,
+                lagsCountPacfEnabled,
+            );
+            Helper.appendIfAvailable(formData, "method", method, methodEnabled);
 
-        const request: Type.FetchRequest = {
-            url: Constants.BACKEND_PATH + Constants.CORRELOGRAM_PACF,
-            options: {
-                method: "post",
-                body: formData,
-            },
-        };
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.CORRELOGRAM_PACF,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
 
-        CookiesManager.prepareRequest(request);
-        return await fetch(request.url, request.options);
+            CookiesManager.prepareRequest(request);
+            return await fetch(request.url, request.options);
+        } catch {
+            return null;
+        }
     };
 
     const handleConfirmButtonClick = async () => {
@@ -143,24 +154,28 @@ function CorrelogramForm(props: CorrelogramFormProps) {
             const acfResponse = await handleAcfRequest();
             const pacfResponse = await handlePacfRequest();
 
-            if (!acfResponse.ok || !pacfResponse.ok) {
+            if (
+                acfResponse === null ||
+                !acfResponse.ok ||
+                pacfResponse === null ||
+                !pacfResponse.ok
+            ) {
                 props.setResponseBody(null);
                 openNotification(
                     "Pri vykonávaní akcie nastala chyba",
                     "white",
                     "red",
                 );
-                return;
+            } else {
+                CookiesManager.processResponse(acfResponse);
+                CookiesManager.processResponse(pacfResponse);
+
+                const acfResponseBody =
+                    (await acfResponse.json()) as Type.RequestResult;
+                const pacfResponseBody =
+                    (await pacfResponse.json()) as Type.RequestResult;
+                props.setResponseBody([acfResponseBody, pacfResponseBody]);
             }
-
-            CookiesManager.processResponse(acfResponse);
-            CookiesManager.processResponse(pacfResponse);
-
-            const acfResponseBody =
-                (await acfResponse.json()) as Type.RequestResult;
-            const pacfResponseBody =
-                (await pacfResponse.json()) as Type.RequestResult;
-            props.setResponseBody([acfResponseBody, pacfResponseBody]);
         } catch {
             props.setResponseBody(null);
             openNotification(
@@ -199,6 +214,21 @@ function CorrelogramForm(props: CorrelogramFormProps) {
 
             <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={alphaAcf}
+                        setValue={setAlphaAcf}
+                        toggleable={false}
+                        inputEnabled={true}
+                        limitValuesAllowed={false}
+                        label={"(ACF) Hladina významnosti"}
+                        defaultValue={0.05}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-top"
                         label={"(ACF) Autokovariancia"}
@@ -213,6 +243,9 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                         ]}
                     />
                 </Grid>
+            </Grid>
+
+            <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
                         customClass="custom-form-component-margin-top"
@@ -228,9 +261,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                         step={1}
                     />
                 </Grid>
-            </Grid>
-
-            <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-top"
@@ -244,22 +274,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                             [Constants.STRING_TRUE, "Áno"],
                             [Constants.STRING_FALSE, "Nie"],
                         ]}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={alfaAcf}
-                        setValue={setAlfaAcf}
-                        toggleable={true}
-                        inputEnabled={alfaAcfEnabled}
-                        setInputEnabled={setAlfaAcfEnabled}
-                        limitValuesAllowed={false}
-                        label={"(ACF) Hladina významnosti"}
-                        defaultValue={0.05}
-                        minValue={0}
-                        maxValue={1}
-                        step={0.01}
                     />
                 </Grid>
             </Grid>
@@ -283,6 +297,24 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
                         customClass="custom-form-component-margin-top"
+                        value={alphaPacf}
+                        setValue={setAlphaPacf}
+                        toggleable={false}
+                        inputEnabled={true}
+                        limitValuesAllowed={false}
+                        label={"(PACF) Hladina významnosti"}
+                        defaultValue={0.05}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+            </Grid>
+
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
                         value={lagsCountPacf}
                         setValue={setLagsCountPacf}
                         toggleable={true}
@@ -295,9 +327,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                         step={1}
                     />
                 </Grid>
-            </Grid>
-
-            <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-top"
@@ -323,22 +352,6 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                             ["ldb", "Levinson-Durbin bez úpravy"],
                             ["burg", "Burgov odhad čiastočnej autokorelácie"],
                         ]}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={alfaPacf}
-                        setValue={setAlfaPacf}
-                        toggleable={true}
-                        inputEnabled={alfaPacfEnabled}
-                        setInputEnabled={setAlfaPacfEnabled}
-                        limitValuesAllowed={false}
-                        label={"(PACF) Hladina významnosti"}
-                        defaultValue={0.05}
-                        minValue={0}
-                        maxValue={1}
-                        step={0.01}
                     />
                 </Grid>
             </Grid>

@@ -1,5 +1,9 @@
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
+import BarChartWrapper from "../../common/elements/BarChartWrapper.tsx";
+import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import CorrelogramForm from "./CorrelogramForm.tsx";
 
@@ -12,6 +16,46 @@ function Correlogram() {
         [Type.RequestResult, Type.RequestResult] | null
     >(null);
 
+    const getResultContent = () => {
+        if (actionInProgress) {
+            return HelperElements.actionInProgressElement;
+        } else if (responseBody) {
+            const acfJson: Record<string, any> = JSON.parse(
+                responseBody[0].data,
+            );
+            const pacfJson: Record<string, any> = JSON.parse(
+                responseBody[1].data,
+            );
+
+            if (
+                !acfJson[Constants.SUCCESS_KEY] ||
+                !pacfJson[Constants.SUCCESS_KEY]
+            ) {
+                return (
+                    <div className="inner-container-style">
+                        Analýzu nebolo možné vykonať
+                    </div>
+                );
+            }
+
+            return getChartsContent();
+        } else {
+            return (
+                <div className="inner-container-style">
+                    Zvoľte parametre a vykonajte analýzu
+                </div>
+            );
+        }
+    };
+
+    const getChartsContent = () => {
+        if (!responseBody) {
+            return;
+        }
+
+        return <p>hi</p>;
+    };
+
     const content = (
         <>
             <div className="custom-container">
@@ -23,10 +67,23 @@ function Correlogram() {
                 />
             </div>
 
-            <div
-                className="custom-container"
-                style={{ marginBottom: "20px" }}
-            ></div>
+            {responseBody !== null && (
+                <div
+                    className="custom-container"
+                    style={{ marginBottom: "20px" }}
+                >
+                    <ScrollableContainer
+                        breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    >
+                        <BarChartWrapper
+                            height={Constants.DEFAULT_CHART_HEIGHT}
+                            responseBody={responseBody[0]}
+                            yAxisArrayKey={"acf_values"}
+                            xAxisArrayKey={""}
+                        />
+                    </ScrollableContainer>
+                </div>
+            )}
         </>
     );
 

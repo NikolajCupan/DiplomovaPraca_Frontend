@@ -9,7 +9,7 @@ export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 export const NOTIFICATION_CLOSE_MS = 3_000;
 
-export const DEFAULT_LINE_CHART_HEIGHT = 400;
+export const DEFAULT_CHART_HEIGHT = 400;
 export const DEFAULT_BREAKPOINT_WIDTH = 600;
 export const DEFAULT_P_VALUE = 0.05;
 

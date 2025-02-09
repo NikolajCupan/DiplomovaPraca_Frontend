@@ -48,7 +48,7 @@ function Periodogram() {
                     xAxisArrayKey={"frequency"}
                     yAxisArrayKey={"power"}
                     responseBody={responseBody!}
-                    height={Constants.DEFAULT_LINE_CHART_HEIGHT}
+                    height={Constants.DEFAULT_CHART_HEIGHT}
                 />
             </ScrollableContainer>
 
@@ -60,7 +60,7 @@ function Periodogram() {
                     xAxisArrayKey={"period"}
                     yAxisArrayKey={"reversed_power"}
                     responseBody={responseBody!}
-                    height={Constants.DEFAULT_LINE_CHART_HEIGHT}
+                    height={Constants.DEFAULT_CHART_HEIGHT}
                     minDistance={10}
                     useSlider={true}
                 />

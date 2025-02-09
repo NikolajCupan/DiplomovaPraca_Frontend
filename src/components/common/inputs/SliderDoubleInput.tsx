@@ -6,15 +6,15 @@ interface SliderDoubleInputProps {
     value: number[];
     setValue: React.Dispatch<React.SetStateAction<number[]>>;
 
-    minValue: number;
-    maxValue: number;
+    permanentMinValue: number;
+    permanentMaxValue: number;
     minDistance: number;
 }
 
 function SliderDoubleInput(props: SliderDoubleInputProps) {
     const [displayedValue, setDisplayedValue] = React.useState<number[]>([]);
-    const initialMinValue = React.useRef(Math.floor(props.minValue));
-    const initialMaxValue = React.useRef(Math.ceil(props.maxValue));
+    const initialMinValue = React.useRef(Math.floor(props.permanentMinValue));
+    const initialMaxValue = React.useRef(Math.ceil(props.permanentMaxValue));
 
     React.useEffect(() => {
         setDisplayedValue([

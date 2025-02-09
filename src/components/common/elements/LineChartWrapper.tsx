@@ -1,18 +1,20 @@
-import * as Constants from "../../../helpers/Constants.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
+import SliderDoubleInput from "../inputs/SliderDoubleInput.tsx";
+import CenteredContainer from "./CenteredContainer.tsx";
 
 import { LineChart } from "@mui/x-charts/LineChart";
 
 import * as React from "react";
-import SliderDoubleInput from "../inputs/SliderDoubleInput.tsx";
-import CenteredContainer from "./CenteredContainer.tsx";
+import ChartDataManager from "./ChartDataManager.tsx";
 
 interface LineChartProps {
     label: string;
+
     yAxisArrayKey: string;
     xAxisArrayKey?: string;
+
     height: number;
     color?: string;
 
@@ -23,110 +25,19 @@ interface LineChartProps {
 }
 
 function LineChartWrapper(props: LineChartProps) {
-    const [yAxisArray, setYAxisArray] = React.useState<
-        (number | null)[] | null
-    >(null);
-    const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
+    const [yChartDataArray, setYChartDataArray] = React.useState<
+        (number | null)[]
+    >([]);
+    const [yAxisLimits, setYAxisLimits] = React.useState<number[]>([]);
+
+    const [xChartDataArray, setXChartDataArray] = React.useState<number[]>([]);
     const [xAxisLimits, setXAxisLimits] = React.useState<number[]>([]);
 
-    const usedMinDistance = React.useRef<number | null>(null);
+    const usedSliderMinDistance = React.useRef<number | null>(null);
 
-    React.useEffect(() => {
-        clearState();
-        if (!props.responseBody) {
-            return;
-        }
-
-        const json: Record<string, any> = JSON.parse(props.responseBody.data);
-        if (
-            !(props.yAxisArrayKey in json) ||
-            (props.xAxisArrayKey && !(props.xAxisArrayKey in json))
-        ) {
-            return;
-        }
-
-        const yAxisInnerJson: Record<string, any> = json[props.yAxisArrayKey];
-        const yAxisArray = yAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
-        setYAxisArray(yAxisArray);
-
-        let xAxisArray: number[] = [];
-        if (props.xAxisArrayKey) {
-            const xAxisInnerJsonY: Record<string, any> =
-                json[props.xAxisArrayKey];
-            xAxisArray = xAxisInnerJsonY[Constants.OUTPUT_ELEMENT_RESULT_KEY];
-        } else {
-            xAxisArray = generateXDataArray(yAxisArray);
-        }
-
-        setXAxisArray(xAxisArray);
-        const [xMin, xMax] = getArrayRange(xAxisArray);
-        setXAxisLimits([xMin, xMax]);
-    }, [props.responseBody]);
-
-    const clearState = () => {
-        setYAxisArray(null);
-        setXAxisArray(null);
-        setXAxisLimits([]);
-    };
-
-    function getArrayRange(
-        array: (number | null)[],
-    ): [min: number, max: number, range: number] {
-        const filteredArray = array.filter((x) => x !== null);
-
-        const min = Math.min(...filteredArray);
-        const max = Math.max(...filteredArray);
-        const range = max - min;
-
-        return [min, max, range];
-    }
-
-    const generateXDataArray = (yDataArray: (number | null)[]): number[] => {
-        let xDataArray: number[] = [];
-        for (let i = 0; i < yDataArray.length; ++i) {
-            xDataArray[i] = i;
-        }
-
-        return xDataArray;
-    };
-
-    const getChartData = (): [
-        yChartDataArray: (number | null)[],
-        xChartDataArray: number[],
-    ] => {
-        let yChartDataArray: (number | null)[] = [];
-        let xChartDataArray: number[] = [];
-
-        if (!yAxisArray) {
-            return [yChartDataArray, xChartDataArray];
-        }
-
-        let startIndex = 0;
-        while (yAxisArray[startIndex] === null) {
-            ++startIndex;
-        }
-
-        let endIndex = yAxisArray.length - 1;
-        while (yAxisArray[endIndex] === null) {
-            --endIndex;
-        }
-
-        if (startIndex <= endIndex) {
-            yChartDataArray = yAxisArray.slice(startIndex, endIndex + 1);
-
-            if (xAxisArray) {
-                xChartDataArray = xAxisArray.slice(startIndex, endIndex + 1);
-            } else {
-                xChartDataArray = generateXDataArray(yChartDataArray);
-            }
-        }
-
-        return [yChartDataArray, xChartDataArray];
-    };
-
-    const getMinDistance = () => {
-        if (usedMinDistance.current !== null) {
-            return usedMinDistance.current;
+    const getSliderMinDistance = () => {
+        if (usedSliderMinDistance.current !== null) {
+            return usedSliderMinDistance.current;
         }
 
         let minDistance = 1;
@@ -140,7 +51,7 @@ function LineChartWrapper(props: LineChartProps) {
             }
         }
 
-        usedMinDistance.current = minDistance;
+        usedSliderMinDistance.current = minDistance;
         return minDistance;
     };
 
@@ -154,17 +65,16 @@ function LineChartWrapper(props: LineChartProps) {
                 <SliderDoubleInput
                     value={xAxisLimits}
                     setValue={setXAxisLimits}
-                    minValue={xAxisLimits[0]}
-                    maxValue={xAxisLimits[1]}
-                    minDistance={getMinDistance()}
+                    permanentMinValue={xAxisLimits[0]}
+                    permanentMaxValue={xAxisLimits[1]}
+                    minDistance={getSliderMinDistance()}
                 />
             </CenteredContainer>
         );
     };
 
     const getChartElement = () => {
-        const [yChartDataArray, xChartDataArray] = getChartData();
-        if (yChartDataArray.length <= 2) {
+        if (yChartDataArray.length <= 2 || xChartDataArray.length <= 2) {
             return (
                 <div className="inner-container-style">
                     Nedostatok dát pre graf{" "}
@@ -172,8 +82,6 @@ function LineChartWrapper(props: LineChartProps) {
                 </div>
             );
         }
-
-        const [yMin, yMax, yRange] = getArrayRange(yChartDataArray);
 
         return (
             <>
@@ -187,8 +95,8 @@ function LineChartWrapper(props: LineChartProps) {
                     ]}
                     yAxis={[
                         {
-                            min: yMin - (yRange / 100) * 2.5,
-                            max: yMax + (yRange / 100) * 2.5,
+                            min: yAxisLimits[0] - (yAxisLimits[2] / 100) * 2.5,
+                            max: yAxisLimits[1] + (yAxisLimits[2] / 100) * 2.5,
                             valueFormatter: (value) => {
                                 if (value.toString().indexOf("e") > -1) {
                                     return value;
@@ -225,7 +133,29 @@ function LineChartWrapper(props: LineChartProps) {
         );
     };
 
-    return <>{getChartElement()}</>;
+    return (
+        <>
+            <ChartDataManager
+                /* Y axis */
+                yAxisArrayKey={props.yAxisArrayKey}
+                yChartDataArray={yChartDataArray}
+                setYChartDataArray={setYChartDataArray}
+                yAxisLimits={yAxisLimits}
+                setYAxisLimits={setYAxisLimits}
+                /* Y axis end */
+                /* X axis */
+                xAxisArrayKey={props.xAxisArrayKey}
+                xChartDataArray={xChartDataArray}
+                setXChartDataArray={setXChartDataArray}
+                xAxisLimits={xAxisLimits}
+                setXAxisLimits={setXAxisLimits}
+                /* X axis end */
+                responseBody={props.responseBody}
+            />
+
+            {getChartElement()}
+        </>
+    );
 }
 
 export default LineChartWrapper;
