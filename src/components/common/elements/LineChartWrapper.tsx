@@ -33,30 +33,16 @@ function LineChartWrapper(props: LineChartProps) {
     const [xChartDataArray, setXChartDataArray] = React.useState<number[]>([]);
     const [xAxisLimits, setXAxisLimits] = React.useState<number[]>([]);
 
-    const usedSliderMinDistance = React.useRef<number | null>(null);
-
-    const getSliderMinDistance = () => {
-        if (usedSliderMinDistance.current !== null) {
-            return usedSliderMinDistance.current;
-        }
-
-        let minDistance = 1;
-
-        if (props.minDistance !== undefined) {
-            const range =
-                Math.ceil(xAxisLimits[1]) - Math.floor(xAxisLimits[0]);
-
-            if (range > props.minDistance) {
-                minDistance = props.minDistance;
-            }
-        }
-
-        usedSliderMinDistance.current = minDistance;
-        return minDistance;
-    };
+    const [sliderUsedMinDistance, setSliderUsedMinDistance] = React.useState<
+        number | null
+    >(null);
 
     const getSliderElement = () => {
-        if (props.useSlider === undefined || !props.useSlider) {
+        if (
+            props.useSlider === undefined ||
+            !props.useSlider ||
+            !sliderUsedMinDistance
+        ) {
             return;
         }
 
@@ -67,7 +53,7 @@ function LineChartWrapper(props: LineChartProps) {
                     setValue={setXAxisLimits}
                     permanentMinValue={xAxisLimits[0]}
                     permanentMaxValue={xAxisLimits[1]}
-                    minDistance={getSliderMinDistance()}
+                    minDistance={sliderUsedMinDistance}
                 />
             </CenteredContainer>
         );
@@ -150,6 +136,9 @@ function LineChartWrapper(props: LineChartProps) {
                 xAxisLimits={xAxisLimits}
                 setXAxisLimits={setXAxisLimits}
                 /* X axis end */
+                minDistance={props.minDistance}
+                sliderUsedMinDistance={sliderUsedMinDistance}
+                setSliderUsedMinDistance={setSliderUsedMinDistance}
                 responseBody={props.responseBody}
             />
 

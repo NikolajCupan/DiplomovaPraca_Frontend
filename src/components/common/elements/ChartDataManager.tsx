@@ -26,6 +26,11 @@ interface ChartDataManagerProps {
     setXAxisLimits: React.Dispatch<React.SetStateAction<number[]>>;
     // X axis end
 
+    minDistance?: number;
+    sliderUsedMinDistance: number | null;
+    setSliderUsedMinDistance: React.Dispatch<
+        React.SetStateAction<number | null>
+    >;
     responseBody: Type.RequestResult;
 }
 
@@ -34,14 +39,14 @@ function ChartDataManager(props: ChartDataManagerProps) {
         (number | null)[] | null
     >(null);
     const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
-    const [allData, setAllData] = React.useState({ yAxisArray, xAxisArray });
+    const [bothAxes, setBothAxes] = React.useState({ yAxisArray, xAxisArray });
 
     React.useEffect(() => {
         generateChartData();
-    }, [allData]);
+    }, [bothAxes]);
 
     React.useEffect(() => {
-        setAllData((previousState: any) => {
+        setBothAxes((previousState: any) => {
             return yAxisArray !== previousState.yAxisArray &&
                 xAxisArray !== previousState.xAxisArray
                 ? { yAxisArray, xAxisArray }
@@ -159,6 +164,20 @@ function ChartDataManager(props: ChartDataManagerProps) {
         props.setYAxisLimits([yMin, yMax, yRange]);
         props.setXChartDataArray(xChartDataArray);
         props.setXAxisLimits([xMin, xMax, xRange]);
+
+        // Slider
+        let minDistance = 1;
+
+        if (props.minDistance !== undefined) {
+            const range = Math.ceil(xMax) - Math.floor(xMin);
+
+            if (range > props.minDistance) {
+                minDistance = props.minDistance;
+            }
+        }
+
+        props.setSliderUsedMinDistance(minDistance);
+        // Slider end
     };
 
     const clearStateParent = () => {
