@@ -6,11 +6,10 @@ import CenteredContainer from "../CenteredContainer.tsx";
 import ChartDataManager from "./ChartDataManager.tsx";
 
 import { LineChart } from "@mui/x-charts";
-import { BarChart } from "@mui/x-charts/BarChart";
 
 import * as React from "react";
 
-interface ChartProps {
+interface LineChartProps {
     label: string;
 
     yAxisArrayKey: string;
@@ -23,10 +22,9 @@ interface ChartProps {
     minSliderDistance?: number;
 
     responseBody: Type.RequestResult;
-    chartType: Type.ChartType;
 }
 
-function ChartWrapper(props: ChartProps) {
+function LineChartWrapper(props: LineChartProps) {
     const [yChartDataArray, setYChartDataArray] = React.useState<
         (number | null)[]
     >([]);
@@ -73,102 +71,53 @@ function ChartWrapper(props: ChartProps) {
 
         return (
             <>
-                {getChartOfType()}
+                <LineChart
+                    xAxis={[
+                        {
+                            data: xChartDataArray,
+                            min: xAxisLimits[0],
+                            max: xAxisLimits[1],
+                        },
+                    ]}
+                    yAxis={[
+                        {
+                            min: yAxisLimits[0] - (yAxisLimits[2] / 100) * 2.5,
+                            max: yAxisLimits[1] + (yAxisLimits[2] / 100) * 2.5,
+                            valueFormatter: (value) => {
+                                if (value.toString().indexOf("e") > -1) {
+                                    return value;
+                                }
+
+                                const numberValue = Number(value);
+                                if (
+                                    Helper.getDecimalDigitsCount(numberValue) >=
+                                    5
+                                ) {
+                                    return numberValue.toExponential(0);
+                                }
+
+                                return value;
+                            },
+                        },
+                    ]}
+                    series={[
+                        {
+                            label: props.label,
+                            data: yChartDataArray,
+                            curve: "linear",
+                            showMark: false,
+                            ...(props.color
+                                ? { color: props.color }
+                                : { color: "var(--primary-color)" }),
+                        },
+                    ]}
+                    height={props.height}
+                />
+
                 {getSliderElement()}
             </>
         );
     };
-
-    const getChartOfType = () => {
-        switch (props.chartType) {
-            case Type.ChartType.LineChart:
-                return LineChartElement;
-            case Type.ChartType.BarChart:
-                return BarChartElement;
-        }
-    };
-
-    const LineChartElement = (
-        <LineChart
-            xAxis={[
-                {
-                    data: xChartDataArray,
-                    min: xAxisLimits[0],
-                    max: xAxisLimits[1],
-                },
-            ]}
-            yAxis={[
-                {
-                    min: yAxisLimits[0] - (yAxisLimits[2] / 100) * 2.5,
-                    max: yAxisLimits[1] + (yAxisLimits[2] / 100) * 2.5,
-                    valueFormatter: (value) => {
-                        if (value.toString().indexOf("e") > -1) {
-                            return value;
-                        }
-
-                        const numberValue = Number(value);
-                        if (Helper.getDecimalDigitsCount(numberValue) >= 5) {
-                            return numberValue.toExponential(0);
-                        }
-
-                        return value;
-                    },
-                },
-            ]}
-            series={[
-                {
-                    label: props.label,
-                    data: yChartDataArray,
-                    curve: "linear",
-                    showMark: false,
-                    ...(props.color
-                        ? { color: props.color }
-                        : { color: "var(--primary-color)" }),
-                },
-            ]}
-            height={props.height}
-        />
-    );
-
-    const BarChartElement = (
-        <BarChart
-            xAxis={[
-                {
-                    scaleType: "band",
-                    data: xChartDataArray,
-                    min: xAxisLimits[0],
-                    max: xAxisLimits[1],
-                },
-            ]}
-            yAxis={[
-                {
-                    max: yAxisLimits[1] + (yAxisLimits[2] / 100) * 10,
-                    valueFormatter: (value) => {
-                        if (value.toString().indexOf("e") > -1) {
-                            return value;
-                        }
-
-                        const numberValue = Number(value);
-                        if (Helper.getDecimalDigitsCount(numberValue) >= 5) {
-                            return numberValue.toExponential(0);
-                        }
-
-                        return value;
-                    },
-                },
-            ]}
-            series={[
-                {
-                    label: props.label,
-                    data: yChartDataArray,
-                    ...(props.color
-                        ? { color: props.color }
-                        : { color: "var(--primary-color)" }),
-                },
-            ]}
-            height={props.height}
-        />
-    );
 
     return (
         <>
@@ -198,4 +147,4 @@ function ChartWrapper(props: ChartProps) {
     );
 }
 
-export default ChartWrapper;
+export default LineChartWrapper;

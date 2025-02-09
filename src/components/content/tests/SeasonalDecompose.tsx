@@ -2,7 +2,7 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
-import ChartWrapper from "../../common/elements/charts/ChartWrapper.tsx";
+import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import SeasonalDecomposeForm from "./SeasonalDecomposeForm.tsx";
@@ -45,12 +45,11 @@ function SeasonalDecompose() {
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 customStyle={{ marginBottom: "20px" }}
             >
-                <ChartWrapper
+                <LineChartWrapper
                     label={"pozorované hodnoty"}
                     yAxisArrayKey={"observed"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}
-                    chartType={Type.ChartType.LineChart}
                 />
             </ScrollableContainer>
 
@@ -58,12 +57,11 @@ function SeasonalDecompose() {
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 customStyle={{ marginBottom: "20px" }}
             >
-                <ChartWrapper
+                <LineChartWrapper
                     label={"trend"}
                     yAxisArrayKey={"trend"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}
-                    chartType={Type.ChartType.LineChart}
                 />
             </ScrollableContainer>
 
@@ -71,24 +69,22 @@ function SeasonalDecompose() {
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 customStyle={{ marginBottom: "20px" }}
             >
-                <ChartWrapper
+                <LineChartWrapper
                     label={"sezónna zložka"}
                     yAxisArrayKey={"seasonal"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}
-                    chartType={Type.ChartType.LineChart}
                 />
             </ScrollableContainer>
 
             <ScrollableContainer
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
             >
-                <ChartWrapper
+                <LineChartWrapper
                     label={"reziduá"}
                     yAxisArrayKey={"resid"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}
-                    chartType={Type.ChartType.LineChart}
                 />
             </ScrollableContainer>
         </>
