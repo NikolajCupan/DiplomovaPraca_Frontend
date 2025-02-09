@@ -25,6 +25,9 @@ export const EVALUATION_KEY = "evaluation";
 export const NULL_HYPOTHESIS_KEY = "null_hypothesis";
 export const ALTERNATIVE_HYPOTHESIS_KEY = "alternative_hypothesis";
 
+export const CONFIDENCE_INTERVAL_UPPER_BOUND_KEY = "confidence_interval_upper_bound";
+export const CONFIDENCE_INTERVAL_LOWER_BOUND_KEY = "confidence_interval_lower_bound";
+
 /*
  * Frontend paths
  */

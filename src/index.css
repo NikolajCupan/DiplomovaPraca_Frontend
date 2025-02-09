@@ -7,6 +7,7 @@ input:-webkit-autofill:active {
 
 :root {
     --primary-color: #1976d2;
+    --secondary-color: #ffa600;
     --default-border-radius: 15px;
 }
 

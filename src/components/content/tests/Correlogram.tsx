@@ -2,6 +2,8 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
+import ConfidenceIntervalChartWrapper from "../../common/elements/charts/ConfidenceIntervalChartWrapper.tsx";
+import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import CorrelogramForm from "./CorrelogramForm.tsx";
 
@@ -53,16 +55,39 @@ function Correlogram() {
 
         return (
             <>
-                {/* <ScrollableContainer
+                <ScrollableContainer
                     breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
                 >
-                    <LineChartWrapper
+                    <ConfidenceIntervalChartWrapper
                         label={"ACF"}
                         height={Constants.DEFAULT_CHART_HEIGHT}
                         responseBody={responseBody[0]}
                         yAxisArrayKey={"acf_values"}
+                        confidenceIntervalUpperBoundKey={
+                            Constants.CONFIDENCE_INTERVAL_UPPER_BOUND_KEY
+                        }
+                        confidenceIntervalLowerBoundKey={
+                            Constants.CONFIDENCE_INTERVAL_LOWER_BOUND_KEY
+                        }
                     />
-                </ScrollableContainer> */}
+                </ScrollableContainer>
+
+                <ScrollableContainer
+                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                >
+                    <ConfidenceIntervalChartWrapper
+                        label={"PACF"}
+                        height={Constants.DEFAULT_CHART_HEIGHT}
+                        responseBody={responseBody[1]}
+                        yAxisArrayKey={"pacf_values"}
+                        confidenceIntervalUpperBoundKey={
+                            Constants.CONFIDENCE_INTERVAL_UPPER_BOUND_KEY
+                        }
+                        confidenceIntervalLowerBoundKey={
+                            Constants.CONFIDENCE_INTERVAL_LOWER_BOUND_KEY
+                        }
+                    />
+                </ScrollableContainer>
             </>
         );
     };

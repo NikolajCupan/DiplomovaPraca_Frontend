@@ -15,22 +15,29 @@ interface ChartDataManagerProps {
     // Y axis end
 
     // X axis
+    manageXAxis: boolean;
+
     xAxisStartValue?: number;
 
     xAxisArrayKey?: string;
 
-    xChartDataArray: number[];
-    setXChartDataArray: React.Dispatch<React.SetStateAction<number[]>>;
+    xChartDataArray?: number[];
+    setXChartDataArray?: React.Dispatch<React.SetStateAction<number[]>>;
 
-    xAxisLimits: number[];
-    setXAxisLimits: React.Dispatch<React.SetStateAction<number[]>>;
+    xAxisLimits?: number[];
+    setXAxisLimits?: React.Dispatch<React.SetStateAction<number[]>>;
     // X axis end
 
+    // Slider
+    manageSlider: boolean;
+
     minSliderDistance?: number;
-    usedMinSliderDistance: number | null;
-    setUsedMinSliderDistance: React.Dispatch<
+    usedMinSliderDistance?: number | null;
+    setUsedMinSliderDistance?: React.Dispatch<
         React.SetStateAction<number | null>
     >;
+    // Slider end
+
     responseBody: Type.RequestResult;
 }
 
@@ -44,6 +51,12 @@ function ChartDataManager(props: ChartDataManagerProps) {
     React.useEffect(() => {
         generateChartData();
     }, [bothAxes]);
+
+    React.useEffect(() => {
+        if (!props.manageXAxis) {
+            generateChartData();
+        }
+    }, [yAxisArray]);
 
     React.useEffect(() => {
         setBothAxes((previousState: any) => {
@@ -73,17 +86,19 @@ function ChartDataManager(props: ChartDataManagerProps) {
             yAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
         setYAxisArray(yAxisInnerJsonArray);
 
-        let xAxisInnerJsonArray: number[] = [];
-        if (props.xAxisArrayKey) {
-            const xAxisInnerJson: Record<string, any> =
-                json[props.xAxisArrayKey];
-            xAxisInnerJsonArray =
-                xAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
-        } else {
-            xAxisInnerJsonArray = generateXDataArray(yAxisInnerJsonArray);
-        }
+        if (props.manageXAxis) {
+            let xAxisInnerJsonArray: number[] = [];
+            if (props.xAxisArrayKey) {
+                const xAxisInnerJson: Record<string, any> =
+                    json[props.xAxisArrayKey];
+                xAxisInnerJsonArray =
+                    xAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
+            } else {
+                xAxisInnerJsonArray = generateXDataArray(yAxisInnerJsonArray);
+            }
 
-        setXAxisArray(xAxisInnerJsonArray);
+            setXAxisArray(xAxisInnerJsonArray);
+        }
     }, [props.responseBody]);
 
     const clearState = () => {
@@ -94,9 +109,11 @@ function ChartDataManager(props: ChartDataManagerProps) {
         // Y axis end
 
         // X axis
-        props.setXChartDataArray([]);
-        props.setXAxisLimits([]);
-        setXAxisArray(null);
+        if (props.manageXAxis) {
+            props.setXChartDataArray!([]);
+            props.setXAxisLimits!([]);
+            setXAxisArray(null);
+        }
         // X axis end
     };
 
@@ -129,7 +146,7 @@ function ChartDataManager(props: ChartDataManagerProps) {
     }
 
     const generateChartData = () => {
-        if (!yAxisArray || !yAxisArray) {
+        if (!yAxisArray || (props.manageXAxis && !yAxisArray)) {
             clearStateParent();
             return;
         }
@@ -162,29 +179,37 @@ function ChartDataManager(props: ChartDataManagerProps) {
 
         props.setYChartDataArray(yChartDataArray);
         props.setYAxisLimits([yMin, yMax, yRange]);
-        props.setXChartDataArray(xChartDataArray);
-        props.setXAxisLimits([xMin, xMax, xRange]);
 
-        // Slider
-        let minSliderDistance = 1;
-
-        if (props.minSliderDistance !== undefined) {
-            const range = Math.ceil(xMax) - Math.floor(xMin);
-
-            if (range > props.minSliderDistance) {
-                minSliderDistance = props.minSliderDistance;
-            }
+        if (props.manageXAxis) {
+            props.setXChartDataArray!(xChartDataArray);
+            props.setXAxisLimits!([xMin, xMax, xRange]);
         }
 
-        props.setUsedMinSliderDistance(minSliderDistance);
+        // Slider
+        if (props.manageSlider) {
+            let minSliderDistance = 1;
+
+            if (props.minSliderDistance !== undefined) {
+                const range = Math.ceil(xMax) - Math.floor(xMin);
+
+                if (range > props.minSliderDistance) {
+                    minSliderDistance = props.minSliderDistance;
+                }
+            }
+
+            props.setUsedMinSliderDistance!(minSliderDistance);
+        }
         // Slider end
     };
 
     const clearStateParent = () => {
         props.setYChartDataArray([]);
         props.setYAxisLimits([]);
-        props.setXChartDataArray([]);
-        props.setXAxisLimits([]);
+
+        if (props.manageXAxis) {
+            props.setXChartDataArray!([]);
+            props.setXAxisLimits!([]);
+        }
     };
 
     return <></>;

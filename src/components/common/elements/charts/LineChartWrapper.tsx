@@ -122,6 +122,8 @@ function LineChartWrapper(props: LineChartProps) {
     return (
         <>
             <ChartDataManager
+                manageXAxis={true}
+                manageSlider={true}
                 /* Y axis */
                 yAxisArrayKey={props.yAxisArrayKey}
                 yChartDataArray={yChartDataArray}
