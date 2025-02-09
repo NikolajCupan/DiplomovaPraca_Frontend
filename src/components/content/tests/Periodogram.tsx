@@ -2,7 +2,7 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
-import LineChartWrapper from "../../common/elements/LineChartWrapper.tsx";
+import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import PeriodogramForm from "./PeriodogramForm.tsx";
@@ -61,7 +61,7 @@ function Periodogram() {
                     yAxisArrayKey={"reversed_power"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}
-                    minDistance={10}
+                    minSliderDistance={10}
                     useSlider={true}
                 />
             </ScrollableContainer>

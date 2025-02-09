@@ -1,5 +1,5 @@
-import * as Constants from "../../../helpers/Constants.tsx";
-import * as Type from "../../../helpers/Types.tsx";
+import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
 
 import * as React from "react";
 
@@ -26,9 +26,9 @@ interface ChartDataManagerProps {
     setXAxisLimits: React.Dispatch<React.SetStateAction<number[]>>;
     // X axis end
 
-    minDistance?: number;
-    sliderUsedMinDistance: number | null;
-    setSliderUsedMinDistance: React.Dispatch<
+    minSliderDistance?: number;
+    usedMinSliderDistance: number | null;
+    setUsedMinSliderDistance: React.Dispatch<
         React.SetStateAction<number | null>
     >;
     responseBody: Type.RequestResult;
@@ -166,17 +166,17 @@ function ChartDataManager(props: ChartDataManagerProps) {
         props.setXAxisLimits([xMin, xMax, xRange]);
 
         // Slider
-        let minDistance = 1;
+        let minSliderDistance = 1;
 
-        if (props.minDistance !== undefined) {
+        if (props.minSliderDistance !== undefined) {
             const range = Math.ceil(xMax) - Math.floor(xMin);
 
-            if (range > props.minDistance) {
-                minDistance = props.minDistance;
+            if (range > props.minSliderDistance) {
+                minSliderDistance = props.minSliderDistance;
             }
         }
 
-        props.setSliderUsedMinDistance(minDistance);
+        props.setUsedMinSliderDistance(minSliderDistance);
         // Slider end
     };
 

@@ -1,15 +1,13 @@
-import * as Helper from "../../../helpers/Helper.tsx";
-import * as Type from "../../../helpers/Types.tsx";
-import "../../../index.css";
-import SliderDoubleInput from "../inputs/SliderDoubleInput.tsx";
-import CenteredContainer from "./CenteredContainer.tsx";
-
-import { LineChart } from "@mui/x-charts/LineChart";
-
-import * as React from "react";
+import * as Helper from "../../../../helpers/Helper.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
+import SliderDoubleInput from "../../inputs/SliderDoubleInput.tsx";
+import CenteredContainer from "../CenteredContainer.tsx";
 import ChartDataManager from "./ChartDataManager.tsx";
 
-interface LineChartProps {
+import { BarChart } from "@mui/x-charts/BarChart";
+import * as React from "react";
+
+interface BarChartWrapperProps {
     label: string;
 
     yAxisArrayKey: string;
@@ -19,12 +17,12 @@ interface LineChartProps {
     color?: string;
 
     useSlider?: boolean;
-    minDistance?: number;
+    minSliderDistance?: number;
 
     responseBody: Type.RequestResult;
 }
 
-function LineChartWrapper(props: LineChartProps) {
+function BarChartWrapper(props: BarChartWrapperProps) {
     const [yChartDataArray, setYChartDataArray] = React.useState<
         (number | null)[]
     >([]);
@@ -63,7 +61,7 @@ function LineChartWrapper(props: LineChartProps) {
         if (yChartDataArray.length <= 2 || xChartDataArray.length <= 2) {
             return (
                 <div className="inner-container-style">
-                    Nedostatok dát pre graf{" "}
+                    Nedostatok dát pre graf
                     <span style={{ fontWeight: "bold" }}>{props.label}</span>
                 </div>
             );
@@ -71,9 +69,10 @@ function LineChartWrapper(props: LineChartProps) {
 
         return (
             <>
-                <LineChart
+                <BarChart
                     xAxis={[
                         {
+                            scaleType: "band",
                             data: xChartDataArray,
                             min: xAxisLimits[0],
                             max: xAxisLimits[1],
@@ -104,8 +103,6 @@ function LineChartWrapper(props: LineChartProps) {
                         {
                             label: props.label,
                             data: yChartDataArray,
-                            curve: "linear",
-                            showMark: false,
                             ...(props.color
                                 ? { color: props.color }
                                 : { color: "var(--primary-color)" }),
@@ -136,9 +133,9 @@ function LineChartWrapper(props: LineChartProps) {
                 xAxisLimits={xAxisLimits}
                 setXAxisLimits={setXAxisLimits}
                 /* X axis end */
-                minDistance={props.minDistance}
-                sliderUsedMinDistance={sliderUsedMinDistance}
-                setSliderUsedMinDistance={setSliderUsedMinDistance}
+                minSliderDistance={props.minSliderDistance}
+                usedMinSliderDistance={sliderUsedMinDistance}
+                setUsedMinSliderDistance={setSliderUsedMinDistance}
                 responseBody={props.responseBody}
             />
 
@@ -147,4 +144,4 @@ function LineChartWrapper(props: LineChartProps) {
     );
 }
 
-export default LineChartWrapper;
+export default BarChartWrapper;
