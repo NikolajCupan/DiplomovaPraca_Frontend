@@ -25,3 +25,8 @@ export interface DatasetForEditing {
     datasetInfo: DatasetInfo;
     rows: Row[];
 }
+
+export enum ChartType {
+    LineChart,
+    BarChart,
+}

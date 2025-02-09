@@ -2,7 +2,7 @@ import * as Constants from "../../../helpers/Constants.tsx";
 import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
-import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
+import ChartWrapper from "../../common/elements/charts/ChartWrapper.tsx";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../layout/Layout.tsx";
 import PeriodogramForm from "./PeriodogramForm.tsx";
@@ -43,19 +43,20 @@ function Periodogram() {
             <ScrollableContainer
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
             >
-                <LineChartWrapper
+                <ChartWrapper
                     label={"Frekvencia"}
                     xAxisArrayKey={"frequency"}
                     yAxisArrayKey={"power"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}
+                    chartType={Type.ChartType.LineChart}
                 />
             </ScrollableContainer>
 
             <ScrollableContainer
                 breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
             >
-                <LineChartWrapper
+                <ChartWrapper
                     label={"Perióda"}
                     xAxisArrayKey={"period"}
                     yAxisArrayKey={"reversed_power"}
@@ -63,6 +64,7 @@ function Periodogram() {
                     height={Constants.DEFAULT_CHART_HEIGHT}
                     minSliderDistance={10}
                     useSlider={true}
+                    chartType={Type.ChartType.LineChart}
                 />
             </ScrollableContainer>
         </>
