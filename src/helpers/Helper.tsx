@@ -17,7 +17,11 @@ export function translateFrequency(frequency: string): string {
     }
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | string): string {
+    if (typeof date === "string") {
+        date = stringToDate(date);
+    }
+
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString();
     const day = date.getDate().toString();

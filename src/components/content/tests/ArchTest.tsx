@@ -1,8 +1,8 @@
 import * as Type from "../../../helpers/Types.tsx";
+import "../../../index.css";
 import ResultElement from "../../common/elements/ResultElement.tsx";
 import Layout from "../../layout/Layout.tsx";
 import ArchTestForm from "./ArchTestForm.tsx";
-import "./TestStyles.css";
 
 import * as React from "react";
 

@@ -1,5 +1,5 @@
 import Data from "../components/content/data/Data.tsx";
-import DatasetEditor from "../components/content/data/DatasetEditor.tsx";
+import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
 import LinearRegression from "../components/content/LinearRegression.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
@@ -27,8 +27,8 @@ export const ROUTES = [
         element: <Data />,
     },
     {
-        path: Constants.EDIT_DATASET_LINK,
-        element: <DatasetEditor />,
+        path: Constants.VIEW_DATASET_LINK,
+        element: <DatasetViewer />,
     },
     {
         path: Constants.LINEAR_REGRESSION_LINK,

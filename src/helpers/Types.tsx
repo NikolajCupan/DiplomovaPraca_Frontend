@@ -21,7 +21,7 @@ export interface Row {
     value: string;
 }
 
-export interface DatasetForEditing {
+export interface DatasetForViewing {
     datasetInfo: DatasetInfo;
     rows: Row[];
 }

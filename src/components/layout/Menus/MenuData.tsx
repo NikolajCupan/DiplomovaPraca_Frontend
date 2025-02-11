@@ -112,10 +112,10 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href={Constants.EDIT_DATASET_LINK}>
+                <a href={Constants.VIEW_DATASET_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        Editovanie datasetu
+                        Zobrazenie datasetu
                     </MenuItem>
                 </a>
             </StyledMenu>

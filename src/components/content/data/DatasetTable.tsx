@@ -115,7 +115,7 @@ function DatasetTable(props: DatasetTableProps) {
     };
 
     const handleEditClick = (idDataset: number) => {
-        navigate(Constants.EDIT_DATASET_LINK, { state: { idDataset } });
+        navigate(Constants.VIEW_DATASET_LINK, { state: { idDataset } });
     };
 
     const handleDeleteClick = (idDataset: number) => {

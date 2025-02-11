@@ -1,4 +1,4 @@
-export const STRICT_MODE = true;
+export const STRICT_MODE = false;
 
 export const STRING_TRUE = "True";
 export const STRING_FALSE = "False";
@@ -36,7 +36,7 @@ export const CONFIDENCE_INTERVAL_LOWER_BOUND_KEY =
 export const HOME_LINK = "/";
 
 export const UPLOAD_DATASET_LINK = "/data";
-export const EDIT_DATASET_LINK = "/data/edit";
+export const VIEW_DATASET_LINK = "/data/view";
 
 export const DICKEY_FULLER_TEST_LINK = "/test/dicker-fuller-test";
 export const KPSS_TEST_LINK = "/test/kpss-test";
