@@ -98,28 +98,28 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.DIFFERENCE_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Diferencia
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.LOGARITHM_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Logaritmovanie
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.NORMALIZATION_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Normalizácia
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.STANDARDIZATION_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         Štandardizácia

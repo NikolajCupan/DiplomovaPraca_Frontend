@@ -47,6 +47,11 @@ export const ARCH_TEST_LINK = "/test/arch-test";
 export const LJUNG_BOX_TEST_LINK = "/test/ljung-box-test";
 export const LINEAR_REGRESSION_LINK = "/model/linear-regression";
 
+export const DIFFERENCE_LINK = "/transformation/difference";
+export const LOGARITHM_LINK = "/transformation/logarithm";
+export const NORMALIZATION_LINK = "/transformation/normalization";
+export const STANDARDIZATION_LINK = "/transformation/standardization";
+
 export const TESTING_LINK = "/debug/testing";
 export const TODO_LINK = "/debug/todo";
 
@@ -72,3 +77,8 @@ export const CORRELOGRAM_ACF = "/test/correlogram-acf";
 export const CORRELOGRAM_PACF = "/test/correlogram-pacf";
 export const ARCH_TEST = "/test/arch-test";
 export const LJUNG_BOX_TEST = "/test/ljung-box-test";
+
+export const DIFFERENCE = "/transformation/difference";
+export const LOGARITHM = "/transformation/logarithm";
+export const NORMALIZATION = "/transformation/normalization";
+export const STANDARDIZATION = "/transformation/standardization";

@@ -9,6 +9,10 @@ import KPSSTest from "../components/content/tests/KPSSTest.tsx";
 import LjungBoxTest from "../components/content/tests/LjungBoxTest.tsx";
 import Periodogram from "../components/content/tests/Periodogram.tsx";
 import SeasonalDecompose from "../components/content/tests/SeasonalDecompose.tsx";
+import Difference from "../components/content/transformations/Difference.tsx";
+import Logarithm from "../components/content/transformations/Logarithm.tsx";
+import Normalization from "../components/content/transformations/Normalization.tsx";
+import Standardization from "../components/content/transformations/Standardization.tsx";
 import * as Constants from "../helpers/Constants.tsx";
 import Test from "../testing/Test.tsx";
 import Todo from "../testing/Todo.tsx";
@@ -57,6 +61,22 @@ export const ROUTES = [
     {
         path: Constants.LJUNG_BOX_TEST_LINK,
         element: <LjungBoxTest />,
+    },
+    {
+        path: Constants.DIFFERENCE_LINK,
+        element: <Difference />,
+    },
+    {
+        path: Constants.LOGARITHM_LINK,
+        element: <Logarithm />,
+    },
+    {
+        path: Constants.NORMALIZATION_LINK,
+        element: <Normalization />,
+    },
+    {
+        path: Constants.STANDARDIZATION_LINK,
+        element: <Standardization />,
     },
     {
         path: Constants.TESTING_LINK,
