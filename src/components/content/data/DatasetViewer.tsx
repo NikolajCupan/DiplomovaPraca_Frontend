@@ -22,10 +22,10 @@ function DatasetViewer() {
     };
 
     const getChartContent = () => {
-        let datesArray: Date[] = [];
+        let datesArray: string[] = [];
         let valuesArray: number[] = [];
         datasetForViewing!.rows.forEach((element: Type.Row) => {
-            datesArray.push(Helper.stringToDate(element.date));
+            datesArray.push(Helper.formatDate(element.date));
             valuesArray.push(Number(element.value));
         });
 
@@ -45,8 +45,11 @@ function DatasetViewer() {
                 <LineChartWrapper
                     label={"Dáta"}
                     yAxisArrayKey={"data"}
+                    xAxisArrayKey={"date"}
                     responseBody={json}
                     height={Constants.DEFAULT_CHART_HEIGHT}
+                    isXAxisDate={true}
+                    frequency={datasetForViewing!.datasetInfo.frequencyType}
                 />
             </ScrollableContainer>
         );

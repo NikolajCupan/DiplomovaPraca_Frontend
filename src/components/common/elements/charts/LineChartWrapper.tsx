@@ -14,6 +14,8 @@ interface LineChartProps {
 
     yAxisArrayKey: string;
     xAxisArrayKey?: string;
+    isXAxisDate?: boolean;
+    frequency?: string;
 
     height: number;
     color?: string;
@@ -25,13 +27,24 @@ interface LineChartProps {
 }
 
 function LineChartWrapper(props: LineChartProps) {
+    if (
+        props.isXAxisDate !== undefined &&
+        props.isXAxisDate &&
+        props.useSlider !== undefined &&
+        props.useSlider
+    ) {
+        return <div>Cannot use slider with date X axis</div>;
+    }
+
     const [yChartDataArray, setYChartDataArray] = React.useState<
         (number | null)[]
     >([]);
     const [yAxisLimits, setYAxisLimits] = React.useState<number[]>([]);
 
-    const [xChartDataArray, setXChartDataArray] = React.useState<number[]>([]);
-    const [xAxisLimits, setXAxisLimits] = React.useState<number[]>([]);
+    const [xChartDataArray, setXChartDataArray] = React.useState<
+        number[] | Date[]
+    >([]);
+    const [xAxisLimits, setXAxisLimits] = React.useState<number[] | Date[]>([]);
 
     const [sliderUsedMinDistance, setSliderUsedMinDistance] = React.useState<
         number | null
@@ -49,10 +62,14 @@ function LineChartWrapper(props: LineChartProps) {
         return (
             <CenteredContainer widthPercent={80}>
                 <SliderDoubleInput
-                    value={xAxisLimits}
-                    setValue={setXAxisLimits}
-                    permanentMinValue={xAxisLimits[0]}
-                    permanentMaxValue={xAxisLimits[1]}
+                    value={xAxisLimits as number[]}
+                    setValue={
+                        setXAxisLimits as React.Dispatch<
+                            React.SetStateAction<number[]>
+                        >
+                    }
+                    permanentMinValue={xAxisLimits[0] as number}
+                    permanentMaxValue={xAxisLimits[1] as number}
                     minDistance={sliderUsedMinDistance}
                 />
             </CenteredContainer>
@@ -77,6 +94,15 @@ function LineChartWrapper(props: LineChartProps) {
                             data: xChartDataArray,
                             min: xAxisLimits[0],
                             max: xAxisLimits[1],
+                            ...(props.isXAxisDate && {
+                                scaleType: "time",
+                                valueFormatter: (value) => {
+                                    return Helper.formatChartValueX(
+                                        value,
+                                        props.frequency!,
+                                    );
+                                },
+                            }),
                         },
                     ]}
                     yAxis={[
@@ -124,6 +150,9 @@ function LineChartWrapper(props: LineChartProps) {
             <ChartDataManager
                 manageXAxis={true}
                 manageSlider={true}
+                isXAxisDate={
+                    props.isXAxisDate === undefined ? false : props.isXAxisDate
+                }
                 /* Y axis */
                 yAxisArrayKey={props.yAxisArrayKey}
                 yChartDataArray={yChartDataArray}

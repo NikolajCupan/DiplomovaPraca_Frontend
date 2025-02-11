@@ -30,7 +30,7 @@ function DatasetViewerTable(props: DatasetViewerTableProps) {
 
     const columns: ColumnData[] = [
         {
-            label: "Dátum",
+            label: "Dátum (YYYY/MM/DD-HH)",
             dataKey: "date",
             widthPercent: 50,
             minWidthPx: 200,

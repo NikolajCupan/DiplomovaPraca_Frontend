@@ -98,7 +98,7 @@ export function stringToDate(string: string | Date): Date {
     const day = Number(string.substring(8, 10));
     const hour = Number(string.substring(11, 13));
 
-    let date = new Date();
+    let date = new Date(new Date().toDateString());
     date.setFullYear(year);
     date.setMonth(month - 1);
     date.setDate(day);
@@ -161,4 +161,22 @@ export function getDecimalDigitsCount(value: number): number {
     }
 
     return value.toString().split(".")[1].length || 0;
+}
+
+export function formatChartValueX(value: Date, frequencyType: string): string {
+    const formattedDate = formatDate(value);
+
+    switch (frequencyType) {
+        case "hourly":
+            return formattedDate;
+        case "daily":
+        case "weekly":
+            return formattedDate.substring(0, 10);
+        case "monthly":
+        case "quarterly":
+            return formattedDate.substring(0, 7);
+        case "yearly":
+            return formattedDate.substring(0, 4);
+    }
+    return "n/a";
 }

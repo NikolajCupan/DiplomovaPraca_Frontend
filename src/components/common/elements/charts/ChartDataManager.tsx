@@ -1,4 +1,5 @@
 import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Helper from "../../../../helpers/Helper.tsx";
 import * as Type from "../../../../helpers/Types.tsx";
 
 import * as React from "react";
@@ -16,16 +17,19 @@ interface ChartDataManagerProps {
 
     // X axis
     manageXAxis: boolean;
+    isXAxisDate: boolean;
 
     xAxisStartValue?: number;
 
     xAxisArrayKey?: string;
 
-    xChartDataArray?: number[];
-    setXChartDataArray?: React.Dispatch<React.SetStateAction<number[]>>;
+    xChartDataArray?: number[] | Date[];
+    setXChartDataArray?: React.Dispatch<
+        React.SetStateAction<number[] | Date[]>
+    >;
 
-    xAxisLimits?: number[];
-    setXAxisLimits?: React.Dispatch<React.SetStateAction<number[]>>;
+    xAxisLimits?: number[] | Date[];
+    setXAxisLimits?: React.Dispatch<React.SetStateAction<number[] | Date[]>>;
     // X axis end
 
     // Slider
@@ -45,7 +49,9 @@ function ChartDataManager(props: ChartDataManagerProps) {
     const [yAxisArray, setYAxisArray] = React.useState<
         (number | null)[] | null
     >(null);
-    const [xAxisArray, setXAxisArray] = React.useState<number[] | null>(null);
+    const [xAxisArray, setXAxisArray] = React.useState<
+        number[] | Date[] | null
+    >(null);
     const [bothAxes, setBothAxes] = React.useState({ yAxisArray, xAxisArray });
 
     React.useEffect(() => {
@@ -86,8 +92,24 @@ function ChartDataManager(props: ChartDataManagerProps) {
             yAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
         setYAxisArray(yAxisInnerJsonArray);
 
-        if (props.manageXAxis) {
+        if (!props.manageXAxis) {
+            return;
+        }
+
+        if (props.isXAxisDate && props.xAxisArrayKey) {
+            let xAxisInnerJsonArray: string[] = [];
+            const xAxisInnerJson: Record<string, any> =
+                json[props.xAxisArrayKey];
+            xAxisInnerJsonArray =
+                xAxisInnerJson[Constants.OUTPUT_ELEMENT_RESULT_KEY];
+
+            const datesArray: Date[] = xAxisInnerJsonArray.map((element) => {
+                return Helper.stringToDate(element);
+            });
+            setXAxisArray(datesArray);
+        } else {
             let xAxisInnerJsonArray: number[] = [];
+
             if (props.xAxisArrayKey) {
                 const xAxisInnerJson: Record<string, any> =
                     json[props.xAxisArrayKey];
@@ -145,6 +167,17 @@ function ChartDataManager(props: ChartDataManagerProps) {
         return [min, max, range];
     }
 
+    function getDateArrayRange(
+        array: Date[],
+    ): [min: Date, max: Date, range: Date] {
+        const filteredArray = array.filter((x) => x !== null);
+
+        const min = filteredArray[0];
+        const max = filteredArray[filteredArray.length - 1];
+
+        return [min, max, max];
+    }
+
     const generateChartData = () => {
         if (!yAxisArray || (props.manageXAxis && !yAxisArray)) {
             clearStateParent();
@@ -152,7 +185,7 @@ function ChartDataManager(props: ChartDataManagerProps) {
         }
 
         let yChartDataArray: (number | null)[] = [];
-        let xChartDataArray: number[] = [];
+        let xChartDataArray: number[] | Date[] = [];
 
         let startIndex = 0;
         while (yAxisArray[startIndex] === null) {
@@ -175,20 +208,32 @@ function ChartDataManager(props: ChartDataManagerProps) {
         }
 
         const [yMin, yMax, yRange] = getArrayRange(yChartDataArray);
-        const [xMin, xMax, xRange] = getArrayRange(xChartDataArray);
-
         props.setYChartDataArray(yChartDataArray);
         props.setYAxisLimits([yMin, yMax, yRange]);
 
         if (props.manageXAxis) {
             props.setXChartDataArray!(xChartDataArray);
-            props.setXAxisLimits!([xMin, xMax, xRange]);
+
+            if (props.isXAxisDate) {
+                const [xMin, xMax, xRange] = getDateArrayRange(
+                    xChartDataArray as Date[],
+                );
+                props.setXAxisLimits!([xMin, xMax, xRange]);
+            } else {
+                const [xMin, xMax, xRange] = getArrayRange(
+                    xChartDataArray as (number | null)[],
+                );
+                props.setXAxisLimits!([xMin, xMax, xRange]);
+            }
         }
 
         // Slider
         if (props.manageSlider) {
             let minSliderDistance = 1;
 
+            const [xMin, xMax] = getArrayRange(
+                xChartDataArray as (number | null)[],
+            );
             if (props.minSliderDistance !== undefined) {
                 const range = Math.ceil(xMax) - Math.floor(xMin);
 
