@@ -88,7 +88,11 @@ export function getNextDate(date: Date, frequency: string): Date {
     return newDate;
 }
 
-export function stringToDate(string: string): Date {
+export function stringToDate(string: string | Date): Date {
+    if (string instanceof Date) {
+        return string;
+    }
+
     const year = Number(string.substring(0, 4));
     const month = Number(string.substring(5, 7));
     const day = Number(string.substring(8, 10));

@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../helpers/Types.tsx";
@@ -8,21 +7,26 @@ import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
 import TextInput from "../../common/inputs/TextInput.tsx";
 import DatasetViewerTable from "./DatasetViewerTable.tsx";
 
+import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-function DatasetViewerForm() {
+interface DatasetViewerFormProps {
+    datasetForViewing: Type.DatasetForViewing | null;
+    setDatasetForViewing: React.Dispatch<
+        React.SetStateAction<Type.DatasetForViewing | null>
+    >;
+}
+
+function DatasetViewerForm(props: DatasetViewerFormProps) {
     const { openNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
     );
-
     const [selectedDatasetInfo, setSelectedDatasetInfo] =
         React.useState<Type.DatasetInfo | null>(null);
-    const [datasetForViewing, setDatasetForViewing] =
-        React.useState<Type.DatasetForViewing | null>(null);
 
     const [newDatasetName, setNewDatasetName] = React.useState<string>("");
     const [newColumnName, setNewColumnName] = React.useState<string>("");
@@ -34,7 +38,7 @@ function DatasetViewerForm() {
     const loadDatasetForViewing = async () => {
         try {
             if (!selectedDatasetInfo) {
-                setDatasetForViewing(null);
+                props.setDatasetForViewing(null);
                 setNewDatasetName("");
                 setNewColumnName("");
                 return;
@@ -96,17 +100,17 @@ function DatasetViewerForm() {
                     datasetForViewing.rows.push(newRow);
                 }
 
-                setDatasetForViewing(datasetForViewing);
+                props.setDatasetForViewing(datasetForViewing);
             } else {
                 openNotification(responseBody.message, "white", "red");
                 setSelectedDatasetInfo(null);
-                setDatasetForViewing(null);
+                props.setDatasetForViewing(null);
             }
         } catch {}
     };
 
     const handleConfirmButtonClick = () => {
-        if (!selectedDatasetInfo || !datasetForViewing) {
+        if (!selectedDatasetInfo || !props.datasetForViewing) {
             return;
         }
     };
@@ -121,10 +125,10 @@ function DatasetViewerForm() {
                 setSelectedDatasetInfo={setSelectedDatasetInfo}
             />
 
-            {selectedDatasetInfo && datasetForViewing ? (
+            {selectedDatasetInfo && props.datasetForViewing ? (
                 <DatasetViewerTable
                     selectedDatasetInfo={selectedDatasetInfo}
-                    datasetForViewing={datasetForViewing}
+                    datasetForViewing={props.datasetForViewing}
                 />
             ) : (
                 <div
@@ -145,7 +149,7 @@ function DatasetViewerForm() {
                         value={newDatasetName}
                         setValue={setNewDatasetName}
                         toggleable={false}
-                        inputEnabled={datasetForViewing !== null}
+                        inputEnabled={props.datasetForViewing !== null}
                         label={"Nový názov datasetu"}
                     />
                 </Grid>
@@ -162,7 +166,7 @@ function DatasetViewerForm() {
                             value={newColumnName}
                             setValue={setNewColumnName}
                             toggleable={false}
-                            inputEnabled={datasetForViewing !== null}
+                            inputEnabled={props.datasetForViewing !== null}
                             label={"Nový názov stĺpca s dátami"}
                         />
                     </Box>
@@ -174,7 +178,7 @@ function DatasetViewerForm() {
                 customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
                 action={handleConfirmButtonClick}
                 toggleable={false}
-                submitEnabled={datasetForViewing !== null}
+                submitEnabled={props.datasetForViewing !== null}
             />
         </>
     );
