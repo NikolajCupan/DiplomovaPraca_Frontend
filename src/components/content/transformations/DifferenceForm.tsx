@@ -13,6 +13,11 @@ import Grid from "@mui/material/Grid2";
 import React from "react";
 
 interface DifferenceFormProps {
+    selectedDatasetInfo: Type.DatasetInfo | null;
+    setSelectedDatasetInfo: React.Dispatch<
+        React.SetStateAction<Type.DatasetInfo | null>
+    >;
+
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -28,8 +33,6 @@ function DifferenceForm(props: DifferenceFormProps) {
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
     );
-    const [selectedDatasetInfo, setSelectedDatasetInfo] =
-        React.useState<Type.DatasetInfo | null>(null);
 
     const [transformedDatasetName, setTransformedDatasetName] =
         React.useState<string>("");
@@ -40,7 +43,10 @@ function DifferenceForm(props: DifferenceFormProps) {
             return;
         }
 
-        if (!selectedDatasetInfo || transformedDatasetName.trim() === "") {
+        if (
+            !props.selectedDatasetInfo ||
+            transformedDatasetName.trim() === ""
+        ) {
             openNotification("Zvoľte parametre", "white", "red");
             return;
         }
@@ -51,7 +57,7 @@ function DifferenceForm(props: DifferenceFormProps) {
             const formData = new FormData();
             formData.append(
                 "idDataset",
-                selectedDatasetInfo.idDataset.toString(),
+                props.selectedDatasetInfo.idDataset.toString(),
             );
             formData.append(
                 "transformedDatasetName",
@@ -75,6 +81,17 @@ function DifferenceForm(props: DifferenceFormProps) {
                 CookiesManager.processResponse(response);
 
                 props.setResponseBody(responseBody);
+
+                const newDatasetInfo: Type.DatasetInfo = responseBody.data;
+                const prevDatasetInfos = datasetInfos.slice();
+                prevDatasetInfos.push(newDatasetInfo);
+                setDatasetInfos(prevDatasetInfos);
+
+                openNotification(
+                    "Akcia bola úspešne vykonaná",
+                    "white",
+                    "green",
+                );
             } else {
                 props.setResponseBody(null);
                 openNotification(
@@ -109,8 +126,8 @@ function DifferenceForm(props: DifferenceFormProps) {
             <DatasetSelector
                 datasetInfos={datasetInfos}
                 setDatasetInfos={setDatasetInfos}
-                selectedDatasetInfo={selectedDatasetInfo}
-                setSelectedDatasetInfo={setSelectedDatasetInfo}
+                selectedDatasetInfo={props.selectedDatasetInfo}
+                setSelectedDatasetInfo={props.setSelectedDatasetInfo}
             />
 
             <Grid container columnSpacing={4}>

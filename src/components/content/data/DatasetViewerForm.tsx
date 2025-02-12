@@ -45,65 +45,13 @@ function DatasetViewerForm(props: DatasetViewerFormProps) {
                 return;
             }
 
-            const formData = new FormData();
-            formData.append(
-                "idDataset",
-                selectedDatasetInfo.idDataset.toString(),
+            const datasetForViewing = await Helper.getDatasetForViewing(
+                selectedDatasetInfo.idDataset,
             );
-
-            const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.GET_DATASET_FOR_EDITING,
-                options: {
-                    method: "post",
-                    body: formData,
-                },
-            };
-
-            CookiesManager.prepareRequest(request);
-            const response = await fetch(request.url, request.options);
-            const responseBody = (await response.json()) as Type.RequestResult;
-
-            if (response.ok) {
-                CookiesManager.processResponse(response);
-
-                let datasetForViewing: Type.DatasetForViewing = {
-                    datasetInfo: {
-                        idDataset: -1,
-                        datasetName: "",
-                        columnName: "",
-                        rowsCount: -1,
-                        frequencyType: "",
-                    },
-                    rows: [],
-                };
-
-                datasetForViewing.datasetInfo.idDataset =
-                    responseBody.data.datasetInfoDto.idDataset;
-                datasetForViewing.datasetInfo.datasetName =
-                    responseBody.data.datasetInfoDto.datasetName;
-                datasetForViewing.datasetInfo.columnName =
-                    responseBody.data.datasetInfoDto.columnName;
-                datasetForViewing.datasetInfo.rowsCount =
-                    responseBody.data.datasetInfoDto.rowsCount;
-                datasetForViewing.datasetInfo.frequencyType =
-                    responseBody.data.datasetInfoDto.frequencyType;
-
-                const rows = responseBody.data.rows;
-                for (let i = 0; i < rows.length; ++i) {
-                    let newRow: Type.Row = {
-                        date: new Date(),
-                        value: "",
-                    };
-
-                    newRow.date = rows[i].dateTime;
-                    newRow.value = rows[i].value;
-
-                    datasetForViewing.rows.push(newRow);
-                }
-
+            if (datasetForViewing) {
                 props.setDatasetForViewing(datasetForViewing);
             } else {
-                openNotification(responseBody.message, "white", "red");
+                openNotification("Počas akcie nastala chyba", "white", "red");
                 setSelectedDatasetInfo(null);
                 props.setDatasetForViewing(null);
             }

@@ -1,3 +1,7 @@
+import * as Constants from "./Constants.tsx";
+import * as CookiesManager from "./CookiesManager.tsx";
+import * as Type from "./Types.tsx";
+
 export function translateFrequency(frequency: string): string {
     switch (frequency.toLowerCase()) {
         case "hourly":
@@ -189,4 +193,88 @@ export function formatChartValueX(value: Date, frequencyType: string): string {
             return formattedDate.substring(0, 4);
     }
     return "n/a";
+}
+
+export async function getDatasetForViewing(
+    idDataset: number,
+): Promise<Type.DatasetForViewing | null> {
+    const formData = new FormData();
+    formData.append("idDataset", idDataset.toString());
+
+    const request: Type.FetchRequest = {
+        url: Constants.BACKEND_PATH + Constants.GET_DATASET_FOR_EDITING,
+        options: {
+            method: "post",
+            body: formData,
+        },
+    };
+
+    CookiesManager.prepareRequest(request);
+    const response = await fetch(request.url, request.options);
+    const responseBody = (await response.json()) as Type.RequestResult;
+
+    if (response.ok) {
+        CookiesManager.processResponse(response);
+
+        let datasetForViewing: Type.DatasetForViewing = {
+            datasetInfo: {
+                idDataset: -1,
+                datasetName: "",
+                columnName: "",
+                rowsCount: -1,
+                frequencyType: "",
+            },
+            rows: [],
+        };
+
+        datasetForViewing.datasetInfo.idDataset =
+            responseBody.data.datasetInfoDto.idDataset;
+        datasetForViewing.datasetInfo.datasetName =
+            responseBody.data.datasetInfoDto.datasetName;
+        datasetForViewing.datasetInfo.columnName =
+            responseBody.data.datasetInfoDto.columnName;
+        datasetForViewing.datasetInfo.rowsCount =
+            responseBody.data.datasetInfoDto.rowsCount;
+        datasetForViewing.datasetInfo.frequencyType =
+            responseBody.data.datasetInfoDto.frequencyType;
+
+        const rows = responseBody.data.rows;
+        for (let i = 0; i < rows.length; ++i) {
+            let newRow: Type.Row = {
+                date: new Date(),
+                value: "",
+            };
+
+            newRow.date = rows[i].dateTime;
+            newRow.value = rows[i].value;
+
+            datasetForViewing.rows.push(newRow);
+        }
+
+        return datasetForViewing;
+    } else {
+        return null;
+    }
+}
+
+export function transformToJson(
+    datasetForViewing: Type.DatasetForViewing,
+): Type.RequestResult {
+    let datesArray: string[] = [];
+    let valuesArray: (number | null)[] = [];
+    datasetForViewing!.rows.forEach((element: Type.Row) => {
+        datesArray.push(formatDate(element.date));
+        valuesArray.push(!element.value ? null : Number(element.value));
+    });
+
+    let dataJson: Record<string, any> = {};
+    dataJson["date"] = { result: datesArray };
+    dataJson["data"] = { result: valuesArray };
+
+    const json: Type.RequestResult = {
+        message: "",
+        data: JSON.stringify(dataJson),
+    };
+
+    return json;
 }

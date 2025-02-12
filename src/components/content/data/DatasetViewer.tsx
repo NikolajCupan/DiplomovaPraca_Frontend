@@ -22,21 +22,7 @@ function DatasetViewer() {
     };
 
     const getChartContent = () => {
-        let datesArray: string[] = [];
-        let valuesArray: (number | null)[] = [];
-        datasetForViewing!.rows.forEach((element: Type.Row) => {
-            datesArray.push(Helper.formatDate(element.date));
-            valuesArray.push(!element.value ? null : Number(element.value));
-        });
-
-        let dataJson: Record<string, any> = {};
-        dataJson["date"] = { result: datesArray };
-        dataJson["data"] = { result: valuesArray };
-
-        const json: Type.RequestResult = {
-            message: "",
-            data: JSON.stringify(dataJson),
-        };
+        const json = Helper.transformToJson(datasetForViewing!);
 
         return (
             <ScrollableContainer
