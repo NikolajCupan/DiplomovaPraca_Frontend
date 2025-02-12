@@ -1,5 +1,6 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
@@ -32,10 +33,10 @@ function DatasetViewerForm(props: DatasetViewerFormProps) {
     const [newColumnName, setNewColumnName] = React.useState<string>("");
 
     React.useEffect(() => {
-        loadDatasetForViewing();
+        getDatasetForViewing();
     }, [selectedDatasetInfo]);
 
-    const loadDatasetForViewing = async () => {
+    const getDatasetForViewing = async () => {
         try {
             if (!selectedDatasetInfo) {
                 props.setDatasetForViewing(null);
@@ -109,9 +110,81 @@ function DatasetViewerForm(props: DatasetViewerFormProps) {
         } catch {}
     };
 
-    const handleConfirmButtonClick = () => {
+    const handleConfirmButtonClick = async () => {
         if (!selectedDatasetInfo || !props.datasetForViewing) {
+            openNotification("Zvoľte dataset", "white", "red");
             return;
+        }
+
+        if (newDatasetName.trim() === "" && newColumnName.trim() === "") {
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append(
+                "idDataset",
+                selectedDatasetInfo.idDataset.toString(),
+            );
+            Helper.appendIfAvailable(
+                formData,
+                "newDatasetName",
+                newDatasetName,
+                true,
+            );
+            Helper.appendIfAvailable(
+                formData,
+                "newColumnName",
+                newColumnName,
+                true,
+            );
+
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.EDIT_DATASET_PATH,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
+
+            CookiesManager.prepareRequest(request);
+            const response = await fetch(request.url, request.options);
+
+            if (response.ok) {
+                CookiesManager.processResponse(response);
+
+                const responseBody =
+                    (await response.json()) as Type.RequestResult;
+
+                const newDatasetName =
+                    responseBody.data.datasetInfoDto.datasetName;
+                const datasetId = responseBody.data.datasetInfoDto.idDataset;
+
+                const datasetInfosCopy = datasetInfos.slice();
+                datasetInfosCopy.forEach((element) => {
+                    if (element.idDataset === datasetId) {
+                        element.datasetName = newDatasetName;
+                    }
+                });
+
+                setDatasetInfos(datasetInfosCopy);
+                setSelectedDatasetInfo(responseBody.data.datasetInfoDto);
+
+                setNewDatasetName("");
+                setNewColumnName("");
+            } else {
+                openNotification(
+                    "Pri vykonávaní akcie nastala chyba",
+                    "white",
+                    "red",
+                );
+            }
+        } catch {
+            openNotification(
+                "Pri vykonávaní akcie nastala chyba",
+                "white",
+                "red",
+            );
         }
     };
 

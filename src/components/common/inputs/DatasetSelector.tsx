@@ -28,10 +28,6 @@ function DatasetSelector(props: DatasetSelectorProps) {
         loadDatasetInfos();
     }, []);
 
-    React.useEffect(() => {
-        initializeAutocomplete();
-    }, [props.datasetInfos]);
-
     const loadDatasetInfos = async () => {
         try {
             const request: Type.FetchRequest = {
@@ -58,13 +54,15 @@ function DatasetSelector(props: DatasetSelectorProps) {
                         element,
                     ]);
                 });
+
+                initializeAutocomplete(responseBody.data as Type.DatasetInfo[]);
             }
         } catch {}
     };
 
-    const initializeAutocomplete = () => {
+    const initializeAutocomplete = (datasetInfos: Type.DatasetInfo[]) => {
         if (location.state?.idDataset != null) {
-            const dataset = props.datasetInfos.find(
+            const dataset = datasetInfos.find(
                 (dataset) => dataset.idDataset === location.state.idDataset,
             );
 
@@ -77,7 +75,7 @@ function DatasetSelector(props: DatasetSelectorProps) {
     return (
         <Autocomplete
             className={props.customClass}
-            value={props.selectedDatasetInfo}
+            value={props.selectedDatasetInfo || null}
             options={props.datasetInfos}
             getOptionLabel={(option) =>
                 `${option.datasetName} (ID: ${option.idDataset})`
