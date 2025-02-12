@@ -8,6 +8,7 @@ interface HeaderProps {
     text: string;
     breakpointWidth: number;
     link: string | [string, string][];
+    excludeInfoTooltip?: boolean;
 }
 
 function Header(props: HeaderProps) {
@@ -66,12 +67,16 @@ function Header(props: HeaderProps) {
                     }),
                 }}
             >
-                <ToolTipElement
-                    title={
-                        "Pre nepoužité parametre bude nastavená predvolená hodnota. Viac informácií nájdete v oficiálnej dokumentácii."
-                    }
-                    icon={<InfoIcon style={iconStyle} color="primary" />}
-                />
+                {(props.excludeInfoTooltip === undefined ||
+                    !props.excludeInfoTooltip) && (
+                    <ToolTipElement
+                        title={
+                            "Pre nepoužité parametre bude nastavená predvolená hodnota. Viac informácií nájdete v oficiálnej dokumentácii."
+                        }
+                        icon={<InfoIcon style={iconStyle} color="primary" />}
+                    />
+                )}
+
                 {Array.isArray(props.link) ? (
                     props.link.map((item, key) => (
                         <React.Fragment key={key}>

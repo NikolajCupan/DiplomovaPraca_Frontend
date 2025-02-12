@@ -23,10 +23,10 @@ function DatasetViewer() {
 
     const getChartContent = () => {
         let datesArray: string[] = [];
-        let valuesArray: number[] = [];
+        let valuesArray: (number | null)[] = [];
         datasetForViewing!.rows.forEach((element: Type.Row) => {
             datesArray.push(Helper.formatDate(element.date));
-            valuesArray.push(Number(element.value));
+            valuesArray.push(!element.value ? null : Number(element.value));
         });
 
         let dataJson: Record<string, any> = {};
