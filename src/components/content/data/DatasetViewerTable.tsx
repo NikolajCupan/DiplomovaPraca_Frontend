@@ -78,7 +78,7 @@ function DatasetViewerTable(props: DatasetViewerTableProps) {
                     >
                         {column.isDate
                             ? Helper.formatDate(row[column.dataKey])
-                            : row[column.dataKey].toString()}
+                            : Helper.formatValue(row[column.dataKey] as string)}
                     </TableCell>
                 ))}
             </React.Fragment>

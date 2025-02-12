@@ -30,6 +30,16 @@ export function formatDate(date: Date | string): string {
     return `${year}/${month.padStart(2, "0")}/${day.padStart(2, "0")}-${hour.padStart(2, "0")}`;
 }
 
+export function formatValue(value: string): string {
+    const decimalPart = value.toString().split(".")[1];
+    if (decimalPart && decimalPart.length > 4) {
+        const numericValue = Number(value);
+        return numericValue.toFixed(4);
+    } else {
+        return value;
+    }
+}
+
 export function getPreviousDate(date: Date, frequency: string): Date {
     const newDate = new Date(date);
 
