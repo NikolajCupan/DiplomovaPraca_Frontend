@@ -1,9 +1,8 @@
-import Layout from "../../layout/Layout.tsx";
+import LogarithmForm from "./LogarithmForm.tsx";
+import Transformation from "./Transformation.tsx";
 
 function Logarithm() {
-    const content = <div>Logarithm</div>;
-
-    return <Layout component={content} />;
+    return <Transformation Component={LogarithmForm} />;
 }
 
 export default Logarithm;

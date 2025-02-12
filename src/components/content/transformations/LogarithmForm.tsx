@@ -1,18 +1,20 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import Header from "../../common/elements/Header.tsx";
 import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../common/inputs/NumberInput.tsx";
+import SelectInput from "../../common/inputs/SelectInput.tsx";
 import TextInput from "../../common/inputs/TextInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface DifferenceFormProps {
+interface LogarithmFormProps {
     selectedDatasetInfo: Type.DatasetInfo | null;
     setSelectedDatasetInfo: React.Dispatch<
         React.SetStateAction<Type.DatasetInfo | null>
@@ -27,7 +29,7 @@ interface DifferenceFormProps {
     >;
 }
 
-function DifferenceForm(props: DifferenceFormProps) {
+function LogarithmForm(props: LogarithmFormProps) {
     const { openNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -36,7 +38,11 @@ function DifferenceForm(props: DifferenceFormProps) {
 
     const [transformedDatasetName, setTransformedDatasetName] =
         React.useState<string>("");
-    const [differenceLevel, setDifferenceLevel] = React.useState<number>(1);
+
+    const [useNaturalLog, setUseNaturalLog] = React.useState<string>(
+        Constants.STRING_TRUE,
+    );
+    const [customBase, setCustomBase] = React.useState<number>(10);
 
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
@@ -63,10 +69,16 @@ function DifferenceForm(props: DifferenceFormProps) {
                 "transformedDatasetName",
                 transformedDatasetName.trim(),
             );
-            formData.append("differenceLevel", differenceLevel.toString());
+            formData.append("useNaturalLog", useNaturalLog);
+            Helper.appendIfAvailable(
+                formData,
+                "base",
+                customBase,
+                !Helper.stringToBoolean(useNaturalLog),
+            );
 
             const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.DIFFERENCE,
+                url: Constants.BACKEND_PATH + Constants.LOGARITHM,
                 options: {
                     method: "post",
                     body: formData,
@@ -93,9 +105,7 @@ function DifferenceForm(props: DifferenceFormProps) {
                     "green",
                 );
             } else {
-                console.log(responseBody.message);
                 props.setResponseBody(null);
-                console.log("hi");
                 openNotification(
                     responseBody.message.trim() === ""
                         ? "Pri vykonávaní akcie nastala chyba"
@@ -119,7 +129,7 @@ function DifferenceForm(props: DifferenceFormProps) {
     return (
         <>
             <Header
-                text={"Diferencia"}
+                text={"Logaritmovanie"}
                 breakpointWidth={300}
                 link={[]}
                 excludeInfoTooltip={true}
@@ -144,21 +154,32 @@ function DifferenceForm(props: DifferenceFormProps) {
                     />
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
+                    <SelectInput
                         customClass="custom-form-component-margin-top"
-                        value={differenceLevel}
-                        setValue={setDifferenceLevel}
+                        label={"Použiť prirodzený logaritmus"}
+                        value={useNaturalLog}
+                        setValue={setUseNaturalLog}
                         toggleable={false}
                         inputEnabled={true}
-                        decimalValuesAllowed={false}
-                        label={"Level diferencie"}
-                        defaultValue={1}
-                        minValue={1}
-                        maxValue={10}
-                        step={1}
+                        menuItems={[
+                            [Constants.STRING_TRUE, "Áno"],
+                            [Constants.STRING_FALSE, "Nie"],
+                        ]}
                     />
                 </Grid>
             </Grid>
+
+            <NumberInput
+                customClass="custom-form-component-margin-top"
+                label={"Základ logaritmu"}
+                value={customBase}
+                toggleable={false}
+                setValue={setCustomBase}
+                inputEnabled={!Helper.stringToBoolean(useNaturalLog)}
+                defaultValue={1}
+                minValue={1}
+                step={1}
+            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}
@@ -171,4 +192,4 @@ function DifferenceForm(props: DifferenceFormProps) {
     );
 }
 
-export default DifferenceForm;
+export default LogarithmForm;

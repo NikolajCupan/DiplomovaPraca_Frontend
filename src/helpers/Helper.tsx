@@ -195,6 +195,10 @@ export function formatChartValueX(value: Date, frequencyType: string): string {
     return "n/a";
 }
 
+export function stringToBoolean(value: string) {
+    return value.trim().toLowerCase() === "true";
+}
+
 export async function getDatasetForViewing(
     idDataset: number,
 ): Promise<Type.DatasetForViewing | null> {
