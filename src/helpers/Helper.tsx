@@ -286,3 +286,30 @@ export function transformToJson(
 
     return json;
 }
+
+export function transformToJsonWithKeys(
+    inputJson: Record<string, any>,
+    yAxisKey: string,
+    xAxisKey: string,
+): Type.RequestResult {
+    let valuesArray: (number | null)[] = [];
+    inputJson[yAxisKey].forEach((element: number | null) => {
+        valuesArray.push(element);
+    });
+
+    let datesArray: string[] = [];
+    inputJson[xAxisKey].forEach((element: string) => {
+        datesArray.push(formatDate(element));
+    });
+
+    let dataJson: Record<string, any> = {};
+    dataJson["date"] = { result: datesArray };
+    dataJson["data"] = { result: valuesArray };
+
+    const json: Type.RequestResult = {
+        message: "",
+        data: JSON.stringify(dataJson),
+    };
+
+    return json;
+}

@@ -106,3 +106,9 @@ input[type="number"].numeric-input-no-arrows {
         margin-top: 40px !important;
     }
 }
+
+.code {
+    text-align: center;
+    white-space: pre;
+    font-family: "Noto Sans Mono", monospace !important;
+}

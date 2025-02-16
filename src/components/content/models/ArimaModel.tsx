@@ -3,6 +3,8 @@ import "../../../index.css";
 import Layout from "../../layout/Layout.tsx";
 
 import * as React from "react";
+import ModelResultChartElement from "../../common/elements/charts/ModelResultChartElement.tsx";
+import ModelResultElement from "../../common/elements/ModelResultElement.tsx";
 import ArimaModelForm from "./ArimaModelForm.tsx";
 
 function ArimaModel() {
@@ -22,7 +24,15 @@ function ArimaModel() {
                 />
             </div>
 
-            <div className="custom-container">TODO</div>
+            <div className="custom-container">
+                <ModelResultChartElement
+                    responseBody={responseBody}
+                />
+            </div>
+
+            <div className="custom-container">
+                <ModelResultElement responseBody={responseBody} />
+            </div>
         </>
     );
 

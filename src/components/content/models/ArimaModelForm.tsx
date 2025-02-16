@@ -3,13 +3,13 @@ import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
 import Header from "../../common/elements/Header.tsx";
+import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
+import NumberInput from "../../common/inputs/NumberInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
-import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
-import NumberInput from "../../common/inputs/NumberInput.tsx";
 
 interface ArimaModelFormProps {
     actionInProgress: boolean;
@@ -27,6 +27,7 @@ function ArimaModelForm(props: ArimaModelFormProps) {
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
     );
+
     const [selectedDatasetInfo, setSelectedDatasetInfo] =
         React.useState<Type.DatasetInfo | null>(null);
 
