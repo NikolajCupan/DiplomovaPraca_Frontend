@@ -1,7 +1,6 @@
 import Data from "../components/content/data/Data.tsx";
 import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
-import LinearRegression from "../components/content/LinearRegression.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
 import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
@@ -29,10 +28,6 @@ export const ROUTES = [
     {
         path: Constants.VIEW_DATASET_LINK,
         element: <DatasetViewer />,
-    },
-    {
-        path: Constants.LINEAR_REGRESSION_LINK,
-        element: <LinearRegression />,
     },
     {
         path: Constants.DICKEY_FULLER_TEST_LINK,

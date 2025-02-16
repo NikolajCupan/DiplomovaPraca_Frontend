@@ -117,9 +117,10 @@ function LineChartWrapper(props: LineChartProps) {
                                 const numberValue = Number(value);
                                 if (
                                     Helper.getDecimalDigitsCount(numberValue) >=
-                                    5
+                                        5 ||
+                                    Helper.getWholeDigitsCount(numberValue) >= 5
                                 ) {
-                                    return numberValue.toExponential(0);
+                                    return numberValue.toExponential(2);
                                 }
 
                                 return value;

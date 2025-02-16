@@ -177,6 +177,10 @@ export function getDecimalDigitsCount(value: number): number {
     return value.toString().split(".")[1].length || 0;
 }
 
+export function getWholeDigitsCount(value: number): number {
+    return value.toString().split(".")[0].length || 0;
+}
+
 export function formatChartValueX(value: Date, frequencyType: string): string {
     const formattedDate = formatDate(value);
 

@@ -98,17 +98,12 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href={Constants.LINEAR_REGRESSION_LINK}>
-                    <MenuItem disableRipple>
-                        <NavigateNextIcon style={{ color: "black" }} />
-                        Lineárna regresia
-                    </MenuItem>
-                </a>
-
                 <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        ARIMA
+                        <div style={{ textWrap: "balance" }}>
+                            Jednoduché exponenciálne vyrovnávanie
+                        </div>
                     </MenuItem>
                 </a>
 
@@ -124,9 +119,7 @@ export default function CustomizedMenus() {
                 <a href={Constants.HOME_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        <div style={{ textWrap: "balance" }}>
-                            Jednoduché exponenciálne vyrovnávanie
-                        </div>
+                        ARIMA
                     </MenuItem>
                 </a>
 
