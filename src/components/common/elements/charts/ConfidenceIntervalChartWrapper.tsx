@@ -139,6 +139,7 @@ function ConfidenceIntervalChartWrapper(
             <ChartDataManager
                 manageXAxis={true}
                 manageSlider={true}
+                isXAxisDate={false}
                 /* Y axis */
                 yAxisArrayKey={props.yAxisArrayKey}
                 yChartDataArray={bar_yChartDataArray}
@@ -149,9 +150,17 @@ function ConfidenceIntervalChartWrapper(
                 /* X axis */
                 xAxisArrayKey={props.xAxisArrayKey}
                 xChartDataArray={xChartDataArray}
-                setXChartDataArray={setXChartDataArray}
+                setXChartDataArray={
+                    setXChartDataArray as React.Dispatch<
+                        React.SetStateAction<number[] | Date[]>
+                    >
+                }
                 xAxisLimits={xAxisLimits}
-                setXAxisLimits={setXAxisLimits}
+                setXAxisLimits={
+                    setXAxisLimits as React.Dispatch<
+                        React.SetStateAction<number[] | Date[]>
+                    >
+                }
                 /* X axis end */
                 minSliderDistance={props.minSliderDistance}
                 usedMinSliderDistance={sliderUsedMinDistance}
@@ -162,6 +171,7 @@ function ConfidenceIntervalChartWrapper(
             <ChartDataManager
                 manageXAxis={false}
                 manageSlider={false}
+                isXAxisDate={false}
                 /* Y axis */
                 yAxisArrayKey={props.confidenceIntervalLowerBoundKey}
                 yChartDataArray={lowerCI_yChartDataArray}
@@ -175,6 +185,7 @@ function ConfidenceIntervalChartWrapper(
             <ChartDataManager
                 manageXAxis={false}
                 manageSlider={false}
+                isXAxisDate={false}
                 /* Y axis */
                 yAxisArrayKey={props.confidenceIntervalUpperBoundKey}
                 yChartDataArray={upperCI_yChartDataArray}
