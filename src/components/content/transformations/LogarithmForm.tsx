@@ -176,8 +176,10 @@ function LogarithmForm(props: LogarithmFormProps) {
                 toggleable={false}
                 setValue={setCustomBase}
                 inputEnabled={!Helper.stringToBoolean(useNaturalLog)}
-                defaultValue={1}
-                minValue={1}
+                limitValuesAllowed={false}
+                forbiddenValues={[1]}
+                defaultValue={10}
+                minValue={0}
                 step={1}
             />
 

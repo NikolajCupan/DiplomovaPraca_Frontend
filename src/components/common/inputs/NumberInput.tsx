@@ -12,6 +12,7 @@ interface NumberInputProps {
 
     label: string;
     defaultValue: number;
+    forbiddenValues?: number[];
     limitValuesAllowed?: boolean;
     decimalValuesAllowed?: boolean;
     minValue?: number;
@@ -45,6 +46,14 @@ function NumberInput(props: NumberInputProps) {
     const handleBlur = (newValue: string) => {
         const numericValue = Number(newValue);
         if (isNaN(numericValue)) {
+            return;
+        }
+
+        if (
+            props.forbiddenValues !== undefined &&
+            props.forbiddenValues.indexOf(numericValue) > -1
+        ) {
+            props.setValue(props.defaultValue);
             return;
         }
 
