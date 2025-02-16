@@ -116,7 +116,7 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.ARIMA_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
                         ARIMA

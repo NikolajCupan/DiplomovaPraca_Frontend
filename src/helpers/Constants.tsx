@@ -30,6 +30,8 @@ export const CONFIDENCE_INTERVAL_UPPER_BOUND_KEY =
 export const CONFIDENCE_INTERVAL_LOWER_BOUND_KEY =
     "confidence_interval_lower_bound";
 
+export const SUMMARY_KEY = "summary";
+
 /*
  * Frontend paths
  */
@@ -52,6 +54,8 @@ export const LOGARITHM_LINK = "/transformation/logarithm";
 export const NORMALIZATION_LINK = "/transformation/normalization";
 export const STANDARDIZATION_LINK = "/transformation/standardization";
 
+export const ARIMA_LINK = "/model/arima";
+
 export const TESTING_LINK = "/debug/testing";
 export const TODO_LINK = "/debug/todo";
 
@@ -62,7 +66,7 @@ export const BACKEND_PATH = "http://localhost:8080";
 
 export const UPLOAD_DATASET_PATH = "/dataset/upload";
 export const DOWNLOAD_DATASET_PATH = "/dataset/download";
-export const EDIT_DATASET_PATH = "/dataset/edit/v2"
+export const EDIT_DATASET_PATH = "/dataset/edit/v2";
 
 export const GET_DATASETS_OF_USER_PATH = "/dataset/get";
 
@@ -83,3 +87,5 @@ export const DIFFERENCE = "/transformation/difference";
 export const LOGARITHM = "/transformation/logarithm";
 export const NORMALIZATION = "/transformation/normalization";
 export const STANDARDIZATION = "/transformation/standardization";
+
+export const ARIMA = "/model/arima";

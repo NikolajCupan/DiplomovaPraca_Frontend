@@ -1,6 +1,7 @@
 import Data from "../components/content/data/Data.tsx";
 import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
+import Arima from "../components/content/models/ArimaModel.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
 import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
@@ -72,6 +73,10 @@ export const ROUTES = [
     {
         path: Constants.STANDARDIZATION_LINK,
         element: <Standardization />,
+    },
+    {
+        path: Constants.ARIMA_LINK,
+        element: <Arima />,
     },
     {
         path: Constants.TESTING_LINK,

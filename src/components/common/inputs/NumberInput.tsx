@@ -6,6 +6,7 @@ interface NumberInputProps {
     value: number;
     setValue: React.Dispatch<React.SetStateAction<number>>;
 
+    readOnly?: boolean;
     toggleable: boolean;
     inputEnabled: boolean;
     setInputEnabled?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -135,6 +136,8 @@ function NumberInput(props: NumberInputProps) {
                             />
                         </InputAdornment>
                     ) : null,
+                    readOnly:
+                        props.readOnly !== undefined ? props.readOnly : false,
                 },
             }}
         />
