@@ -1,9 +1,8 @@
-import Layout from "../../layout/Layout.tsx";
+import StandardizationForm from "./StandardizationForm.tsx";
+import Transformation from "./Transformation.tsx";
 
 function Standardization() {
-    const content = <div>Standardization</div>;
-
-    return <Layout component={content} />;
+    return <Transformation Component={StandardizationForm} />;
 }
 
 export default Standardization;
