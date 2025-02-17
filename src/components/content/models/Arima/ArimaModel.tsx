@@ -3,8 +3,10 @@ import * as Type from "../../../../helpers/Types.tsx";
 import * as VariousElements from "../../../../helpers/VariousElements.tsx";
 import "../../../../index.css";
 import Header from "../../../common/elements/Header.tsx";
+import ScrollableContainer from "../../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../../layout/Layout.tsx";
 import ModelResult from "../ModelResult.tsx";
+import ModelResultTable from "../ModelResultTable.tsx";
 import RealPredictedChart from "../RealPredictedChart.tsx";
 import ResidualsChart from "../ResidualsChart.tsx";
 import ArimaModelForm from "./ArimaModelForm.tsx";
@@ -53,17 +55,32 @@ function ArimaModel() {
             <>
                 <div className="custom-container">
                     <Header
+                        text={"Prehľad"}
+                        breakpointWidth={300}
+                        link={[]}
+                        excludeInfoTooltip={true}
+                    />
+
+                    <ModelResultTable responseBody={responseBody} />
+                </div>
+
+                <div className="custom-container">
+                    <Header
                         text={"Výsledok"}
                         breakpointWidth={300}
                         link={[]}
                         excludeInfoTooltip={true}
                     />
 
-                    <RealPredictedChart
-                        responseBody={responseBody}
-                        jsonKey={Constants.FORECAST_KEY}
-                        height={Constants.DEFAULT_CHART_HEIGHT}
-                    />
+                    <ScrollableContainer
+                        breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    >
+                        <RealPredictedChart
+                            responseBody={responseBody}
+                            jsonKey={Constants.FORECAST_KEY}
+                            height={Constants.DEFAULT_CHART_HEIGHT}
+                        />
+                    </ScrollableContainer>
                 </div>
 
                 <div
@@ -75,48 +92,65 @@ function ArimaModel() {
 
                 <div className="custom-container">
                     <Header
-                        text={"Testovacia množina"}
-                        breakpointWidth={300}
-                        link={[]}
-                        excludeInfoTooltip={true}
-                    />
-
-                    <RealPredictedChart
-                        responseBody={responseBody}
-                        jsonKey={Constants.TRAIN_KEY}
-                        height={Constants.DEFAULT_CHART_HEIGHT}
-                    />
-
-                    <ResidualsChart
-                        responseBody={responseBody}
-                        jsonKey={Constants.TRAIN_KEY}
-                        height={Constants.DEFAULT_CHART_HEIGHT}
-                    />
-                </div>
-
-                <div
-                    className="custom-container"
-                    style={{ marginBottom: "20px" }}
-                >
-                    <Header
                         text={"Trénovacia množina"}
                         breakpointWidth={300}
                         link={[]}
                         excludeInfoTooltip={true}
                     />
 
-                    <RealPredictedChart
-                        responseBody={responseBody}
-                        jsonKey={Constants.TEST_KEY}
-                        height={Constants.DEFAULT_CHART_HEIGHT}
-                    />
+                    <ScrollableContainer
+                        breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    >
+                        <RealPredictedChart
+                            responseBody={responseBody}
+                            jsonKey={Constants.TRAIN_KEY}
+                            height={Constants.DEFAULT_CHART_HEIGHT}
+                        />
+                    </ScrollableContainer>
 
-                    <ResidualsChart
-                        responseBody={responseBody}
-                        jsonKey={Constants.TEST_KEY}
-                        height={Constants.DEFAULT_CHART_HEIGHT}
-                    />
+                    <ScrollableContainer
+                        breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    >
+                        <ResidualsChart
+                            responseBody={responseBody}
+                            jsonKey={Constants.TRAIN_KEY}
+                            height={Constants.DEFAULT_CHART_HEIGHT}
+                        />
+                    </ScrollableContainer>
                 </div>
+
+                {Constants.TEST_KEY in responseBodyData && (
+                    <div className="custom-container">
+                        <Header
+                            text={"Testovacia množina"}
+                            breakpointWidth={300}
+                            link={[]}
+                            excludeInfoTooltip={true}
+                        />
+
+                        <ScrollableContainer
+                            breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                        >
+                            <RealPredictedChart
+                                responseBody={responseBody}
+                                jsonKey={Constants.TEST_KEY}
+                                height={Constants.DEFAULT_CHART_HEIGHT}
+                            />
+                        </ScrollableContainer>
+
+                        <ScrollableContainer
+                            breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                        >
+                            <ResidualsChart
+                                responseBody={responseBody}
+                                jsonKey={Constants.TEST_KEY}
+                                height={Constants.DEFAULT_CHART_HEIGHT}
+                            />
+                        </ScrollableContainer>
+                    </div>
+                )}
+
+                <div style={{ marginBottom: "20px" }}></div>
             </>
         );
     };
