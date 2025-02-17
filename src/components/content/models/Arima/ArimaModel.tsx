@@ -1,11 +1,13 @@
-import * as Type from "../../../helpers/Types.tsx";
-import "../../../index.css";
-import Layout from "../../layout/Layout.tsx";
+import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
+import "../../../../index.css";
+import ModelResultElement from "../../../common/elements/ModelResultElement.tsx";
+import Layout from "../../../layout/Layout.tsx";
+import ComparisonChartElement from "../ComparisonChartElement.tsx";
+import ModelResultChartElement from "../ModelResultChartElement.tsx";
+import ArimaModelForm from "./ArimaModelForm.tsx";
 
 import * as React from "react";
-import ModelResultChartElement from "../../common/elements/charts/ModelResultChartElement.tsx";
-import ModelResultElement from "../../common/elements/ModelResultElement.tsx";
-import ArimaModelForm from "./ArimaModelForm.tsx";
 
 function ArimaModel() {
     const [actionInProgress, setActionInProgress] =
@@ -25,8 +27,16 @@ function ArimaModel() {
             </div>
 
             <div className="custom-container">
+                <ComparisonChartElement
+                    responseBody={responseBody}
+                    jsonKey={Constants.TRAIN_KEY}
+                />
+            </div>
+
+            <div className="custom-container">
                 <ModelResultChartElement
                     responseBody={responseBody}
+                    jsonKey={Constants.TRAIN_KEY}
                 />
             </div>
 

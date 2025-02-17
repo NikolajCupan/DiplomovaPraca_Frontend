@@ -1,11 +1,12 @@
-import * as Constants from "../../../../helpers/Constants.tsx";
-import * as Helper from "../../../../helpers/Helper.tsx";
-import * as Type from "../../../../helpers/Types.tsx";
-import ScrollableContainer from "../ScrollableContainer.tsx";
-import LineChartWrapper from "./LineChartWrapper.tsx";
+import * as Constants from "../../../helpers/Constants.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
+import * as Type from "../../../helpers/Types.tsx";
+import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
+import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
 
 interface ModelResultChartElementProps {
     responseBody: Type.RequestResult | null;
+    jsonKey: string;
 }
 
 function ModelResultChartElement(props: ModelResultChartElementProps) {
@@ -16,12 +17,11 @@ function ModelResultChartElement(props: ModelResultChartElementProps) {
     const responseBodyData: Record<string, any> = JSON.parse(
         props.responseBody.data,
     );
-    if (!(Constants.TRAIN_KEY in responseBodyData)) {
+    if (!(props.jsonKey in responseBodyData)) {
         return;
     }
 
-    const chartData: Record<string, any> =
-        responseBodyData[Constants.TRAIN_KEY];
+    const chartData: Record<string, any> = responseBodyData[props.jsonKey];
     const json = Helper.transformToJsonWithKeys(
         chartData,
         Constants.MODEL_RESIDUALS_KEY,

@@ -120,7 +120,7 @@ function LineChartWrapper(props: LineChartProps) {
                                         5 ||
                                     Helper.getWholeDigitsCount(numberValue) >= 5
                                 ) {
-                                    return numberValue.toExponential(2);
+                                    return numberValue.toExponential(1);
                                 }
 
                                 return value;
