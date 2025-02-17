@@ -34,7 +34,7 @@ function ResidualsChart(props: ResidualsChartProps) {
             breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
         >
             <LineChartWrapper
-                label={"Reziduá"}
+                label={"Reziduum"}
                 xAxisArrayKey={"date"}
                 yAxisArrayKey={"data"}
                 responseBody={json}

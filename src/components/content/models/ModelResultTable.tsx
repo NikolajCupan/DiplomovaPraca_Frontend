@@ -1,4 +1,5 @@
 import * as Constants from "../../../helpers/Constants.tsx";
+import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 
 import {
@@ -77,10 +78,10 @@ function ModelResultTable(props: ModelResultTableProps) {
             row[Constants.MODEL_DATE_KEY] =
                 forecast[Constants.MODEL_DATE_KEY][i];
             row["type"] = "Predikcia";
-            row[Constants.MODEL_REAL_KEY] = "";
+            row[Constants.MODEL_REAL_KEY] = "-";
             row[Constants.MODEL_FITTED_KEY] =
                 forecast[Constants.MODEL_FITTED_KEY][i];
-            row[Constants.MODEL_RESIDUALS_KEY] = "";
+            row[Constants.MODEL_RESIDUALS_KEY] = "-";
 
             newTableData.push(row);
         }
@@ -91,30 +92,61 @@ function ModelResultTable(props: ModelResultTableProps) {
     interface ColumnData {
         label: string;
         dataKey: string;
+        minWidthPx: number;
+        isNumeric: boolean;
     }
 
     const columns: ColumnData[] = [
         {
             label: "Dátum (YYYY/MM/DD-HH)",
             dataKey: Constants.MODEL_DATE_KEY,
+            minWidthPx: 200,
+            isNumeric: false,
         },
         {
             label: "Množina",
             dataKey: "type",
+            minWidthPx: 100,
+            isNumeric: false,
         },
         {
             label: "Skutočnosť",
             dataKey: Constants.MODEL_REAL_KEY,
+            minWidthPx: 100,
+            isNumeric: true,
         },
         {
             label: "Predikcia",
             dataKey: Constants.MODEL_FITTED_KEY,
+            minWidthPx: 100,
+            isNumeric: true,
         },
         {
             label: "Reziduum",
             dataKey: Constants.MODEL_RESIDUALS_KEY,
+            minWidthPx: 100,
+            isNumeric: true,
         },
     ];
+
+    const formatTableCellValue = (
+        column: ColumnData,
+        value: Record<string, any>,
+    ) => {
+        const data: string = value[column.dataKey];
+        if (!column.isNumeric) {
+            return data;
+        }
+
+        const numericData: number = Number(data);
+        const decimalDigitsCount = Helper.getDecimalDigitsCount(numericData);
+
+        if (decimalDigitsCount > 5) {
+            return numericData.toFixed(3);
+        } else {
+            return numericData;
+        }
+    };
 
     function fixedHeaderContent() {
         return (
@@ -125,6 +157,8 @@ function ModelResultTable(props: ModelResultTableProps) {
                         variant="head"
                         sx={{
                             backgroundColor: "background.paper",
+                            width: column.minWidthPx + "px",
+                            minWidth: column.minWidthPx + "px",
                         }}
                     >
                         {column.label}
@@ -139,7 +173,7 @@ function ModelResultTable(props: ModelResultTableProps) {
             <React.Fragment>
                 {columns.map((column) => (
                     <TableCell key={column.dataKey}>
-                        {row[column.dataKey]}
+                        {formatTableCellValue(column, row)}
                     </TableCell>
                 ))}
             </React.Fragment>
