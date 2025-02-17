@@ -42,6 +42,8 @@ function ArimaModelForm(props: ArimaModelFormProps) {
     const [seasonal_d, setSeasonal_d] = React.useState<number>(0);
     const [seasonal_q, setSeasonal_q] = React.useState<number>(0);
 
+    const [forecastCount, setForecastCount] = React.useState<number>(0);
+
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
             return;
@@ -71,6 +73,11 @@ function ArimaModelForm(props: ArimaModelFormProps) {
             formData.append("seasonal_p", seasonal_p.toString());
             formData.append("seasonal_d", seasonal_d.toString());
             formData.append("seasonal_q", seasonal_q.toString());
+
+            formData.append(
+                Constants.FORECAST_COUNT_KEY,
+                forecastCount.toString(),
+            );
 
             const request: Type.FetchRequest = {
                 url: Constants.BACKEND_PATH + Constants.ARIMA,
@@ -251,6 +258,19 @@ function ArimaModelForm(props: ArimaModelFormProps) {
                     />
                 </Grid>
             </Grid>
+
+            <NumberInput
+                customClass="custom-form-component-margin-top"
+                value={forecastCount}
+                setValue={setForecastCount}
+                toggleable={false}
+                inputEnabled={true}
+                decimalValuesAllowed={false}
+                label={"Počet predikcií"}
+                defaultValue={0}
+                minValue={0}
+                step={1}
+            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}

@@ -1,6 +1,6 @@
 import * as Constants from "../../../helpers/Constants.tsx";
-import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import * as VariousElements from "../../../helpers/VariousElements.tsx";
 import "../../../index.css";
 import ConfidenceIntervalChartWrapper from "../../common/elements/charts/ConfidenceIntervalChartWrapper.tsx";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
@@ -18,7 +18,7 @@ function Correlogram() {
 
     const getResultContent = () => {
         if (actionInProgress) {
-            return HelperElements.actionInProgressElement;
+            return VariousElements.actionInProgressElement;
         } else if (responseBody) {
             const acfJson: Record<string, any> = JSON.parse(
                 responseBody[0].data,

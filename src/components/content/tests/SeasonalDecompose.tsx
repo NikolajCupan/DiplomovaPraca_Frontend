@@ -1,6 +1,6 @@
 import * as Constants from "../../../helpers/Constants.tsx";
-import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import * as VariousElements from "../../../helpers/VariousElements.tsx";
 import "../../../index.css";
 import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
@@ -17,7 +17,7 @@ function SeasonalDecompose() {
 
     const getResultContent = () => {
         if (actionInProgress) {
-            return HelperElements.actionInProgressElement;
+            return VariousElements.actionInProgressElement;
         } else if (responseBody) {
             const json: Record<string, any> = JSON.parse(responseBody.data);
             if (!json[Constants.SUCCESS_KEY]) {

@@ -34,6 +34,7 @@ export const SUMMARY_KEY = "summary";
 
 export const TRAIN_KEY = "train";
 export const TEST_KEY = "test";
+export const FORECAST_KEY = "forecast";
 
 export const MODEL_DATE_KEY = "date";
 export const MODEL_REAL_KEY = "real";
@@ -42,6 +43,7 @@ export const MODEL_RESIDUALS_KEY = "residuals";
 export const MODEL_FORECAST_KEY = "forecast";
 
 export const FREQUENCY_TYPE_KEY = "frequency";
+export const FORECAST_COUNT_KEY = "forecast_count";
 
 /*
  * Frontend paths

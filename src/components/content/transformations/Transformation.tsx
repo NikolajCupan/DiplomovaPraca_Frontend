@@ -1,7 +1,7 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
-import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import * as VariousElements from "../../../helpers/VariousElements.tsx";
 import "../../../index.css";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
@@ -78,7 +78,7 @@ const Transformation: React.FC<TransformationProps> = ({ Component }) => {
 
     const getResultContent = () => {
         if (actionInProgress) {
-            return HelperElements.actionInProgressElement;
+            return VariousElements.actionInProgressElement;
         } else if (arrayTransformed && arrayOriginal) {
             return getChartsContent();
         } else {

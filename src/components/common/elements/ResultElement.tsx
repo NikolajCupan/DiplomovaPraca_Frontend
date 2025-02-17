@@ -1,7 +1,7 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
-import * as HelperElements from "../../../helpers/HelperElements.tsx";
 import * as Type from "../../../helpers/Types.tsx";
+import * as VariousElements from "../../../helpers/VariousElements.tsx";
 import "../../../index.css";
 import ScrollableContainer from "../elements/ScrollableContainer.tsx";
 
@@ -182,7 +182,7 @@ function ResultElement(props: ResultElementProps) {
 
     const getResultElementBody = () => {
         if (props.actionInProgress) {
-            return HelperElements.actionInProgressElement;
+            return VariousElements.actionInProgressElement;
         } else if (!responseBodyData) {
             return noTestDoneElement;
         } else {

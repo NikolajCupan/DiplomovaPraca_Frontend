@@ -57,19 +57,19 @@ function RealPredictedChart(props: RealPredictedChartProps) {
             ];
         const chartData: Record<string, any> = responseBodyData[props.jsonKey];
 
-        const jsonReal = Helper.transformToJsonWithKeys(
+        const realArray = Helper.transformToJsonWithKeys(
             chartData,
             Constants.MODEL_REAL_KEY,
             Constants.MODEL_DATE_KEY,
         );
-        setJsonReal(jsonReal);
+        setJsonReal(realArray);
 
-        const jsonFitted = Helper.transformToJsonWithKeys(
+        const fittedArray = Helper.transformToJsonWithKeys(
             chartData,
             Constants.MODEL_FITTED_KEY,
             Constants.MODEL_DATE_KEY,
         );
-        seTJsonFitted(jsonFitted);
+        seTJsonFitted(fittedArray);
     }, [props.responseBody]);
 
     const getChartElement = () => {
@@ -149,7 +149,7 @@ function RealPredictedChart(props: RealPredictedChartProps) {
     return (
         <>
             <ChartDataManager
-                manageXAxis={true}
+                manageXAxis={false}
                 manageSlider={false}
                 isXAxisDate={true}
                 /* Y axis */
@@ -158,6 +158,20 @@ function RealPredictedChart(props: RealPredictedChartProps) {
                 setYChartDataArray={real_setYChartDataArray}
                 yAxisLimits={real_yAxisLimits}
                 setYAxisLimits={real_setYAxisLimits}
+                /* Y axis end */
+                responseBody={jsonReal!}
+            />
+
+            <ChartDataManager
+                manageXAxis={true}
+                manageSlider={false}
+                isXAxisDate={true}
+                /* Y axis */
+                yAxisArrayKey={"data"}
+                yChartDataArray={fitted_yChartDataArray}
+                setYChartDataArray={fitted_setYChartDataArray}
+                yAxisLimits={fitted_yAxisLimits}
+                setYAxisLimits={fitted_setYAxisLimits}
                 /* Y axis end */
                 /* X axis */
                 xAxisArrayKey={"date"}
@@ -174,20 +188,6 @@ function RealPredictedChart(props: RealPredictedChartProps) {
                     >
                 }
                 /* X axis end */
-                responseBody={jsonReal!}
-            />
-
-            <ChartDataManager
-                manageXAxis={false}
-                manageSlider={false}
-                isXAxisDate={false}
-                /* Y axis */
-                yAxisArrayKey={"data"}
-                yChartDataArray={fitted_yChartDataArray}
-                setYChartDataArray={fitted_setYChartDataArray}
-                yAxisLimits={fitted_yAxisLimits}
-                setYAxisLimits={fitted_setYAxisLimits}
-                /* Y axis end */
                 responseBody={jsonFitted!}
             />
 

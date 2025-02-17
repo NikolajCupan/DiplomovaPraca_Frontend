@@ -1,14 +1,14 @@
 import * as Constants from "../../../helpers/Constants.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import "../../../index.css";
-import Header from "./Header.tsx";
-import ScrollableContainer from "./ScrollableContainer.tsx";
+import Header from "../../common/elements/Header.tsx";
+import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 
-interface ModelResultElementProps {
+interface ModelResultProps {
     responseBody: Type.RequestResult | null;
 }
 
-function ModelResultElement(props: ModelResultElementProps) {
+function ModelResult(props: ModelResultProps) {
     if (!props.responseBody) {
         return;
     }
@@ -48,4 +48,4 @@ function ModelResultElement(props: ModelResultElementProps) {
     );
 }
 
-export default ModelResultElement;
+export default ModelResult;
