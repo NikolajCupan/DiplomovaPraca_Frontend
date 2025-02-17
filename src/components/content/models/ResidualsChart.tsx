@@ -4,12 +4,13 @@ import * as Type from "../../../helpers/Types.tsx";
 import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
 import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
 
-interface ModelResultChartElementProps {
+interface ResidualsChartProps {
     responseBody: Type.RequestResult | null;
     jsonKey: string;
+    height: number;
 }
 
-function ModelResultChartElement(props: ModelResultChartElementProps) {
+function ResidualsChart(props: ResidualsChartProps) {
     if (!props.responseBody) {
         return;
     }
@@ -37,7 +38,7 @@ function ModelResultChartElement(props: ModelResultChartElementProps) {
                 xAxisArrayKey={"date"}
                 yAxisArrayKey={"data"}
                 responseBody={json}
-                height={Constants.DEFAULT_CHART_HEIGHT}
+                height={props.height}
                 isXAxisDate={true}
                 frequency={
                     responseBodyData[Constants.FREQUENCY_TYPE_KEY][
@@ -49,4 +50,4 @@ function ModelResultChartElement(props: ModelResultChartElementProps) {
     );
 }
 
-export default ModelResultChartElement;
+export default ResidualsChart;

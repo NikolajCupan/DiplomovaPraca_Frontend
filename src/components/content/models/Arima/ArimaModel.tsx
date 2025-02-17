@@ -3,8 +3,8 @@ import * as Type from "../../../../helpers/Types.tsx";
 import "../../../../index.css";
 import ModelResultElement from "../../../common/elements/ModelResultElement.tsx";
 import Layout from "../../../layout/Layout.tsx";
-import ComparisonChartElement from "../ComparisonChartElement.tsx";
-import ModelResultChartElement from "../ModelResultChartElement.tsx";
+import RealPredictedChart from "../RealPredictedChart.tsx";
+import ResidualsChart from "../ResidualsChart.tsx";
 import ArimaModelForm from "./ArimaModelForm.tsx";
 
 import * as React from "react";
@@ -27,16 +27,18 @@ function ArimaModel() {
             </div>
 
             <div className="custom-container">
-                <ComparisonChartElement
+                <RealPredictedChart
                     responseBody={responseBody}
                     jsonKey={Constants.TRAIN_KEY}
+                    height={Constants.DEFAULT_CHART_HEIGHT}
                 />
             </div>
 
             <div className="custom-container">
-                <ModelResultChartElement
+                <ResidualsChart
                     responseBody={responseBody}
                     jsonKey={Constants.TRAIN_KEY}
+                    height={Constants.DEFAULT_CHART_HEIGHT}
                 />
             </div>
 
