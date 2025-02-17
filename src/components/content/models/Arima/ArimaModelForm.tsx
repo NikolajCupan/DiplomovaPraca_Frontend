@@ -43,6 +43,7 @@ function ArimaModelForm(props: ArimaModelFormProps) {
     const [seasonal_q, setSeasonal_q] = React.useState<number>(0);
 
     const [forecastCount, setForecastCount] = React.useState<number>(0);
+    const [pValueTests, setPValueTests] = React.useState<number>(0.05);
 
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
@@ -78,6 +79,7 @@ function ArimaModelForm(props: ArimaModelFormProps) {
                 Constants.FORECAST_COUNT_KEY,
                 forecastCount.toString(),
             );
+            formData.append("pValueTests", pValueTests.toString());
 
             const request: Type.FetchRequest = {
                 url: Constants.BACKEND_PATH + Constants.ARIMA,
@@ -259,18 +261,37 @@ function ArimaModelForm(props: ArimaModelFormProps) {
                 </Grid>
             </Grid>
 
-            <NumberInput
-                customClass="custom-form-component-margin-top"
-                value={forecastCount}
-                setValue={setForecastCount}
-                toggleable={false}
-                inputEnabled={true}
-                decimalValuesAllowed={false}
-                label={"Počet predikcií"}
-                defaultValue={0}
-                minValue={0}
-                step={1}
-            />
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={forecastCount}
+                        setValue={setForecastCount}
+                        toggleable={false}
+                        inputEnabled={true}
+                        decimalValuesAllowed={false}
+                        label={"Počet predikcií"}
+                        defaultValue={0}
+                        minValue={0}
+                        step={1}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={pValueTests}
+                        setValue={setPValueTests}
+                        toggleable={false}
+                        inputEnabled={true}
+                        limitValuesAllowed={false}
+                        label={"Hladina významnosti testov"}
+                        defaultValue={0.05}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+            </Grid>
 
             <ConfirmButton
                 action={handleConfirmButtonClick}

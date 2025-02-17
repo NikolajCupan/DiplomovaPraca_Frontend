@@ -112,3 +112,10 @@ input[type="number"].numeric-input-no-arrows {
     white-space: pre;
     font-family: "Noto Sans Mono", monospace !important;
 }
+
+.sub-header {
+    text-align: center;
+    color: gray;
+    margin: 0;
+    font-size: 16px;
+}

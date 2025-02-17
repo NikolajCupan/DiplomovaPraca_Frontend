@@ -9,6 +9,7 @@ interface HeaderProps {
     breakpointWidth: number;
     link: string | [string, string][];
     excludeInfoTooltip?: boolean;
+    fontSizePx?: number;
 }
 
 function Header(props: HeaderProps) {
@@ -52,6 +53,9 @@ function Header(props: HeaderProps) {
                     marginRight: isSmall ? "0" : "10px",
                     marginBottom: isSmall ? "5px" : "20px",
                     textAlign: "center",
+                    ...(props.fontSizePx && {
+                        fontSize: props.fontSizePx + "px",
+                    }),
                 }}
             >
                 {props.text}

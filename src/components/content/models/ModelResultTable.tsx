@@ -134,7 +134,7 @@ function ModelResultTable(props: ModelResultTableProps) {
         value: Record<string, any>,
     ) => {
         const data: string = value[column.dataKey];
-        if (!column.isNumeric) {
+        if (!column.isNumeric || isNaN(Number(data))) {
             return data;
         }
 

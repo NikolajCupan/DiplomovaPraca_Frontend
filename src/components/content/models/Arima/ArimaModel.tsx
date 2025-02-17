@@ -3,6 +3,7 @@ import * as Type from "../../../../helpers/Types.tsx";
 import * as VariousElements from "../../../../helpers/VariousElements.tsx";
 import "../../../../index.css";
 import Header from "../../../common/elements/Header.tsx";
+import ResultElement from "../../../common/elements/ResultElement.tsx";
 import ScrollableContainer from "../../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../../layout/Layout.tsx";
 import ModelResult from "../ModelResult.tsx";
@@ -47,8 +48,17 @@ function ArimaModel() {
 
         const success = responseBodyData[Constants.SUCCESS_KEY];
         if (!success) {
-            setResponseBody(null);
-            return noActionElement;
+            return (
+                <div
+                    className="custom-container"
+                    style={{ marginBottom: "20px" }}
+                >
+                    <ResultElement
+                        actionInProgress={actionInProgress}
+                        responseBody={responseBody}
+                    />
+                </div>
+            );
         }
 
         return (
@@ -62,15 +72,6 @@ function ArimaModel() {
                     />
 
                     <ModelResultTable responseBody={responseBody} />
-                </div>
-
-                <div className="custom-container">
-                    <Header
-                        text={"Výsledok"}
-                        breakpointWidth={300}
-                        link={[]}
-                        excludeInfoTooltip={true}
-                    />
 
                     <ScrollableContainer
                         breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
@@ -149,6 +150,58 @@ function ArimaModel() {
                         </ScrollableContainer>
                     </div>
                 )}
+
+                <div className="custom-container">
+                    <Header
+                        text={"Testy"}
+                        breakpointWidth={300}
+                        link={[]}
+                        excludeInfoTooltip={true}
+                    />
+
+                    <p className="sub-header" style={{ marginBottom: "25px" }}>
+                        Všetky testy sú vykonané na reziduách z trénovacej
+                        množiny
+                    </p>
+
+                    <Header
+                        text={"Ljung-Box test"}
+                        breakpointWidth={400}
+                        link={
+                            "https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.acorr_ljungbox.html"
+                        }
+                        fontSizePx={25}
+                        excludeInfoTooltip={true}
+                    />
+
+                    <ResultElement
+                        actionInProgress={actionInProgress}
+                        responseBody={{
+                            message: "",
+                            data: JSON.stringify(
+                                responseBodyData["ljung_box_test"],
+                            ),
+                        }}
+                    />
+
+                    <Header
+                        text={"ARCH test"}
+                        breakpointWidth={300}
+                        link={
+                            "https://www.statsmodels.org/dev/generated/statsmodels.stats.diagnostic.het_arch.html"
+                        }
+                        fontSizePx={25}
+                        excludeInfoTooltip={true}
+                    />
+
+                    <ResultElement
+                        actionInProgress={actionInProgress}
+                        responseBody={{
+                            message: "",
+                            data: JSON.stringify(responseBodyData["arch_test"]),
+                        }}
+                    />
+                </div>
 
                 <div style={{ marginBottom: "20px" }}></div>
             </>
