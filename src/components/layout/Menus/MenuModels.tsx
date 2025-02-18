@@ -98,24 +98,6 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href={Constants.HOME_LINK}>
-                    <MenuItem disableRipple>
-                        <NavigateNextIcon style={{ color: "black" }} />
-                        <div style={{ textWrap: "balance" }}>
-                            Jednoduché exponenciálne vyrovnávanie
-                        </div>
-                    </MenuItem>
-                </a>
-
-                <a href={Constants.HOME_LINK}>
-                    <MenuItem disableRipple>
-                        <NavigateNextIcon style={{ color: "black" }} />
-                        <div style={{ textWrap: "balance" }}>
-                            Exponenciálne vyrovnávanie Holt-Winter
-                        </div>
-                    </MenuItem>
-                </a>
-
                 <a href={Constants.ARIMA_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
@@ -123,10 +105,10 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
-                <a href={Constants.HOME_LINK}>
+                <a href={Constants.HOLT_WINTER_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        GARCH
+                        Exponenciálne vyrovnávanie Holt-Winter
                     </MenuItem>
                 </a>
             </StyledMenu>

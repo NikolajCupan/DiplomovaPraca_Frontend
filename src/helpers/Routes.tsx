@@ -1,7 +1,8 @@
 import Data from "../components/content/data/Data.tsx";
 import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
-import Arima from "../components/content/models/Arima/ArimaModel.tsx";
+import ArimaModel from "../components/content/models/Arima/ArimaModel.tsx";
+import HoltWinterModel from "../components/content/models/HoltWinter/HoltWinterModel.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
 import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
@@ -76,7 +77,11 @@ export const ROUTES = [
     },
     {
         path: Constants.ARIMA_LINK,
-        element: <Arima />,
+        element: <ArimaModel />,
+    },
+    {
+        path: Constants.HOLT_WINTER,
+        element: <HoltWinterModel />,
     },
     {
         path: Constants.TESTING_LINK,

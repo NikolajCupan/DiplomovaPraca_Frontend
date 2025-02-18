@@ -68,6 +68,7 @@ export const NORMALIZATION_LINK = "/transformation/normalization";
 export const STANDARDIZATION_LINK = "/transformation/standardization";
 
 export const ARIMA_LINK = "/model/arima";
+export const HOLT_WINTER_LINK = "/model/holt-winter";
 
 export const TESTING_LINK = "/debug/testing";
 export const TODO_LINK = "/debug/todo";
@@ -102,3 +103,4 @@ export const NORMALIZATION = "/transformation/normalization";
 export const STANDARDIZATION = "/transformation/standardization";
 
 export const ARIMA = "/model/arima";
+export const HOLT_WINTER = "/model/holt-winter";
