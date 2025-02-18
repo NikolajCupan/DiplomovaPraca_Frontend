@@ -37,6 +37,20 @@ function ResultElement(props: ResultElementProps) {
         </div>
     );
 
+    const formatPValue = (value: any): string => {
+        const rawString = value.toString();
+        let result = rawString;
+
+        if (rawString.includes(".")) {
+            const [integerPart, decimalPart] = rawString.split(".");
+            if (decimalPart.length === 1) {
+                result = `${integerPart}.${decimalPart}0`;
+            }
+        }
+
+        return result;
+    };
+
     const getActionResultElement = () => {
         if (!responseBodyData) {
             return;
@@ -53,7 +67,7 @@ function ResultElement(props: ResultElementProps) {
             delete responseCopy[Constants.USED_P_VALUE_KEY];
             pairs.push([
                 true,
-                Helper.formatDecimalNumber(
+                formatPValue(
                     usedPValueJson[Constants.OUTPUT_ELEMENT_RESULT_KEY],
                 ),
                 usedPValueJson[Constants.OUTPUT_ELEMENT_TITLE_KEY],
@@ -108,7 +122,7 @@ function ResultElement(props: ResultElementProps) {
                 if (result === -1) {
                     result = "nie je k dispozícii";
                 } else {
-                    result = Helper.formatDecimalNumber(result);
+                    result = formatPValue(result);
                 }
             }
 

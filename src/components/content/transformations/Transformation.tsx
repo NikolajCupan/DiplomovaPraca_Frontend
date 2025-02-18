@@ -54,9 +54,8 @@ const Transformation: React.FC<TransformationProps> = ({ Component }) => {
             datasetInfo.idDataset,
         );
 
-        const json: Type.RequestResult = Helper.transformToJson(
-            datasetForViewing!,
-        );
+        const json: Type.RequestResult =
+            Helper.transformDatasetForViewingToJson(datasetForViewing!);
         setArrayTransformed(json);
     };
 
@@ -70,9 +69,8 @@ const Transformation: React.FC<TransformationProps> = ({ Component }) => {
             selectedDatasetInfo.idDataset,
         );
 
-        const json: Type.RequestResult = Helper.transformToJson(
-            datasetForViewing!,
-        );
+        const json: Type.RequestResult =
+            Helper.transformDatasetForViewingToJson(datasetForViewing!);
         setArrayOriginal(json);
     };
 

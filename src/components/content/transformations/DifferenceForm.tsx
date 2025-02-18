@@ -93,9 +93,7 @@ function DifferenceForm(props: DifferenceFormProps) {
                     "green",
                 );
             } else {
-                console.log(responseBody.message);
                 props.setResponseBody(null);
-                console.log("hi");
                 openNotification(
                     responseBody.message.trim() === ""
                         ? "Pri vykonávaní akcie nastala chyba"

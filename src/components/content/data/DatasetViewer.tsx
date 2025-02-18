@@ -22,7 +22,9 @@ function DatasetViewer() {
     };
 
     const getChartContent = () => {
-        const json = Helper.transformToJson(datasetForViewing!);
+        const json = Helper.transformDatasetForViewingToJson(
+            datasetForViewing!,
+        );
 
         return (
             <ScrollableContainer

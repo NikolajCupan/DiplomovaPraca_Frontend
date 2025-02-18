@@ -6,6 +6,7 @@ import Header from "../../../common/elements/Header.tsx";
 import ResultElement from "../../../common/elements/ResultElement.tsx";
 import ScrollableContainer from "../../../common/elements/ScrollableContainer.tsx";
 import Layout from "../../../layout/Layout.tsx";
+import AccuracyTable from "../AccuracyTable.tsx";
 import ModelResult from "../ModelResult.tsx";
 import ModelResultTable from "../ModelResultTable.tsx";
 import RealPredictedChart from "../RealPredictedChart.tsx";
@@ -69,6 +70,13 @@ function ArimaModel() {
                         breakpointWidth={300}
                         link={[]}
                         excludeInfoTooltip={true}
+                    />
+
+                    <AccuracyTable
+                        responseBody={responseBody}
+                        trainJsonKey={"train_accuracy"}
+                        testJsonKey={"test_accuracy"}
+                        customStyle={{ marginBottom: "40px" }}
                     />
 
                     <ModelResultTable responseBody={responseBody} />

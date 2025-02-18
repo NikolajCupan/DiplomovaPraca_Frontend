@@ -2,45 +2,20 @@ import * as Constants from "./Constants.tsx";
 import * as CookiesManager from "./CookiesManager.tsx";
 import * as Type from "./Types.tsx";
 
-export function translateFrequency(frequency: string): string {
-    switch (frequency.toLowerCase()) {
-        case "hourly":
-            return "hodinová";
-        case "daily":
-            return "denná";
-        case "weekly":
-            return "týždenná";
-        case "monthly":
-            return "mesačná";
-        case "quarterly":
-            return "štvrťročná";
-        case "yearly":
-            return "ročná";
-        default:
-            return frequency;
-    }
+export function timeout(delayMs: number) {
+    return new Promise((res) => setTimeout(res, delayMs));
 }
 
-export function formatDate(date: Date | string): string {
-    if (typeof date === "string") {
-        date = stringToDate(date);
-    }
-
-    const year = date.getFullYear().toString();
-    const month = (date.getMonth() + 1).toString();
-    const day = date.getDate().toString();
-    const hour = date.getHours().toString();
-
-    return `${year}/${month.padStart(2, "0")}/${day.padStart(2, "0")}-${hour.padStart(2, "0")}`;
-}
-
-export function formatValue(value: string): string {
-    const decimalPart = value.toString().split(".")[1];
-    if (decimalPart && decimalPart.length > 4) {
-        const numericValue = Number(value);
-        return numericValue.toFixed(4);
-    } else {
-        return value;
+export function appendIfAvailable<T>(
+    formData: FormData,
+    name: string,
+    value: T,
+    available: boolean,
+) {
+    if (available) {
+        if ((value as string).toString().trim() !== "") {
+            formData.append(name, (value as string).toString().trim());
+        }
     }
 }
 
@@ -102,6 +77,29 @@ export function getNextDate(date: Date, frequency: string): Date {
     return newDate;
 }
 
+export function formatDate(date: Date | string): string {
+    if (typeof date === "string") {
+        date = stringToDate(date);
+    }
+
+    const year = date.getFullYear().toString();
+    const month = (date.getMonth() + 1).toString();
+    const day = date.getDate().toString();
+    const hour = date.getHours().toString();
+
+    return `${year}/${month.padStart(2, "0")}/${day.padStart(2, "0")}-${hour.padStart(2, "0")}`;
+}
+
+export function formatNumericValue(value: string): string {
+    const decimalPart = value.toString().split(".")[1];
+    if (decimalPart && decimalPart.length > 4) {
+        const numericValue = Number(value);
+        return numericValue.toFixed(4);
+    } else {
+        return value;
+    }
+}
+
 export function stringToDate(string: string | Date): Date {
     if (string instanceof Date) {
         return string;
@@ -121,20 +119,22 @@ export function stringToDate(string: string | Date): Date {
     return date;
 }
 
-export function timeout(delayMs: number) {
-    return new Promise((res) => setTimeout(res, delayMs));
-}
-
-export function appendIfAvailable<T>(
-    formData: FormData,
-    name: string,
-    value: T,
-    available: boolean,
-) {
-    if (available) {
-        if ((value as string).toString().trim() !== "") {
-            formData.append(name, (value as string).toString().trim());
-        }
+export function translateFrequency(frequency: string): string {
+    switch (frequency.toLowerCase()) {
+        case "hourly":
+            return "hodinová";
+        case "daily":
+            return "denná";
+        case "weekly":
+            return "týždenná";
+        case "monthly":
+            return "mesačná";
+        case "quarterly":
+            return "štvrťročná";
+        case "yearly":
+            return "ročná";
+        default:
+            return frequency;
     }
 }
 
@@ -151,20 +151,6 @@ export function formatJSON(object: any): string {
 
         first = false;
     });
-
-    return result;
-}
-
-export function formatDecimalNumber(value: any): string {
-    const rawString = value.toString();
-    let result = rawString;
-
-    if (rawString.includes(".")) {
-        const [integerPart, decimalPart] = rawString.split(".");
-        if (decimalPart.length === 1) {
-            result = `${integerPart}.${decimalPart}0`;
-        }
-    }
 
     return result;
 }
@@ -265,7 +251,7 @@ export async function getDatasetForViewing(
     }
 }
 
-export function transformToJson(
+export function transformDatasetForViewingToJson(
     datasetForViewing: Type.DatasetForViewing,
 ): Type.RequestResult {
     let datesArray: string[] = [];

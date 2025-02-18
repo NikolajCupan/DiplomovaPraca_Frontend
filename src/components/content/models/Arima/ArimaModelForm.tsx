@@ -125,7 +125,7 @@ function ArimaModelForm(props: ArimaModelFormProps) {
                 text={"ARIMA"}
                 breakpointWidth={250}
                 link={
-                    "https://www.statsmodels.org/stable/generated/statsmodels.tsa.arima.model.ARIMA.html"
+                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html"
                 }
             />
 
