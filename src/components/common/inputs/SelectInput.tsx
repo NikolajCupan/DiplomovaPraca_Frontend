@@ -18,8 +18,8 @@ interface SelectInputProps {
 }
 
 function SelectInput(props: SelectInputProps) {
-    const [applyTransformation, setApplyTransformation] =
-        React.useState<boolean>(false);
+    const [keepDefaultMaxWidth, setKeepDefaultMaxWidth] =
+        React.useState<boolean>(props.value.trim() !== "");
 
     const handleInputEnabledChange = (enabled: boolean) => {
         if (props.setInputEnabled) {
@@ -30,10 +30,10 @@ function SelectInput(props: SelectInputProps) {
     return (
         <TextField
             onFocus={() => {
-                setApplyTransformation(true);
+                setKeepDefaultMaxWidth(true);
             }}
             onBlur={() => {
-                setApplyTransformation(props.value.trim() !== "");
+                setKeepDefaultMaxWidth(props.value.trim() !== "");
             }}
             className={props.customClass}
             label={props.label}
@@ -45,10 +45,11 @@ function SelectInput(props: SelectInputProps) {
             slotProps={{
                 inputLabel: {
                     sx: {
-                        ...(applyTransformation
+                        ...(keepDefaultMaxWidth
                             ? {}
                             : {
                                   maxWidth: `calc(100% - 80px) !important`,
+                                  backgroundColor: "pink",
                               }),
                     },
                 },

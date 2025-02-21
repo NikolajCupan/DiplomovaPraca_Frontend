@@ -115,21 +115,27 @@ export default function CustomizedMenus() {
                 <a href={Constants.SIMPLE_EXP_SMOOTHING}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        Jednoduché exponenciálne vyrovnávanie
+                        <div style={{ textWrap: "balance" }}>
+                            Jednoduché exponenciálne vyrovnávanie
+                        </div>
                     </MenuItem>
                 </a>
 
                 <a href={Constants.DOUBLE_EXP_SMOOTHING}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        Dvojité exponenciálne vyrovnávanie
+                        <div style={{ textWrap: "balance" }}>
+                            Dvojité exponenciálne vyrovnávanie
+                        </div>
                     </MenuItem>
                 </a>
 
                 <a href={Constants.HOLT_WINTER_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        Exponenciálne vyrovnávanie Holt-Winter
+                        <div style={{ textWrap: "balance" }}>
+                            Exponenciálne vyrovnávanie Holt-Winter
+                        </div>
                     </MenuItem>
                 </a>
             </StyledMenu>

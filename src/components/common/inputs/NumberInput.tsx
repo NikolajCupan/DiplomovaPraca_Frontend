@@ -25,8 +25,8 @@ interface NumberInputProps {
 }
 
 function NumberInput(props: NumberInputProps) {
-    const [applyTransformation, setApplyTransformation] =
-        React.useState<boolean>(false);
+    const [keepDefaultMaxWidth, setKeepDefaultMaxWidth] =
+        React.useState<boolean>(props.value.toString().trim() !== "");
 
     const handleChangeValue = (newValue: string) => {
         const numericValue = Number(newValue);
@@ -89,7 +89,7 @@ function NumberInput(props: NumberInputProps) {
     return (
         <TextField
             onFocus={() => {
-                setApplyTransformation(true);
+                setKeepDefaultMaxWidth(true);
             }}
             className={props.customClass}
             label={props.label}
@@ -99,14 +99,14 @@ function NumberInput(props: NumberInputProps) {
             value={props.value}
             onChange={(event) => handleChangeValue(event.target.value)}
             onBlur={(event) => {
-                setApplyTransformation(props.value.toString().trim() !== "");
+                setKeepDefaultMaxWidth(props.value.toString().trim() !== "");
                 handleBlur(event.target.value);
             }}
             disabled={!props.inputEnabled}
             slotProps={{
                 inputLabel: {
                     sx: {
-                        ...(applyTransformation
+                        ...(keepDefaultMaxWidth
                             ? {}
                             : {
                                   maxWidth: `calc(100% - 80px) !important`,
