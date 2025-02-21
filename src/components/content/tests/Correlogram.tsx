@@ -56,7 +56,9 @@ function Correlogram() {
         return (
             <>
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <ConfidenceIntervalChartWrapper
                         label={"ACF"}
@@ -73,7 +75,9 @@ function Correlogram() {
                 </ScrollableContainer>
 
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <ConfidenceIntervalChartWrapper
                         label={"PACF"}

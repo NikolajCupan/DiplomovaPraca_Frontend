@@ -31,7 +31,9 @@ function ResidualsChart(props: ResidualsChartProps) {
 
     return (
         <ScrollableContainer
-            breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+            breakpointWidth={
+                Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+            }
         >
             <LineChartWrapper
                 label={"Reziduum"}

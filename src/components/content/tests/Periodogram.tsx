@@ -41,7 +41,9 @@ function Periodogram() {
     const chartsContent = (
         <>
             <ScrollableContainer
-                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                breakpointWidth={
+                    Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                }
             >
                 <LineChartWrapper
                     label={"Frekvencia"}
@@ -53,7 +55,9 @@ function Periodogram() {
             </ScrollableContainer>
 
             <ScrollableContainer
-                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                breakpointWidth={
+                    Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                }
             >
                 <LineChartWrapper
                     label={"Perióda"}

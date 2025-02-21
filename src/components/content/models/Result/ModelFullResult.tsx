@@ -71,7 +71,9 @@ function ModelFullResult(props: ModelFullResultProps) {
                 <ModelResultDataTable responseBody={props.responseBody} />
 
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <RealPredictedDataChart
                         responseBody={props.responseBody}
@@ -94,7 +96,9 @@ function ModelFullResult(props: ModelFullResultProps) {
                 />
 
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <RealPredictedDataChart
                         responseBody={props.responseBody}
@@ -104,7 +108,9 @@ function ModelFullResult(props: ModelFullResultProps) {
                 </ScrollableContainer>
 
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <ResidualsChart
                         responseBody={props.responseBody}
@@ -124,7 +130,9 @@ function ModelFullResult(props: ModelFullResultProps) {
                     />
 
                     <ScrollableContainer
-                        breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                        breakpointWidth={
+                            Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                        }
                     >
                         <RealPredictedDataChart
                             responseBody={props.responseBody}
@@ -134,7 +142,9 @@ function ModelFullResult(props: ModelFullResultProps) {
                     </ScrollableContainer>
 
                     <ScrollableContainer
-                        breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                        breakpointWidth={
+                            Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                        }
                     >
                         <ResidualsChart
                             responseBody={props.responseBody}

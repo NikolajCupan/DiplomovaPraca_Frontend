@@ -92,7 +92,9 @@ const Transformation: React.FC<TransformationProps> = ({ Component }) => {
         return (
             <>
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <LineChartWrapper
                         label={"Pôvodné dáta"}
@@ -106,7 +108,9 @@ const Transformation: React.FC<TransformationProps> = ({ Component }) => {
                 </ScrollableContainer>
 
                 <ScrollableContainer
-                    breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
                 >
                     <LineChartWrapper
                         label={"Modifikované dáta"}

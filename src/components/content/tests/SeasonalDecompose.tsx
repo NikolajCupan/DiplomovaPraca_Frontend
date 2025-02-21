@@ -41,7 +41,9 @@ function SeasonalDecompose() {
     const chartsContent = (
         <>
             <ScrollableContainer
-                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                breakpointWidth={
+                    Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                }
                 customStyle={{ marginBottom: "20px" }}
             >
                 <LineChartWrapper
@@ -53,7 +55,9 @@ function SeasonalDecompose() {
             </ScrollableContainer>
 
             <ScrollableContainer
-                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                breakpointWidth={
+                    Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                }
                 customStyle={{ marginBottom: "20px" }}
             >
                 <LineChartWrapper
@@ -65,7 +69,9 @@ function SeasonalDecompose() {
             </ScrollableContainer>
 
             <ScrollableContainer
-                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                breakpointWidth={
+                    Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                }
                 customStyle={{ marginBottom: "20px" }}
             >
                 <LineChartWrapper
@@ -77,7 +83,9 @@ function SeasonalDecompose() {
             </ScrollableContainer>
 
             <ScrollableContainer
-                breakpointWidth={Constants.DEFAULT_BREAKPOINT_WIDTH}
+                breakpointWidth={
+                    Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                }
             >
                 <LineChartWrapper
                     label={"reziduá"}
