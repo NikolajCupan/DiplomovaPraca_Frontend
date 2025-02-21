@@ -43,7 +43,6 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
     const [gamma, setGamma] = React.useState<number>(0.15);
 
     const [forecastCount, setForecastCount] = React.useState<number>(0);
-    const [pValueTests, setPValueTests] = React.useState<number>(0.05);
 
     const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
@@ -78,7 +77,6 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
                 Constants.FORECAST_COUNT_KEY,
                 forecastCount.toString(),
             );
-            formData.append("pValueTests", pValueTests.toString());
 
             const request: Type.FetchRequest = {
                 url: Constants.BACKEND_PATH + Constants.HOLT_WINTER,
@@ -255,20 +253,6 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
                     />
                 </Grid>
             </Grid>
-
-            <NumberInput
-                customClass="custom-form-component-margin-top"
-                value={pValueTests}
-                setValue={setPValueTests}
-                toggleable={false}
-                inputEnabled={true}
-                limitValuesAllowed={false}
-                label={"Hladina významnosti testov"}
-                defaultValue={0.05}
-                minValue={0}
-                maxValue={1}
-                step={0.01}
-            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}
