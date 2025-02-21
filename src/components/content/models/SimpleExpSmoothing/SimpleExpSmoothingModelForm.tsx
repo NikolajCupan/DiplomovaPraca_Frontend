@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface SimpleExpSmoothingFormProps {
+interface SimpleExpSmoothingModelFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -21,7 +21,7 @@ interface SimpleExpSmoothingFormProps {
     >;
 }
 
-function SimpleExpSmoothingForm(props: SimpleExpSmoothingFormProps) {
+function SimpleExpSmoothingModelForm(props: SimpleExpSmoothingModelFormProps) {
     const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -167,4 +167,4 @@ function SimpleExpSmoothingForm(props: SimpleExpSmoothingFormProps) {
     );
 }
 
-export default SimpleExpSmoothingForm;
+export default SimpleExpSmoothingModelForm;

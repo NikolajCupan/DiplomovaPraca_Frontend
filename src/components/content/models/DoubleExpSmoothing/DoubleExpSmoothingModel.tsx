@@ -2,11 +2,11 @@ import * as Type from "../../../../helpers/Types.tsx";
 import "../../../../index.css";
 import Layout from "../../../layout/Layout.tsx";
 import ModelFullResult from "../Result/ModelFullResult.tsx";
-import DoubleExpSmoothingForm from "./DoubleExpSmoothingForm.tsx";
+import DoubleExpSmoothingModelForm from "./DoubleExpSmoothingModelForm.tsx";
 
 import * as React from "react";
 
-function DoubleExpSmoothing() {
+function DoubleExpSmoothingModel() {
     const [actionInProgress, setActionInProgress] =
         React.useState<boolean>(false);
     const [responseBody, setResponseBody] =
@@ -15,7 +15,7 @@ function DoubleExpSmoothing() {
     const content = (
         <>
             <div className="custom-container">
-                <DoubleExpSmoothingForm
+                <DoubleExpSmoothingModelForm
                     actionInProgress={actionInProgress}
                     setActionInProgress={setActionInProgress}
                     responseBody={responseBody}
@@ -33,4 +33,4 @@ function DoubleExpSmoothing() {
     return <Layout component={content} />;
 }
 
-export default DoubleExpSmoothing;
+export default DoubleExpSmoothingModel;

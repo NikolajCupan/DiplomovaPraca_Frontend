@@ -1,3 +1,4 @@
+import * as Constants from "../../../../helpers/Constants.tsx";
 import * as Helper from "../../../../helpers/Helper.tsx";
 import * as Type from "../../../../helpers/Types.tsx";
 import "../../../../index.css";
@@ -139,6 +140,11 @@ function LineChartWrapper(props: LineChartProps) {
                         },
                     ]}
                     height={props.height}
+                    {...(yChartDataArray.length >
+                        Constants.CHART_MAX_DATA_HOVER && {
+                        sx: { pointerEvents: "none" },
+                        skipAnimation: true,
+                    })}
                 />
 
                 {getSliderElement()}

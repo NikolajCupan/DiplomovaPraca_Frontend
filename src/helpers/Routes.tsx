@@ -2,9 +2,10 @@ import Data from "../components/content/data/Data.tsx";
 import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
 import ArimaModel from "../components/content/models/Arima/ArimaModel.tsx";
-import DoubleExpSmoothing from "../components/content/models/DoubleExpSmoothing/DoubleExpSmoothing.tsx";
+import DoubleExpSmoothingModel from "../components/content/models/DoubleExpSmoothing/DoubleExpSmoothingModel.tsx";
+import GarchModel from "../components/content/models/Garch/GarchModel.tsx";
 import HoltWinterModel from "../components/content/models/HoltWinter/HoltWinterModel.tsx";
-import SimpleExpSmoothing from "../components/content/models/SimpleExpSmoothing/SimpleExpSmoothing.tsx";
+import SimpleExpSmoothingModel from "../components/content/models/SimpleExpSmoothing/SimpleExpSmoothingModel.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
 import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
@@ -82,12 +83,16 @@ export const ROUTES = [
         element: <ArimaModel />,
     },
     {
+        path: Constants.GARCH_LINK,
+        element: <GarchModel />,
+    },
+    {
         path: Constants.SIMPLE_EXP_SMOOTHING_LINK,
-        element: <SimpleExpSmoothing />,
+        element: <SimpleExpSmoothingModel />,
     },
     {
         path: Constants.DOUBLE_EXP_SMOOTHING_LINK,
-        element: <DoubleExpSmoothing />,
+        element: <DoubleExpSmoothingModel />,
     },
     {
         path: Constants.HOLT_WINTER,

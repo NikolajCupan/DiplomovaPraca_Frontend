@@ -13,6 +13,8 @@ export const NOTIFICATION_CLOSE_MS = 5_000;
 
 export const DEFAULT_CHART_HEIGHT = 400;
 export const DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH = 600;
+
+export const CHART_MAX_DATA_HOVER = 1_000;
 // UI end
 //
 
@@ -95,6 +97,7 @@ export const STANDARDIZATION_LINK = "/transformation/standardization";
 
 // Models
 export const ARIMA_LINK = "/model/arima";
+export const GARCH_LINK = "/model/garch";
 export const SIMPLE_EXP_SMOOTHING_LINK = "/model/simple-exp-smoothing";
 export const DOUBLE_EXP_SMOOTHING_LINK = "/model/double-exp-smoothing";
 export const HOLT_WINTER_LINK = "/model/holt-winter";
@@ -136,6 +139,7 @@ export const STANDARDIZATION = "/transformation/standardization";
 
 // Models
 export const ARIMA = "/model/arima";
+export const GARCH = "/model/garch";
 export const SIMPLE_EXP_SMOOTHING = "/model/simple-exp-smoothing";
 export const DOUBLE_EXP_SMOOTHING = "/model/double-exp-smoothing";
 export const HOLT_WINTER = "/model/holt-winter";

@@ -141,6 +141,13 @@ function RealPredictedDataChart(props: RealPredictedDataChartProps) {
                         },
                     ]}
                     height={props.height}
+                    {...((real_yChartDataArray.length >
+                        Constants.CHART_MAX_DATA_HOVER ||
+                        fitted_yChartDataArray.length >
+                            Constants.CHART_MAX_DATA_HOVER) && {
+                        sx: { pointerEvents: "none" },
+                        skipAnimation: true,
+                    })}
                 />
             </>
         );

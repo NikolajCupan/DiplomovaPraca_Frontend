@@ -76,6 +76,7 @@ function ArimaModel() {
             </div>
         );
     };
+
     const content = (
         <>
             <div className="custom-container">

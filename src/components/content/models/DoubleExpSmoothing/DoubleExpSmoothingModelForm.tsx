@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface DoubleExpSmoothingFormProps {
+interface DoubleExpSmoothingModelFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -21,7 +21,7 @@ interface DoubleExpSmoothingFormProps {
     >;
 }
 
-function DoubleExpSmoothingForm(props: DoubleExpSmoothingFormProps) {
+function DoubleExpSmoothingModelForm(props: DoubleExpSmoothingModelFormProps) {
     const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -188,4 +188,4 @@ function DoubleExpSmoothingForm(props: DoubleExpSmoothingFormProps) {
     );
 }
 
-export default DoubleExpSmoothingForm;
+export default DoubleExpSmoothingModelForm;
