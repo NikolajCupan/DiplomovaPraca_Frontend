@@ -112,6 +112,13 @@ export default function CustomizedMenus() {
                     </MenuItem>
                 </a>
 
+                <a href={Constants.DOUBLE_EXP_SMOOTHING}>
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
+                        Dvojité exponenciálne vyrovnávanie
+                    </MenuItem>
+                </a>
+
                 <a href={Constants.HOLT_WINTER_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
