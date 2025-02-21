@@ -62,7 +62,7 @@ function CorrelogramForm(props: CorrelogramFormProps) {
 
     const [method, setMethod] = React.useState<string>("");
     const [methodEnabled, setMethodEnabled] = React.useState<boolean>(false);
-    // PACF ENd
+    // PACF END
 
     const handleAcfRequest = async () => {
         try {
@@ -161,11 +161,23 @@ function CorrelogramForm(props: CorrelogramFormProps) {
                 !pacfResponse.ok
             ) {
                 props.setResponseBody(null);
-                openNotification(
-                    "Pri vykonávaní akcie nastala chyba",
-                    "white",
-                    "red",
-                );
+
+                if (
+                    (acfResponse !== null && acfResponse.status === 408) ||
+                    (pacfResponse !== null && pacfResponse.status === 408)
+                ) {
+                    openNotification(
+                        "Vypršal čas na spracovanie požiadavky",
+                        "white",
+                        "red",
+                    );
+                } else {
+                    openNotification(
+                        "Pri vykonávaní akcie nastala chyba",
+                        "white",
+                        "red",
+                    );
+                }
             } else {
                 CookiesManager.processResponse(acfResponse);
                 CookiesManager.processResponse(pacfResponse);

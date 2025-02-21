@@ -30,7 +30,7 @@ interface LogarithmFormProps {
 }
 
 function LogarithmForm(props: LogarithmFormProps) {
-    const { openNotification } = Utility.useUtility();
+    const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -106,13 +106,7 @@ function LogarithmForm(props: LogarithmFormProps) {
                 );
             } else {
                 props.setResponseBody(null);
-                openNotification(
-                    responseBody.message.trim() === ""
-                        ? "Pri vykonávaní akcie nastala chyba"
-                        : responseBody.message,
-                    "white",
-                    "red",
-                );
+                openSuitableNotification(response, responseBody);
             }
         } catch {
             props.setResponseBody(null);

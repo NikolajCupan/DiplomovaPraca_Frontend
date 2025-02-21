@@ -1,4 +1,5 @@
 import * as Constants from "./Constants.tsx";
+import * as Type from "./Types.tsx";
 
 import { Box, SnackbarContent } from "@mui/material";
 import MuiModal from "@mui/material/Modal";
@@ -37,6 +38,10 @@ interface UtilityContextProps {
         message: string,
         textColor: string,
         backgroundColor: string,
+    ) => void;
+    openSuitableNotification: (
+        response: Response,
+        responseBody: Type.RequestResult,
     ) => void;
     closeNotification: () => void;
 }
@@ -88,6 +93,27 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
         [],
     );
 
+    const openSuitableNotification = React.useCallback(
+        (response: Response, responseBody: Type.RequestResult) => {
+            if (response.status === 400) {
+                openNotification(
+                    responseBody.message.trim() === ""
+                        ? "Pri vykonávaní akcie nastala chyba"
+                        : responseBody.message,
+                    "white",
+                    "red",
+                );
+            } else if (response.status === 408) {
+                openNotification(
+                    "Vypršal čas na spracovanie požiadavky",
+                    "white",
+                    "red",
+                );
+            }
+        },
+        [],
+    );
+
     const closeNotification = React.useCallback(() => {
         clearTimeout(timeoutRef.current);
         setNotificationContent(null);
@@ -103,6 +129,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
                 isNotificationOpen: isNotificationOpen,
                 notificationContent,
                 openNotification,
+                openSuitableNotification,
                 closeNotification,
             }}
         >

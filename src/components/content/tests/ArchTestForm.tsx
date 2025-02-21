@@ -23,7 +23,7 @@ interface ArchTestFormProps {
 }
 
 function ArchTestForm(props: ArchTestFormProps) {
-    const { openNotification } = Utility.useUtility();
+    const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -79,13 +79,7 @@ function ArchTestForm(props: ArchTestFormProps) {
                 props.setResponseBody(responseBody);
             } else {
                 props.setResponseBody(null);
-                openNotification(
-                    responseBody.message.trim() === ""
-                        ? "Pri vykonávaní testu nastala chyba"
-                        : responseBody.message,
-                    "white",
-                    "red",
-                );
+                openSuitableNotification(response, responseBody);
             }
         } catch {
             props.setResponseBody(null);

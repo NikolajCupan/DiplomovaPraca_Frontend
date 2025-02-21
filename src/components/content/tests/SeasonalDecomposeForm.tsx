@@ -25,7 +25,7 @@ interface SeasonalDecomposeFormProps {
 }
 
 function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
-    const { openNotification } = Utility.useUtility();
+    const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -85,13 +85,7 @@ function SeasonalDecomposeForm(props: SeasonalDecomposeFormProps) {
                 props.setResponseBody(responseBody);
             } else {
                 props.setResponseBody(null);
-                openNotification(
-                    responseBody.message.trim() === ""
-                        ? "Pri vykonávaní akcie nastala chyba"
-                        : responseBody.message,
-                    "white",
-                    "red",
-                );
+                openSuitableNotification(response, responseBody);
             }
         } catch {
             props.setResponseBody(null);

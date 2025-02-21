@@ -28,7 +28,7 @@ interface StandardizationFormProps {
 }
 
 function StandardizationForm(props: StandardizationFormProps) {
-    const { openNotification } = Utility.useUtility();
+    const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -40,7 +40,7 @@ function StandardizationForm(props: StandardizationFormProps) {
     const [mean, setMean] = React.useState<number>(0);
     const [standardDeviation, setStandardDeviation] = React.useState<number>(1);
 
-const handleConfirmButtonClick = async () => {
+    const handleConfirmButtonClick = async () => {
         if (props.actionInProgress) {
             return;
         }
@@ -97,13 +97,7 @@ const handleConfirmButtonClick = async () => {
                 );
             } else {
                 props.setResponseBody(null);
-                openNotification(
-                    responseBody.message.trim() === ""
-                        ? "Pri vykonávaní akcie nastala chyba"
-                        : responseBody.message,
-                    "white",
-                    "red",
-                );
+                openSuitableNotification(response, responseBody);
             }
         } catch {
             props.setResponseBody(null);

@@ -7,7 +7,7 @@ export const MAX_FILE_SIZE_BYTES = 25_000_000;
 export const SESSION_COOKIE_NAME = "session_cookie_id";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
-export const NOTIFICATION_CLOSE_MS = 3_000;
+export const NOTIFICATION_CLOSE_MS = 5_000;
 
 export const DEFAULT_CHART_HEIGHT = 400;
 export const DEFAULT_BREAKPOINT_WIDTH = 600;
