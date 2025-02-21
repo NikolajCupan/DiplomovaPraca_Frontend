@@ -1,5 +1,5 @@
-import * as Helper from "../../../helpers/Helper.tsx";
-import * as Type from "../../../helpers/Types.tsx";
+import * as Helper from "../../../../helpers/Helper.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
 
 import { TableContainer } from "@mui/material";
 import Table from "@mui/material/Table";

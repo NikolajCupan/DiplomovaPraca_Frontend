@@ -1,6 +1,6 @@
-import * as Constants from "../../../helpers/Constants.tsx";
-import * as Helper from "../../../helpers/Helper.tsx";
-import * as Type from "../../../helpers/Types.tsx";
+import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Helper from "../../../../helpers/Helper.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
 
 import {
     Table,
@@ -14,11 +14,11 @@ import {
 import * as React from "react";
 import { TableComponents, TableVirtuoso } from "react-virtuoso";
 
-interface ModelResultTableProps {
+interface ModelResultDataTableProps {
     responseBody: Type.RequestResult | null;
 }
 
-function ModelResultTable(props: ModelResultTableProps) {
+function ModelResultDataTable(props: ModelResultDataTableProps) {
     const [tableData, setTableData] = React.useState<Record<string, any>[]>([]);
 
     React.useEffect(() => {
@@ -209,4 +209,4 @@ function ModelResultTable(props: ModelResultTableProps) {
     );
 }
 
-export default ModelResultTable;
+export default ModelResultDataTable;

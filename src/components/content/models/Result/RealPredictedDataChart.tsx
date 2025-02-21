@@ -1,20 +1,20 @@
-import * as Constants from "../../../helpers/Constants.tsx";
-import * as Helper from "../../../helpers/Helper.tsx";
-import * as Type from "../../../helpers/Types.tsx";
-import "../../../index.css";
-import ChartDataManager from "../../common/elements/charts/ChartDataManager.tsx";
+import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Helper from "../../../../helpers/Helper.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
+import "../../../../index.css";
+import ChartDataManager from "../../../common/elements/charts/ChartDataManager.tsx";
 
 import { LineChart } from "@mui/x-charts";
 
 import * as React from "react";
 
-interface RealPredictedChartProps {
+interface RealPredictedDataChartProps {
     responseBody: Type.RequestResult | null;
     jsonKey: string;
     height: number;
 }
 
-function RealPredictedChart(props: RealPredictedChartProps) {
+function RealPredictedDataChart(props: RealPredictedDataChartProps) {
     const [jsonReal, setJsonReal] = React.useState<Type.RequestResult | null>(
         null,
     );
@@ -196,4 +196,4 @@ function RealPredictedChart(props: RealPredictedChartProps) {
     );
 }
 
-export default RealPredictedChart;
+export default RealPredictedDataChart;

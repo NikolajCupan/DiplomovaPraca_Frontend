@@ -1,5 +1,7 @@
 import * as Type from "../../../../helpers/Types.tsx";
+import "../../../../index.css";
 import Layout from "../../../layout/Layout.tsx";
+import ModelFullResult from "../Result/ModelFullResult.tsx";
 import HoltWinterModelForm from "./HoltWinterModelForm.tsx";
 
 import * as React from "react";
@@ -20,6 +22,11 @@ function HoltWinterModel() {
                     setResponseBody={setResponseBody}
                 />
             </div>
+
+            <ModelFullResult
+                responseBody={responseBody}
+                actionInProgress={actionInProgress}
+            />
         </>
     );
 

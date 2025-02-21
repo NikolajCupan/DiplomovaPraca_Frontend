@@ -6,6 +6,7 @@ import Header from "../../../common/elements/Header.tsx";
 import ConfirmButton from "../../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../../common/inputs/NumberInput.tsx";
+import SelectInput from "../../../common/inputs/SelectInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
@@ -34,6 +35,13 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
     const [trainPercent, setTrainPercent] = React.useState<number>(80);
     const [seasonLength, setSeasonLength] = React.useState<number>(12);
 
+    const [trendType, setTrendType] = React.useState<string>("add");
+    const [seasonType, setSeasonType] = React.useState<string>("add");
+
+    const [alpha, setAlpha] = React.useState<number>(0.15);
+    const [beta, setBeta] = React.useState<number>(0.15);
+    const [gamma, setGamma] = React.useState<number>(0.15);
+
     const [forecastCount, setForecastCount] = React.useState<number>(0);
     const [pValueTests, setPValueTests] = React.useState<number>(0.05);
 
@@ -58,6 +66,13 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
 
             formData.append("train_percent", trainPercent.toString());
             formData.append("season_length", seasonLength.toString());
+
+            formData.append("trend_type", trendType);
+            formData.append("season_type", seasonType);
+
+            formData.append("alpha", alpha.toString());
+            formData.append("beta", beta.toString());
+            formData.append("gamma", gamma.toString());
 
             formData.append(
                 Constants.FORECAST_COUNT_KEY,
@@ -159,6 +174,79 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
 
             <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
+                    <SelectInput
+                        customClass="custom-form-component-margin-top"
+                        label={"Typ trendu"}
+                        value={trendType}
+                        setValue={setTrendType}
+                        toggleable={false}
+                        inputEnabled={true}
+                        menuItems={[
+                            ["add", "Aditívny"],
+                            ["mul", "Multiplikatívny"],
+                        ]}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <SelectInput
+                        customClass="custom-form-component-margin-top"
+                        label={"Typ sezónnosti"}
+                        value={seasonType}
+                        setValue={setSeasonType}
+                        toggleable={false}
+                        inputEnabled={true}
+                        menuItems={[
+                            ["add", "Aditívna"],
+                            ["mul", "Multiplikatívna"],
+                        ]}
+                    />
+                </Grid>
+            </Grid>
+
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={alpha}
+                        setValue={setAlpha}
+                        toggleable={false}
+                        inputEnabled={true}
+                        label={"Alfa"}
+                        defaultValue={0}
+                        minValue={0}
+                        step={0.01}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={beta}
+                        setValue={setBeta}
+                        toggleable={false}
+                        inputEnabled={true}
+                        label={"Beta"}
+                        defaultValue={0}
+                        minValue={0}
+                        step={0.01}
+                    />
+                </Grid>
+            </Grid>
+
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={gamma}
+                        setValue={setGamma}
+                        toggleable={false}
+                        inputEnabled={true}
+                        label={"Gamma"}
+                        defaultValue={0}
+                        minValue={0}
+                        step={0.01}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
                         customClass="custom-form-component-margin-top"
                         value={forecastCount}
@@ -172,22 +260,21 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
                         step={1}
                     />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={pValueTests}
-                        setValue={setPValueTests}
-                        toggleable={false}
-                        inputEnabled={true}
-                        limitValuesAllowed={false}
-                        label={"Hladina významnosti testov"}
-                        defaultValue={0.05}
-                        minValue={0}
-                        maxValue={1}
-                        step={0.01}
-                    />
-                </Grid>
             </Grid>
+
+            <NumberInput
+                customClass="custom-form-component-margin-top"
+                value={pValueTests}
+                setValue={setPValueTests}
+                toggleable={false}
+                inputEnabled={true}
+                limitValuesAllowed={false}
+                label={"Hladina významnosti testov"}
+                defaultValue={0.05}
+                minValue={0}
+                maxValue={1}
+                step={0.01}
+            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}

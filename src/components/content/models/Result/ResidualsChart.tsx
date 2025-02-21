@@ -1,8 +1,8 @@
-import * as Constants from "../../../helpers/Constants.tsx";
-import * as Helper from "../../../helpers/Helper.tsx";
-import * as Type from "../../../helpers/Types.tsx";
-import ScrollableContainer from "../../common/elements/ScrollableContainer.tsx";
-import LineChartWrapper from "../../common/elements/charts/LineChartWrapper.tsx";
+import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Helper from "../../../../helpers/Helper.tsx";
+import * as Type from "../../../../helpers/Types.tsx";
+import ScrollableContainer from "../../../common/elements/ScrollableContainer.tsx";
+import LineChartWrapper from "../../../common/elements/charts/LineChartWrapper.tsx";
 
 interface ResidualsChartProps {
     responseBody: Type.RequestResult | null;
