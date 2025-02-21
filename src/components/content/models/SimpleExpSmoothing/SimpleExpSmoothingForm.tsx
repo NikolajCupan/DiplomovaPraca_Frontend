@@ -6,13 +6,12 @@ import Header from "../../../common/elements/Header.tsx";
 import ConfirmButton from "../../../common/inputs/ConfirmButton.tsx";
 import DatasetSelector from "../../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../../common/inputs/NumberInput.tsx";
-import SelectInput from "../../../common/inputs/SelectInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
 
-interface HoltWinterModelFormProps {
+interface SimpleExpSmoothingFormProps {
     actionInProgress: boolean;
     setActionInProgress: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -22,7 +21,7 @@ interface HoltWinterModelFormProps {
     >;
 }
 
-function HoltWinterModelForm(props: HoltWinterModelFormProps) {
+function SimpleExpSmoothingForm(props: SimpleExpSmoothingFormProps) {
     const { openNotification, openSuitableNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
@@ -33,14 +32,7 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
         React.useState<Type.DatasetInfo | null>(null);
 
     const [trainPercent, setTrainPercent] = React.useState<number>(80);
-    const [seasonLength, setSeasonLength] = React.useState<number>(12);
-
-    const [trendType, setTrendType] = React.useState<string>("add");
-    const [seasonType, setSeasonType] = React.useState<string>("add");
-
     const [alpha, setAlpha] = React.useState<number>(0.15);
-    const [beta, setBeta] = React.useState<number>(0.15);
-    const [gamma, setGamma] = React.useState<number>(0.15);
 
     const [forecastCount, setForecastCount] = React.useState<number>(0);
 
@@ -64,14 +56,7 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
             );
 
             formData.append("train_percent", trainPercent.toString());
-            formData.append("season_length", seasonLength.toString());
-
-            formData.append("trend_type", trendType);
-            formData.append("season_type", seasonType);
-
             formData.append("alpha", alpha.toString());
-            formData.append("beta", beta.toString());
-            formData.append("gamma", gamma.toString());
 
             formData.append(
                 Constants.FORECAST_COUNT_KEY,
@@ -79,7 +64,7 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
             );
 
             const request: Type.FetchRequest = {
-                url: Constants.BACKEND_PATH + Constants.HOLT_WINTER,
+                url: Constants.BACKEND_PATH + Constants.SIMPLE_EXP_SMOOTHING,
                 options: {
                     method: "post",
                     body: formData,
@@ -113,10 +98,10 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
     return (
         <>
             <Header
-                text={"Exponenciálne vyrovnávanie Holt-Winter"}
-                breakpointWidth={760}
+                text={"Jednoduché exponenciálne vyrovnávanie"}
+                breakpointWidth={800}
                 link={
-                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.ExponentialSmoothing.html"
+                    "https://www.statsmodels.org/dev/generated/statsmodels.tsa.holtwinters.SimpleExpSmoothing.html"
                 }
             />
 
@@ -146,54 +131,6 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
                         customClass="custom-form-component-margin-top"
-                        value={seasonLength}
-                        setValue={setSeasonLength}
-                        toggleable={false}
-                        inputEnabled={true}
-                        decimalValuesAllowed={false}
-                        label={"Dĺžka sezóny"}
-                        defaultValue={12}
-                        minValue={1}
-                        step={1}
-                    />
-                </Grid>
-            </Grid>
-
-            <Grid container columnSpacing={4}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <SelectInput
-                        customClass="custom-form-component-margin-top"
-                        label={"Typ trendu"}
-                        value={trendType}
-                        setValue={setTrendType}
-                        toggleable={false}
-                        inputEnabled={true}
-                        menuItems={[
-                            ["add", "Aditívny"],
-                            ["mul", "Multiplikatívny"],
-                        ]}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <SelectInput
-                        customClass="custom-form-component-margin-top"
-                        label={"Typ sezónnosti"}
-                        value={seasonType}
-                        setValue={setSeasonType}
-                        toggleable={false}
-                        inputEnabled={true}
-                        menuItems={[
-                            ["add", "Aditívna"],
-                            ["mul", "Multiplikatívna"],
-                        ]}
-                    />
-                </Grid>
-            </Grid>
-
-            <Grid container columnSpacing={4}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
                         value={alpha}
                         setValue={setAlpha}
                         toggleable={false}
@@ -204,50 +141,20 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
                         step={0.01}
                     />
                 </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={beta}
-                        setValue={setBeta}
-                        toggleable={false}
-                        inputEnabled={true}
-                        label={"Beta"}
-                        defaultValue={0}
-                        minValue={0}
-                        step={0.01}
-                    />
-                </Grid>
             </Grid>
 
-            <Grid container columnSpacing={4}>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={gamma}
-                        setValue={setGamma}
-                        toggleable={false}
-                        inputEnabled={true}
-                        label={"Gamma"}
-                        defaultValue={0}
-                        minValue={0}
-                        step={0.01}
-                    />
-                </Grid>
-                <Grid size={{ xs: 12, sm: 6 }}>
-                    <NumberInput
-                        customClass="custom-form-component-margin-top"
-                        value={forecastCount}
-                        setValue={setForecastCount}
-                        toggleable={false}
-                        inputEnabled={true}
-                        decimalValuesAllowed={false}
-                        label={"Počet predikcií"}
-                        defaultValue={0}
-                        minValue={0}
-                        step={1}
-                    />
-                </Grid>
-            </Grid>
+            <NumberInput
+                customClass="custom-form-component-margin-top"
+                value={forecastCount}
+                setValue={setForecastCount}
+                toggleable={false}
+                inputEnabled={true}
+                decimalValuesAllowed={false}
+                label={"Počet predikcií"}
+                defaultValue={0}
+                minValue={0}
+                step={1}
+            />
 
             <ConfirmButton
                 action={handleConfirmButtonClick}
@@ -260,4 +167,4 @@ function HoltWinterModelForm(props: HoltWinterModelFormProps) {
     );
 }
 
-export default HoltWinterModelForm;
+export default SimpleExpSmoothingForm;

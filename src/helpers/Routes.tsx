@@ -3,6 +3,7 @@ import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
 import ArimaModel from "../components/content/models/Arima/ArimaModel.tsx";
 import HoltWinterModel from "../components/content/models/HoltWinter/HoltWinterModel.tsx";
+import SimpleExpSmoothing from "../components/content/models/SimpleExpSmoothing/SimpleExpSmoothing.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
 import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
@@ -78,6 +79,10 @@ export const ROUTES = [
     {
         path: Constants.ARIMA_LINK,
         element: <ArimaModel />,
+    },
+    {
+        path: Constants.SIMPLE_EXP_SMOOTHING_LINK,
+        element: <SimpleExpSmoothing />,
     },
     {
         path: Constants.HOLT_WINTER,
