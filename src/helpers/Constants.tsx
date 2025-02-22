@@ -4,6 +4,7 @@ export const STRICT_MODE = false;
 
 export const STRING_TRUE = "True";
 export const STRING_FALSE = "False";
+export const STRING_NONE = "None";
 // Other end
 //
 
@@ -97,7 +98,6 @@ export const STANDARDIZATION_LINK = "/transformation/standardization";
 
 // Models
 export const ARIMA_LINK = "/model/arima";
-export const GARCH_LINK = "/model/garch";
 export const SIMPLE_EXP_SMOOTHING_LINK = "/model/simple-exp-smoothing";
 export const DOUBLE_EXP_SMOOTHING_LINK = "/model/double-exp-smoothing";
 export const HOLT_WINTER_LINK = "/model/holt-winter";
@@ -139,7 +139,6 @@ export const STANDARDIZATION = "/transformation/standardization";
 
 // Models
 export const ARIMA = "/model/arima";
-export const GARCH = "/model/garch";
 export const SIMPLE_EXP_SMOOTHING = "/model/simple-exp-smoothing";
 export const DOUBLE_EXP_SMOOTHING = "/model/double-exp-smoothing";
 export const HOLT_WINTER = "/model/holt-winter";

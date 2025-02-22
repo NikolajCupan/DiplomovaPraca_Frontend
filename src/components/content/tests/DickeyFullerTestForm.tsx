@@ -189,7 +189,7 @@ function DickeyFullerTestForm(props: DickeyFullerTestFormProps) {
                             ["AIC", "AIC"],
                             ["BIC", "BIC"],
                             ["t-stat", "t-stat"],
-                            ["None", "Žiadny"],
+                            [Constants.STRING_NONE, "Žiadny"],
                         ]}
                     />
                 </Grid>

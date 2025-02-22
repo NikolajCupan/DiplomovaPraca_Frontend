@@ -49,7 +49,6 @@ function SelectInput(props: SelectInputProps) {
                             ? {}
                             : {
                                   maxWidth: `calc(100% - 80px) !important`,
-                                  backgroundColor: "pink",
                               }),
                     },
                 },
