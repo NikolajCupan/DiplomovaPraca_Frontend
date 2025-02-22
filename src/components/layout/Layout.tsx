@@ -6,8 +6,8 @@ import MenuModels from "./Menus/MenuModels.tsx";
 import MenuTests from "./Menus/MenuTests.tsx";
 import MenuTransformations from "./Menus/MenuTransformations.tsx";
 
-import AdbIcon from "@mui/icons-material/Adb";
 import MenuIcon from "@mui/icons-material/Menu";
+import SsidChartIcon from "@mui/icons-material/SsidChart";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -123,11 +123,12 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                 </Menu>
                             </Box>
 
-                            <AdbIcon
+                            <SsidChartIcon
                                 sx={{
                                     display: { xs: "flex", md: "none" },
                                     mr: 1,
                                 }}
+                                className="logo-small"
                             />
                             <Typography
                                 variant="h5"
@@ -143,7 +144,9 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                     textDecoration: "none",
                                 }}
                             >
-                                LOGO
+                                <span className="logo-small-text">
+                                    Diplomová práca
+                                </span>
                             </Typography>
 
                             <Box
@@ -166,7 +169,7 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                 </div>
                             </Box>
 
-                            <AdbIcon
+                            <SsidChartIcon
                                 sx={{
                                     display: { xs: "none", md: "flex" },
                                     mr: 1,
@@ -186,7 +189,7 @@ function ResponsiveAppBar(props: InternalComponentProps) {
                                     fontFamily: "inherit",
                                 }}
                             >
-                                LOGO
+                                Diplomová práca
                             </Typography>
                         </Toolbar>
                     </Container>

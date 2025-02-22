@@ -19,3 +19,13 @@
 .mini-menu-items * {
     min-height: 0 !important;
 }
+
+@media (width < 400px) {
+    .logo-small {
+        display: none !important;
+    }
+
+    .logo-small-text {
+        font-size: 20px;
+    }
+}
