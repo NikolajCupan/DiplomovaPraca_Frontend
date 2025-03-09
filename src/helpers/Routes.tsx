@@ -1,10 +1,11 @@
 import Data from "../components/content/data/Data.tsx";
 import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
 import Home from "../components/content/Home.tsx";
-import ArimaModel from "../components/content/models/Arima/ArimaModel.tsx";
-import DoubleExpSmoothingModel from "../components/content/models/DoubleExpSmoothing/DoubleExpSmoothingModel.tsx";
-import HoltWinterModel from "../components/content/models/HoltWinter/HoltWinterModel.tsx";
-import SimpleExpSmoothingModel from "../components/content/models/SimpleExpSmoothing/SimpleExpSmoothingModel.tsx";
+import ArimaModel from "../components/content/models/arima/ArimaModel.tsx";
+import DoubleExpSmoothingModel from "../components/content/models/doubleExpSmoothing/DoubleExpSmoothingModel.tsx";
+import HoltWinterModel from "../components/content/models/holtWinter/HoltWinterModel.tsx";
+import NeuralNetworkModel from "../components/content/models/neuralNetwork/NeuralNetworkModel.tsx";
+import SimpleExpSmoothingModel from "../components/content/models/simpleExpSmoothing/SimpleExpSmoothingModel.tsx";
 import ArchTest from "../components/content/tests/ArchTest.tsx";
 import Correlogram from "../components/content/tests/Correlogram.tsx";
 import DickerFullerTest from "../components/content/tests/DickeyFullerTest.tsx";
@@ -90,8 +91,12 @@ export const ROUTES = [
         element: <DoubleExpSmoothingModel />,
     },
     {
-        path: Constants.HOLT_WINTER,
+        path: Constants.HOLT_WINTER_LINK,
         element: <HoltWinterModel />,
+    },
+    {
+        path: Constants.NEURAL_NETWORK_LINK,
+        element: <NeuralNetworkModel />,
     },
     {
         path: Constants.TESTING_LINK,

@@ -1,7 +1,7 @@
 import * as Type from "../../../../helpers/Types.tsx";
 import "../../../../index.css";
 import Layout from "../../../layout/Layout.tsx";
-import ModelFullResult from "../Result/ModelFullResult.tsx";
+import ModelFullResult from "../result/ModelFullResult.tsx";
 import DoubleExpSmoothingModelForm from "./DoubleExpSmoothingModelForm.tsx";
 
 import * as React from "react";

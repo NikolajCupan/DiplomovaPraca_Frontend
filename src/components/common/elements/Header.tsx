@@ -1,6 +1,7 @@
+import ToolTipElement from "../../common/elements/ToolTipElement.tsx";
+
 import FindInPageIcon from "@mui/icons-material/FindInPage";
 import InfoIcon from "@mui/icons-material/Info";
-import ToolTipElement from "../../common/elements/ToolTipElement.tsx";
 
 import * as React from "react";
 

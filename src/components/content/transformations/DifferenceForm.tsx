@@ -87,11 +87,6 @@ function DifferenceForm(props: DifferenceFormProps) {
                 prevDatasetInfos.push(newDatasetInfo);
 
                 setDatasetInfos(prevDatasetInfos);
-                openNotification(
-                    "Akcia bola úspešne vykonaná",
-                    "white",
-                    "green",
-                );
             } else {
                 props.setResponseBody(null);
                 openSuitableNotification(response, responseBody);

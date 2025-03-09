@@ -2,11 +2,11 @@ import * as Type from "../../../../helpers/Types.tsx";
 import "../../../../index.css";
 import Layout from "../../../layout/Layout.tsx";
 import ModelFullResult from "../result/ModelFullResult.tsx";
-import SimpleExpSmoothingModelForm from "./SimpleExpSmoothingModelForm.tsx";
+import NeuralNetworkModelForm from "./NeuralNetworkModelForm.tsx";
 
 import * as React from "react";
 
-function SimpleExpSmoothingModel() {
+function NeuralNetworkModel() {
     const [actionInProgress, setActionInProgress] =
         React.useState<boolean>(false);
     const [responseBody, setResponseBody] =
@@ -15,7 +15,7 @@ function SimpleExpSmoothingModel() {
     const content = (
         <>
             <div className="custom-container">
-                <SimpleExpSmoothingModelForm
+                <NeuralNetworkModelForm
                     actionInProgress={actionInProgress}
                     setActionInProgress={setActionInProgress}
                     responseBody={responseBody}
@@ -33,4 +33,4 @@ function SimpleExpSmoothingModel() {
     return <Layout component={content} />;
 }
 
-export default SimpleExpSmoothingModel;
+export default NeuralNetworkModel;

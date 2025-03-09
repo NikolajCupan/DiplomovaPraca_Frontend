@@ -3,7 +3,7 @@ import "../../../../index.css";
 import Header from "../../../common/elements/Header.tsx";
 import ResultElement from "../../../common/elements/ResultElement.tsx";
 import Layout from "../../../layout/Layout.tsx";
-import ModelFullResult from "../Result/ModelFullResult.tsx";
+import ModelFullResult from "../result/ModelFullResult.tsx";
 import ArimaModelForm from "./ArimaModelForm.tsx";
 
 import * as React from "react";

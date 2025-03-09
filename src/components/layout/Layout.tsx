@@ -1,10 +1,10 @@
 import * as Utility from "../../helpers/UtilityProvider.tsx";
 import HelperElement from "./HelperElement.tsx";
 import "./LayoutStyles.css";
-import MenuData from "./Menus/MenuData.tsx";
-import MenuModels from "./Menus/MenuModels.tsx";
-import MenuTests from "./Menus/MenuTests.tsx";
-import MenuTransformations from "./Menus/MenuTransformations.tsx";
+import MenuData from "./menus/MenuData.tsx";
+import MenuModels from "./menus/MenuModels.tsx";
+import MenuTests from "./menus/MenuTests.tsx";
+import MenuTransformations from "./menus/MenuTransformations.tsx";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import SsidChartIcon from "@mui/icons-material/SsidChart";

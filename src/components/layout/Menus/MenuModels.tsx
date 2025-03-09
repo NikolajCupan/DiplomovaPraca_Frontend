@@ -131,6 +131,13 @@ export default function CustomizedMenus() {
                         </div>
                     </MenuItem>
                 </a>
+
+                <a href={Constants.NEURAL_NETWORK_LINK}>
+                    <MenuItem disableRipple>
+                        <NavigateNextIcon style={{ color: "black" }} />
+                        Neurónová sieť
+                    </MenuItem>
+                </a>
             </StyledMenu>
         </div>
     );

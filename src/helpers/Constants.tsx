@@ -101,6 +101,7 @@ export const ARIMA_LINK = "/model/arima";
 export const SIMPLE_EXP_SMOOTHING_LINK = "/model/simple-exp-smoothing";
 export const DOUBLE_EXP_SMOOTHING_LINK = "/model/double-exp-smoothing";
 export const HOLT_WINTER_LINK = "/model/holt-winter";
+export const NEURAL_NETWORK_LINK = "/model/neural-network";
 
 // Frontend paths end
 //
@@ -142,6 +143,7 @@ export const ARIMA = "/model/arima";
 export const SIMPLE_EXP_SMOOTHING = "/model/simple-exp-smoothing";
 export const DOUBLE_EXP_SMOOTHING = "/model/double-exp-smoothing";
 export const HOLT_WINTER = "/model/holt-winter";
+export const NEURAL_NETWORK = "/model/neural-network";
 
 // Backend paths end
 //
