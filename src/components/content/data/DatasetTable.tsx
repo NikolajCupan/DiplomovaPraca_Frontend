@@ -126,6 +126,7 @@ function DatasetTable(props: DatasetTableProps) {
                         marginTop: "0",
                         fontWeight: "bold",
                         fontSize: "25px",
+                        textAlign: "center",
                     }}
                 >
                     Potvrdenie zmazania

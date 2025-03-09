@@ -1,18 +1,27 @@
 import * as Type from "../../../../helpers/Types.tsx";
+import * as Utility from "../../../../helpers/UtilityProvider.tsx";
 import Header from "../../../common/elements/Header.tsx";
 import CustomButton from "../../../common/inputs/CustomButton.tsx";
 import DatasetSelector from "../../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../../common/inputs/NumberInput.tsx";
 import SelectInput from "../../../common/inputs/SelectInput.tsx";
-
-import Grid from "@mui/material/Grid2";
-
-import React from "react";
+import AddDropoutLayerForm from "./AddDropoutLayerForm.tsx";
+import AddHiddenLayerForm from "./AddHiddenLayerForm.tsx";
+import "./NeuralNetworkModelForm.css";
+import * as NeuralNetworkTypes from "./NeuralNetworkModelTypes.tsx";
 import AdaptiveGradientForm from "./optimizers/AdaptiveGradientForm.tsx";
 import AdaptiveMomentumForm from "./optimizers/AdaptiveMomentum.tsx";
 import RootMeanSquarePropagationForm from "./optimizers/RootMeanSquarePropagationForm.tsx";
 import StochasticGradientDescentForm from "./optimizers/StochasticGradientDescentForm.tsx";
 import StochasticGradientDescentWithMomentumForm from "./optimizers/StochasticGradientDescentWithMomentumForm.tsx";
+
+import AddIcon from "@mui/icons-material/Add";
+import BlurLinearIcon from "@mui/icons-material/BlurLinear";
+import GrainIcon from "@mui/icons-material/Grain";
+import { Button } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+
+import * as React from "react";
 
 interface NeuralNetworkModelFormProps {
     actionInProgress: boolean;
@@ -25,6 +34,8 @@ interface NeuralNetworkModelFormProps {
 }
 
 function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
+    const { openModal } = Utility.useUtility();
+
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
     );
@@ -62,6 +73,8 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
         React.useState<string>("mean_squared_error");
     const [maxPercentageDifference, setMaxPercentageDifference] =
         React.useState<number>(5);
+
+    const [layers, setLayers] = React.useState<NeuralNetworkTypes.Layer[]>([]);
 
     let optimizerContent = <></>;
     if (optimizer.trim() !== "") {
@@ -133,17 +146,61 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
         }
 
         optimizerContent = (
-            <div
-                style={{
-                    border: "1px dashed black",
-                    borderRadius: "var(--default-border-radius)",
-                    padding: "15px",
-                }}
-            >
-                {optimizerContent}
-            </div>
+            <div className="custom-border">{optimizerContent}</div>
         );
     }
+
+    const handleAddLayerButtonClick = () => {
+        const content = (
+            <>
+                <div
+                    style={{
+                        textAlign: "center",
+                        fontSize: "22px",
+                        marginBottom: "20px",
+                    }}
+                >
+                    Zvoľte typ novej vrstvy
+                </div>
+
+                <div className="button-center" style={{ marginBottom: "20px" }}>
+                    <Button
+                        style={{ width: "100%" }}
+                        variant="contained"
+                        endIcon={<GrainIcon />}
+                        size="large"
+                        onClick={handleAddHiddenLayerButtonClick}
+                    >
+                        Hidden
+                    </Button>
+                </div>
+
+                <div className="button-center">
+                    <Button
+                        style={{ width: "100%" }}
+                        variant="contained"
+                        endIcon={<BlurLinearIcon />}
+                        size="large"
+                        onClick={handleAddDropoutLayerButtonClick}
+                    >
+                        Dropout
+                    </Button>
+                </div>
+            </>
+        );
+
+        openModal(content);
+    };
+
+    const handleAddHiddenLayerButtonClick = () => {
+        openModal(<AddHiddenLayerForm layers={layers} setLayers={setLayers} />);
+    };
+
+    const handleAddDropoutLayerButtonClick = () => {
+        openModal(
+            <AddDropoutLayerForm layers={layers} setLayers={setLayers} />,
+        );
+    };
 
     const handleConfirmButtonClick = async () => {};
 
@@ -302,6 +359,15 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                     />
                 </Grid>
             </Grid>
+
+            <CustomButton
+                action={handleAddLayerButtonClick}
+                text={"Pridať novú vrstvu"}
+                customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
+                toggleable={false}
+                submitEnabled={!props.actionInProgress}
+                icon={<AddIcon />}
+            />
 
             <CustomButton
                 action={handleConfirmButtonClick}

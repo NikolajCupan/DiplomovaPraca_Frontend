@@ -12,7 +12,7 @@ const modalStyle = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    minWidth: 250,
+    minWidth: 200,
     maxWidth: 400,
     bgcolor: "background.paper",
     borderRadius: "var(--default-border-radius)",

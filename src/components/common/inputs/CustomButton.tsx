@@ -11,6 +11,8 @@ interface CustomButtonProps {
 
     customClass?: string;
     customStyle?: React.CSSProperties;
+
+    icon?: React.ReactNode;
 }
 
 function CustomButton(props: CustomButtonProps) {
@@ -39,7 +41,9 @@ function CustomButton(props: CustomButtonProps) {
                     disabled={!props.submitEnabled}
                     size="large"
                     variant="contained"
-                    endIcon={<SendIcon />}
+                    endIcon={
+                        props.icon === undefined ? <SendIcon /> : props.icon
+                    }
                 >
                     {props.text}
                 </Button>
