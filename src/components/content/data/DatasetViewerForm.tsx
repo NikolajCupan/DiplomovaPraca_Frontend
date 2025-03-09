@@ -3,7 +3,7 @@ import * as CookiesManager from "../../../helpers/CookiesManager.tsx";
 import * as Helper from "../../../helpers/Helper.tsx";
 import * as Type from "../../../helpers/Types.tsx";
 import * as Utility from "../../../helpers/UtilityProvider.tsx";
-import ConfirmButton from "../../common/inputs/ConfirmButton.tsx";
+import CustomButton from "../../common/inputs/CustomButton.tsx";
 import DatasetSelector from "../../common/inputs/DatasetSelector.tsx";
 import TextInput from "../../common/inputs/TextInput.tsx";
 import DatasetViewerTable from "./DatasetViewerTable.tsx";
@@ -194,7 +194,7 @@ function DatasetViewerForm(props: DatasetViewerFormProps) {
                 </Grid>
             </Grid>
 
-            <ConfirmButton
+            <CustomButton
                 text={"Potvrdiť zmeny"}
                 customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
                 action={handleConfirmButtonClick}

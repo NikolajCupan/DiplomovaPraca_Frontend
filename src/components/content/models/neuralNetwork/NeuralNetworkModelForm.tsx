@@ -1,6 +1,6 @@
 import * as Type from "../../../../helpers/Types.tsx";
 import Header from "../../../common/elements/Header.tsx";
-import ConfirmButton from "../../../common/inputs/ConfirmButton.tsx";
+import CustomButton from "../../../common/inputs/CustomButton.tsx";
 import DatasetSelector from "../../../common/inputs/DatasetSelector.tsx";
 import NumberInput from "../../../common/inputs/NumberInput.tsx";
 import SelectInput from "../../../common/inputs/SelectInput.tsx";
@@ -303,7 +303,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                 </Grid>
             </Grid>
 
-            <ConfirmButton
+            <CustomButton
                 action={handleConfirmButtonClick}
                 text={"Vykonať akciu"}
                 customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"

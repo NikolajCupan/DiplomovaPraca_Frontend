@@ -1,7 +1,7 @@
 import SendIcon from "@mui/icons-material/Send";
 import { Box, Button } from "@mui/material";
 
-interface ConfirmButtonProps {
+interface CustomButtonProps {
     text: string;
     action: () => void;
 
@@ -13,7 +13,7 @@ interface ConfirmButtonProps {
     customStyle?: React.CSSProperties;
 }
 
-function ConfirmButton(props: ConfirmButtonProps) {
+function CustomButton(props: CustomButtonProps) {
     return (
         <div
             style={{
@@ -48,4 +48,4 @@ function ConfirmButton(props: ConfirmButtonProps) {
     );
 }
 
-export default ConfirmButton;
+export default CustomButton;
