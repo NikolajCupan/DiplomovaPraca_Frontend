@@ -58,6 +58,11 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     const [momentum, setMomentum] = React.useState<number>(0.9);
     // Optimizers end
 
+    const [lossFunction, setLossFunction] =
+        React.useState<string>("mean_squared_error");
+    const [maxPercentageDifference, setMaxPercentageDifference] =
+        React.useState<number>(5);
+
     let optimizerContent = <></>;
     if (optimizer.trim() !== "") {
         switch (optimizer) {
@@ -266,6 +271,37 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
             </Grid>
 
             {optimizerContent}
+
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <SelectInput
+                        customClass="custom-form-component-margin-top"
+                        label={"Stratová funkcia"}
+                        value={lossFunction}
+                        setValue={setLossFunction}
+                        toggleable={false}
+                        inputEnabled={true}
+                        menuItems={[
+                            ["mean_squared_error", "Mean squared error"],
+                            ["mean_absolute_error", "Mean absolute error"],
+                        ]}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-top"
+                        value={maxPercentageDifference}
+                        setValue={setMaxPercentageDifference}
+                        toggleable={false}
+                        inputEnabled={true}
+                        label={"Maximálny percentuálny rozdiel"}
+                        defaultValue={5}
+                        minValue={0}
+                        maxValue={100}
+                        step={0.5}
+                    />
+                </Grid>
+            </Grid>
 
             <ConfirmButton
                 action={handleConfirmButtonClick}
