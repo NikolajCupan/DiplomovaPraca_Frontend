@@ -12,8 +12,6 @@ const modalStyle = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    minWidth: 200,
-    maxWidth: 400,
     bgcolor: "background.paper",
     borderRadius: "var(--default-border-radius)",
     boxShadow: 24,
@@ -29,7 +27,10 @@ interface NotificationContent {
 
 interface UtilityContextProps {
     isModalOpen: boolean;
-    openModal: (modalContent: React.ReactNode) => void;
+    openModal: (
+        modalContent: React.ReactNode,
+        customModalStyles?: React.CSSProperties,
+    ) => void;
     closeModal: () => void;
 
     isNotificationOpen: boolean;
@@ -58,18 +59,29 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
     const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
     const [modalContent, setModalContent] =
         React.useState<React.ReactNode>(null);
+    const [customModalStyles, setCustomModalStyles] =
+        React.useState<React.CSSProperties>();
 
     const [isNotificationOpen, setIsNotificationOpen] =
         React.useState<boolean>(false);
     const [notificationContent, setNotificationContent] =
         React.useState<NotificationContent | null>();
 
-    const openModal = React.useCallback((modalContent: React.ReactNode) => {
-        closeNotification();
+    const openModal = React.useCallback(
+        (
+            modalContent: React.ReactNode,
+            customModalStyles?: React.CSSProperties,
+        ) => {
+            closeNotification();
 
-        setModalContent(modalContent);
-        setIsModalOpen(true);
-    }, []);
+            setModalContent(modalContent);
+            if (customModalStyles !== undefined) {
+                setCustomModalStyles(customModalStyles);
+            }
+            setIsModalOpen(true);
+        },
+        [],
+    );
 
     const closeModal = React.useCallback(() => {
         setModalContent(null);
@@ -138,7 +150,9 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
             {isModalOpen && (
                 <div>
                     <MuiModal open={isModalOpen} onClose={closeModal}>
-                        <Box sx={modalStyle}>{modalContent}</Box>
+                        <Box sx={{ ...modalStyle, ...customModalStyles }}>
+                            {modalContent}
+                        </Box>
                     </MuiModal>
                 </div>
             )}
