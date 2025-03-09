@@ -8,6 +8,11 @@ import SelectInput from "../../../common/inputs/SelectInput.tsx";
 import Grid from "@mui/material/Grid2";
 
 import React from "react";
+import AdaptiveGradientForm from "./optimizers/AdaptiveGradientForm.tsx";
+import AdaptiveMomentumForm from "./optimizers/AdaptiveMomentum.tsx";
+import RootMeanSquarePropagationForm from "./optimizers/RootMeanSquarePropagationForm.tsx";
+import StochasticGradientDescentForm from "./optimizers/StochasticGradientDescentForm.tsx";
+import StochasticGradientDescentWithMomentumForm from "./optimizers/StochasticGradientDescentWithMomentumForm.tsx";
 
 interface NeuralNetworkModelFormProps {
     actionInProgress: boolean;
@@ -39,7 +44,8 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     const [epochCount, setEpochCount] = React.useState<number>(50);
 
     // Optimizers
-    const [optimizer, setOptimizer] = React.useState<string>("");
+    const [optimizer, setOptimizer] =
+        React.useState<string>("adaptive_gradient");
 
     const [startingLearningRate, setStartingLearningRate] =
         React.useState<number>(0.001);
@@ -51,6 +57,88 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     const [rho, setRho] = React.useState<number>(0.9);
     const [momentum, setMomentum] = React.useState<number>(0.9);
     // Optimizers end
+
+    let optimizerContent = <></>;
+    if (optimizer.trim() !== "") {
+        switch (optimizer) {
+            case "adaptive_gradient":
+                optimizerContent = (
+                    <AdaptiveGradientForm
+                        startingLearningRate={startingLearningRate}
+                        setStartingLearningRate={setStartingLearningRate}
+                        learningRateDecay={learningRateDecay}
+                        setLearningRateDecay={setLearningRateDecay}
+                        epsilon={epsilon}
+                        setEpsilon={setEpsilon}
+                    />
+                );
+                break;
+            case "adaptive_momentum":
+                optimizerContent = (
+                    <AdaptiveMomentumForm
+                        startingLearningRate={startingLearningRate}
+                        setStartingLearningRate={setStartingLearningRate}
+                        learningRateDecay={learningRateDecay}
+                        setLearningRateDecay={setLearningRateDecay}
+                        epsilon={epsilon}
+                        setEpsilon={setEpsilon}
+                        beta1={beta1}
+                        setBeta1={setBeta1}
+                        beta2={beta2}
+                        setBeta2={setBeta2}
+                    />
+                );
+                break;
+            case "root_mean_square_propagation":
+                optimizerContent = (
+                    <RootMeanSquarePropagationForm
+                        startingLearningRate={startingLearningRate}
+                        setStartingLearningRate={setStartingLearningRate}
+                        learningRateDecay={learningRateDecay}
+                        setLearningRateDecay={setLearningRateDecay}
+                        epsilon={epsilon}
+                        setEpsilon={setEpsilon}
+                        rho={rho}
+                        setRho={setRho}
+                    />
+                );
+                break;
+            case "stochastic_gradient_descent":
+                optimizerContent = (
+                    <StochasticGradientDescentForm
+                        startingLearningRate={startingLearningRate}
+                        setStartingLearningRate={setStartingLearningRate}
+                        learningRateDecay={learningRateDecay}
+                        setLearningRateDecay={setLearningRateDecay}
+                    />
+                );
+                break;
+            case "stochastic_gradient_descent_with_momentum":
+                optimizerContent = (
+                    <StochasticGradientDescentWithMomentumForm
+                        startingLearningRate={startingLearningRate}
+                        setStartingLearningRate={setStartingLearningRate}
+                        learningRateDecay={learningRateDecay}
+                        setLearningRateDecay={setLearningRateDecay}
+                        momentum={momentum}
+                        setMomentum={setMomentum}
+                    />
+                );
+                break;
+        }
+
+        optimizerContent = (
+            <div
+                style={{
+                    border: "1px dashed black",
+                    borderRadius: "var(--default-border-radius)",
+                    padding: "15px",
+                }}
+            >
+                {optimizerContent}
+            </div>
+        );
+    }
 
     const handleConfirmButtonClick = async () => {};
 
@@ -151,7 +239,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
-                        customClass="custom-form-component-margin-top"
+                        customClass="custom-form-component-margin-top custom-form-component-margin-bottom"
                         label={"Optimalizátor"}
                         value={optimizer}
                         setValue={setOptimizer}
@@ -176,6 +264,8 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                     />
                 </Grid>
             </Grid>
+
+            {optimizerContent}
 
             <ConfirmButton
                 action={handleConfirmButtonClick}

@@ -2,7 +2,7 @@ import NumberInput from "../../../../common/inputs/NumberInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
-interface AdaptiveGradientFormProps {
+interface AdaptiveMomentumFormProps {
     startingLearningRate: number;
     setStartingLearningRate: React.Dispatch<React.SetStateAction<number>>;
 
@@ -11,9 +11,15 @@ interface AdaptiveGradientFormProps {
 
     epsilon: number;
     setEpsilon: React.Dispatch<React.SetStateAction<number>>;
+
+    beta1: number;
+    setBeta1: React.Dispatch<React.SetStateAction<number>>;
+
+    beta2: number;
+    setBeta2: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
+function AdaptiveMomentumForm(props: AdaptiveMomentumFormProps) {
     return (
         <>
             <Grid container columnSpacing={4}>
@@ -49,20 +55,53 @@ function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
                 </Grid>
             </Grid>
 
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-bottom"
+                        value={props.epsilon}
+                        setValue={props.setEpsilon}
+                        toggleable={false}
+                        inputEnabled={true}
+                        decimalValuesAllowed={true}
+                        label={"Epsilon"}
+                        defaultValue={0.0000001}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.0000005}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        customClass="custom-form-component-margin-bottom"
+                        value={props.beta1}
+                        setValue={props.setBeta1}
+                        toggleable={false}
+                        inputEnabled={true}
+                        decimalValuesAllowed={true}
+                        label={"Beta 1"}
+                        defaultValue={0.9}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+            </Grid>
+
             <NumberInput
-                value={props.epsilon}
-                setValue={props.setEpsilon}
+                value={props.beta2}
+                setValue={props.setBeta2}
                 toggleable={false}
                 inputEnabled={true}
                 decimalValuesAllowed={true}
-                label={"Epsilon"}
-                defaultValue={0.0000001}
+                label={"Beta 2"}
+                defaultValue={0.999}
                 minValue={0}
                 maxValue={1}
-                step={0.0000005}
+                step={0.001}
             />
         </>
     );
 }
 
-export default AdaptiveGradientForm;
+export default AdaptiveMomentumForm;

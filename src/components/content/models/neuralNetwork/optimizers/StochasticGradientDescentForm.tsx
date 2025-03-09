@@ -2,24 +2,22 @@ import NumberInput from "../../../../common/inputs/NumberInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
-interface AdaptiveGradientFormProps {
+interface StochasticGradientDescentFormProps {
     startingLearningRate: number;
     setStartingLearningRate: React.Dispatch<React.SetStateAction<number>>;
 
     learningRateDecay: number;
     setLearningRateDecay: React.Dispatch<React.SetStateAction<number>>;
-
-    epsilon: number;
-    setEpsilon: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
+function StochasticGradientDescentForm(
+    props: StochasticGradientDescentFormProps,
+) {
     return (
         <>
             <Grid container columnSpacing={4}>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
-                        customClass="custom-form-component-margin-bottom"
                         value={props.startingLearningRate}
                         setValue={props.setStartingLearningRate}
                         toggleable={false}
@@ -34,7 +32,7 @@ function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <NumberInput
-                        customClass="custom-form-component-margin-bottom"
+                        customClass="custom-form-component-margin-top-sm"
                         value={props.learningRateDecay}
                         setValue={props.setLearningRateDecay}
                         toggleable={false}
@@ -48,21 +46,8 @@ function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
                     />
                 </Grid>
             </Grid>
-
-            <NumberInput
-                value={props.epsilon}
-                setValue={props.setEpsilon}
-                toggleable={false}
-                inputEnabled={true}
-                decimalValuesAllowed={true}
-                label={"Epsilon"}
-                defaultValue={0.0000001}
-                minValue={0}
-                maxValue={1}
-                step={0.0000005}
-            />
         </>
     );
 }
 
-export default AdaptiveGradientForm;
+export default StochasticGradientDescentForm;

@@ -2,18 +2,20 @@ import NumberInput from "../../../../common/inputs/NumberInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
-interface AdaptiveGradientFormProps {
+interface StochasticGradientDescentWithMomentumFormProps {
     startingLearningRate: number;
     setStartingLearningRate: React.Dispatch<React.SetStateAction<number>>;
 
     learningRateDecay: number;
     setLearningRateDecay: React.Dispatch<React.SetStateAction<number>>;
 
-    epsilon: number;
-    setEpsilon: React.Dispatch<React.SetStateAction<number>>;
+    momentum: number;
+    setMomentum: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
+function StochasticGradientDescentWithMomentumForm(
+    props: StochasticGradientDescentWithMomentumFormProps,
+) {
     return (
         <>
             <Grid container columnSpacing={4}>
@@ -50,19 +52,19 @@ function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
             </Grid>
 
             <NumberInput
-                value={props.epsilon}
-                setValue={props.setEpsilon}
+                value={props.learningRateDecay}
+                setValue={props.setLearningRateDecay}
                 toggleable={false}
                 inputEnabled={true}
                 decimalValuesAllowed={true}
-                label={"Epsilon"}
-                defaultValue={0.0000001}
+                label={"Momentum"}
+                defaultValue={0.9}
                 minValue={0}
                 maxValue={1}
-                step={0.0000005}
+                step={0.01}
             />
         </>
     );
 }
 
-export default AdaptiveGradientForm;
+export default StochasticGradientDescentWithMomentumForm;

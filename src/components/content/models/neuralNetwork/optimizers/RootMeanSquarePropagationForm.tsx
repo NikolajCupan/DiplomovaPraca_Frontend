@@ -2,7 +2,7 @@ import NumberInput from "../../../../common/inputs/NumberInput.tsx";
 
 import Grid from "@mui/material/Grid2";
 
-interface AdaptiveGradientFormProps {
+interface RootMeanSquarePropagationFormProps {
     startingLearningRate: number;
     setStartingLearningRate: React.Dispatch<React.SetStateAction<number>>;
 
@@ -11,9 +11,14 @@ interface AdaptiveGradientFormProps {
 
     epsilon: number;
     setEpsilon: React.Dispatch<React.SetStateAction<number>>;
+
+    rho: number;
+    setRho: React.Dispatch<React.SetStateAction<number>>;
 }
 
-function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
+function RootMeanSquarePropagationForm(
+    props: RootMeanSquarePropagationFormProps,
+) {
     return (
         <>
             <Grid container columnSpacing={4}>
@@ -49,20 +54,38 @@ function AdaptiveGradientForm(props: AdaptiveGradientFormProps) {
                 </Grid>
             </Grid>
 
-            <NumberInput
-                value={props.epsilon}
-                setValue={props.setEpsilon}
-                toggleable={false}
-                inputEnabled={true}
-                decimalValuesAllowed={true}
-                label={"Epsilon"}
-                defaultValue={0.0000001}
-                minValue={0}
-                maxValue={1}
-                step={0.0000005}
-            />
+            <Grid container columnSpacing={4}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        value={props.epsilon}
+                        setValue={props.setEpsilon}
+                        toggleable={false}
+                        inputEnabled={true}
+                        decimalValuesAllowed={true}
+                        label={"Epsilon"}
+                        defaultValue={0.0000001}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.0000005}
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                    <NumberInput
+                        value={props.rho}
+                        setValue={props.setRho}
+                        toggleable={false}
+                        inputEnabled={true}
+                        decimalValuesAllowed={true}
+                        label={"Rho"}
+                        defaultValue={0.9}
+                        minValue={0}
+                        maxValue={1}
+                        step={0.01}
+                    />
+                </Grid>
+            </Grid>
         </>
     );
 }
 
-export default AdaptiveGradientForm;
+export default RootMeanSquarePropagationForm;
