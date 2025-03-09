@@ -29,7 +29,11 @@ interface DatasetTableProps {
 }
 
 function DatasetTable(props: DatasetTableProps) {
-    const { openModal, closeModal, openNotification } = Utility.useUtility();
+    const {
+        openDialog: openDialog,
+        closeDialog: closeDialog,
+        openNotification,
+    } = Utility.useUtility();
     const navigate = ReactRouter.useNavigate();
 
     React.useEffect(() => {
@@ -119,7 +123,7 @@ function DatasetTable(props: DatasetTableProps) {
     };
 
     const handleDeleteClick = (idDataset: number) => {
-        openModal(
+        openDialog(
             <>
                 <p
                     style={{
@@ -149,7 +153,7 @@ function DatasetTable(props: DatasetTableProps) {
                         type="submit"
                         size="medium"
                         variant="contained"
-                        onClick={closeModal}
+                        onClick={closeDialog}
                         style={{ backgroundColor: "green" }}
                     >
                         Zrušiť
@@ -165,12 +169,13 @@ function DatasetTable(props: DatasetTableProps) {
                     </Button>
                 </Box>
             </>,
-            { minWidth: "200px", maxWidth: "400px" },
+            true,
+            "xs",
         );
     };
 
     const handleDeleteDataset = async (idDataset: number) => {
-        closeModal();
+        closeDialog();
 
         try {
             const formData = new FormData();

@@ -1,23 +1,11 @@
+import "../index.css";
 import * as Constants from "./Constants.tsx";
 import * as Type from "./Types.tsx";
 
-import { Box, SnackbarContent } from "@mui/material";
-import MuiModal from "@mui/material/Modal";
+import { Dialog, DialogProps, SnackbarContent } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 
 import * as React from "react";
-
-const modalStyle = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    bgcolor: "background.paper",
-    borderRadius: "var(--default-border-radius)",
-    boxShadow: 24,
-    p: 4,
-    padding: 3.5,
-};
 
 interface NotificationContent {
     message: string;
@@ -26,13 +14,15 @@ interface NotificationContent {
 }
 
 interface UtilityContextProps {
-    isModalOpen: boolean;
-    openModal: (
-        modalContent: React.ReactNode,
-        customModalStyles?: React.CSSProperties,
-        customClass?: string,
+    isDialogOpen: boolean;
+    openDialog: (
+        dialogContent: React.ReactNode,
+        isDialogFullWidth?: boolean,
+        dialogMaxWidth?: DialogProps["maxWidth"],
+        customDialogStyles?: React.CSSProperties,
+        customDialogClass?: string,
     ) => void;
-    closeModal: () => void;
+    closeDialog: () => void;
 
     isNotificationOpen: boolean;
     notificationContent: NotificationContent | undefined | null;
@@ -57,37 +47,54 @@ const UtilityContext = React.createContext<UtilityContextProps | null>(null);
 export const UtilityProvider = (props: UtilityProviderProps) => {
     const timeoutRef = React.useRef<number | undefined>(undefined);
 
-    const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
-    const [modalContent, setModalContent] =
+    const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
+    const [dialogContent, setDialogContent] =
         React.useState<React.ReactNode>(null);
-    const [customModalStyles, setCustomModalStyles] =
+    const [isDialogFullWidth, setIsDialogFullWidth] =
+        React.useState<boolean>(false);
+    const [dialogMaxWidth, setDialogMaxWidth] =
+        React.useState<DialogProps["maxWidth"]>();
+    const [customDialogStyles, setCustomDialogStyles] =
         React.useState<React.CSSProperties>();
-    const [customModalClass, setCustomModalClass] = React.useState<string>("");
+    const [customDialogClass, setCustomDialogClass] =
+        React.useState<string>("");
 
     const [isNotificationOpen, setIsNotificationOpen] =
         React.useState<boolean>(false);
     const [notificationContent, setNotificationContent] =
         React.useState<NotificationContent | null>();
 
-    const openModal = React.useCallback(
+    const openDialog = React.useCallback(
         (
-            modalContent: React.ReactNode,
-            customModalStyles?: React.CSSProperties,
-            customClass?: string,
+            dialogContent: React.ReactNode,
+            isDialogFullWidth?: boolean,
+            dialogMaxWidth?: DialogProps["maxWidth"],
+            customDialogStyles?: React.CSSProperties,
+            customDialogClass?: string,
         ) => {
             closeNotification();
 
-            setModalContent(modalContent);
-            setCustomModalStyles(customModalStyles || {});
-            setCustomModalClass(customClass || "");
-            setIsModalOpen(true);
+            setDialogContent(dialogContent);
+
+            if (isDialogFullWidth !== undefined) {
+                setIsDialogFullWidth(isDialogFullWidth);
+            }
+
+            if (dialogMaxWidth !== undefined) {
+                setDialogMaxWidth(dialogMaxWidth);
+            }
+
+            setCustomDialogStyles(customDialogStyles || {});
+            setCustomDialogClass(customDialogClass || "");
+
+            setIsDialogOpen(true);
         },
         [],
     );
 
-    const closeModal = React.useCallback(() => {
-        setModalContent(null);
-        setIsModalOpen(false);
+    const closeDialog = React.useCallback(() => {
+        setDialogContent(null);
+        setIsDialogOpen(false);
     }, []);
 
     const openNotification = React.useCallback(
@@ -137,9 +144,9 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
     return (
         <UtilityContext.Provider
             value={{
-                isModalOpen: isModalOpen,
-                openModal,
-                closeModal,
+                isDialogOpen: isDialogOpen,
+                openDialog: openDialog,
+                closeDialog: closeDialog,
                 isNotificationOpen: isNotificationOpen,
                 notificationContent,
                 openNotification,
@@ -149,16 +156,22 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
         >
             {props.children}
 
-            {isModalOpen && (
+            {isDialogOpen && (
                 <div>
-                    <MuiModal open={isModalOpen} onClose={closeModal}>
-                        <Box
-                            className={customModalClass}
-                            sx={{ ...modalStyle, ...customModalStyles }}
-                        >
-                            {modalContent}
-                        </Box>
-                    </MuiModal>
+                    <Dialog
+                        open={isDialogOpen}
+                        onClose={closeDialog}
+                        fullWidth={isDialogFullWidth}
+                        maxWidth={dialogMaxWidth}
+                        PaperProps={{
+                            style: {
+                                borderRadius: "var(--default-border-radius)",
+                                padding: "20px",
+                            },
+                        }}
+                    >
+                        {dialogContent}
+                    </Dialog>
                 </div>
             )}
 

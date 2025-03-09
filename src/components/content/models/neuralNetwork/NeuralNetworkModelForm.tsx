@@ -34,7 +34,7 @@ interface NeuralNetworkModelFormProps {
 }
 
 function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
-    const { openModal } = Utility.useUtility();
+    const { openDialog: openDialog } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -189,20 +189,22 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
             </>
         );
 
-        openModal(content);
+        openDialog(content, true, "xs");
     };
 
     const handleAddHiddenLayerButtonClick = () => {
-        openModal(
+        openDialog(
             <AddHiddenLayerForm layers={layers} setLayers={setLayers} />,
-            {},
-            "modal-custom-container",
+            true,
+            "md",
         );
     };
 
     const handleAddDropoutLayerButtonClick = () => {
-        openModal(
+        openDialog(
             <AddDropoutLayerForm layers={layers} setLayers={setLayers} />,
+            true,
+            "md",
         );
     };
 
