@@ -161,17 +161,18 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
             />
 
             {activationFunction === "leaky_relu" && (
-                <NumberInput
-                    customClass="custom-form-component-margin-bottom"
-                    value={slope}
-                    setValue={setSlope}
-                    toggleable={false}
-                    inputEnabled={true}
-                    label={"Sklon"}
-                    defaultValue={0.01}
-                    minValue={0}
-                    step={0.01}
-                />
+                <div className="custom-form-component-margin-bottom custom-border">
+                    <NumberInput
+                        value={slope}
+                        setValue={setSlope}
+                        toggleable={false}
+                        inputEnabled={true}
+                        label={"Sklon"}
+                        defaultValue={0.01}
+                        minValue={0}
+                        step={0.01}
+                    />
+                </div>
             )}
 
             <div className="button-center">

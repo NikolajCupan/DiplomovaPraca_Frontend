@@ -19,8 +19,6 @@ interface UtilityContextProps {
         dialogContent: React.ReactNode,
         isDialogFullWidth?: boolean,
         dialogMaxWidth?: DialogProps["maxWidth"],
-        customDialogStyles?: React.CSSProperties,
-        customDialogClass?: string,
     ) => void;
     closeDialog: () => void;
 
@@ -54,10 +52,6 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
         React.useState<boolean>(false);
     const [dialogMaxWidth, setDialogMaxWidth] =
         React.useState<DialogProps["maxWidth"]>();
-    const [customDialogStyles, setCustomDialogStyles] =
-        React.useState<React.CSSProperties>();
-    const [customDialogClass, setCustomDialogClass] =
-        React.useState<string>("");
 
     const [isNotificationOpen, setIsNotificationOpen] =
         React.useState<boolean>(false);
@@ -69,8 +63,6 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
             dialogContent: React.ReactNode,
             isDialogFullWidth?: boolean,
             dialogMaxWidth?: DialogProps["maxWidth"],
-            customDialogStyles?: React.CSSProperties,
-            customDialogClass?: string,
         ) => {
             closeNotification();
 
@@ -83,9 +75,6 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
             if (dialogMaxWidth !== undefined) {
                 setDialogMaxWidth(dialogMaxWidth);
             }
-
-            setCustomDialogStyles(customDialogStyles || {});
-            setCustomDialogClass(customDialogClass || "");
 
             setIsDialogOpen(true);
         },
