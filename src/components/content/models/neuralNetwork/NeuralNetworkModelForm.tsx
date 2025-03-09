@@ -193,7 +193,11 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     };
 
     const handleAddHiddenLayerButtonClick = () => {
-        openModal(<AddHiddenLayerForm layers={layers} setLayers={setLayers} />);
+        openModal(
+            <AddHiddenLayerForm layers={layers} setLayers={setLayers} />,
+            {},
+            "modal-custom-container",
+        );
     };
 
     const handleAddDropoutLayerButtonClick = () => {

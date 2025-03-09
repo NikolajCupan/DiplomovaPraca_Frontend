@@ -165,6 +165,7 @@ function DatasetTable(props: DatasetTableProps) {
                     </Button>
                 </Box>
             </>,
+            { minWidth: "200px", maxWidth: "400px" },
         );
     };
 

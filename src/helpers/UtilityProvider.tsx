@@ -30,6 +30,7 @@ interface UtilityContextProps {
     openModal: (
         modalContent: React.ReactNode,
         customModalStyles?: React.CSSProperties,
+        customClass?: string,
     ) => void;
     closeModal: () => void;
 
@@ -61,6 +62,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
         React.useState<React.ReactNode>(null);
     const [customModalStyles, setCustomModalStyles] =
         React.useState<React.CSSProperties>();
+    const [customModalClass, setCustomModalClass] = React.useState<string>("");
 
     const [isNotificationOpen, setIsNotificationOpen] =
         React.useState<boolean>(false);
@@ -71,13 +73,13 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
         (
             modalContent: React.ReactNode,
             customModalStyles?: React.CSSProperties,
+            customClass?: string,
         ) => {
             closeNotification();
 
             setModalContent(modalContent);
-            if (customModalStyles !== undefined) {
-                setCustomModalStyles(customModalStyles);
-            }
+            setCustomModalStyles(customModalStyles || {});
+            setCustomModalClass(customClass || "");
             setIsModalOpen(true);
         },
         [],
@@ -150,7 +152,10 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
             {isModalOpen && (
                 <div>
                     <MuiModal open={isModalOpen} onClose={closeModal}>
-                        <Box sx={{ ...modalStyle, ...customModalStyles }}>
+                        <Box
+                            className={customModalClass}
+                            sx={{ ...modalStyle, ...customModalStyles }}
+                        >
                             {modalContent}
                         </Box>
                     </MuiModal>
