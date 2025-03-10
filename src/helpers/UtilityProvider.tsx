@@ -82,6 +82,7 @@ export const UtilityProvider = (props: UtilityProviderProps) => {
     );
 
     const closeDialog = React.useCallback(() => {
+        closeNotification();
         setDialogContent(null);
         setIsDialogOpen(false);
     }, []);

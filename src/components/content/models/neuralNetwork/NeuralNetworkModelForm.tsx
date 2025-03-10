@@ -224,17 +224,33 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     };
 
     const handleAddDropoutLayerButtonClick = () => {
-        openDialog(<AddDropoutLayerForm addLayer={addLayer} />, true, "md");
+        let dropoutLayerCanBeAdded = true;
+        if (layers.size === 0) {
+            dropoutLayerCanBeAdded = false;
+        } else {
+            const lastEntry = Array.from(layers.entries()).pop();
+
+            if (!isHiddenLayer(lastEntry![1])) {
+                dropoutLayerCanBeAdded = false;
+            }
+        }
+
+        if (dropoutLayerCanBeAdded) {
+            openDialog(<AddDropoutLayerForm addLayer={addLayer} />, true, "md");
+        } else {
+            openNotification(
+                "Dropout layer musí byť umiestnený po hidden layer",
+                "white",
+                "red",
+            );
+        }
     };
 
     const isHiddenLayer = (layer: NeuralNetworkTypes.Layer) => {
         return "activationFunction" in layer;
     };
 
-    const handleLayerDelete = (
-        layer: NeuralNetworkTypes.Layer,
-        key: number,
-    ) => {
+    const handleLayerDelete = (_: any, key: number) => {
         const map: Map<number, NeuralNetworkTypes.Layer> = layers;
         const newMap: Map<number, NeuralNetworkTypes.Layer> = new Map();
 
