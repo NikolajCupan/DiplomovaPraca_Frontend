@@ -23,9 +23,9 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
         Constants.STRING_FALSE,
     );
 
-    const [biasesRegularizerL1, setBiasRegularizerL1] =
+    const [biasesRegularizerL1, setBiasesRegularizerL1] =
         React.useState<number>(0);
-    const [biasesRegularizerL2, setBiasRegularizerL2] =
+    const [biasesRegularizerL2, setBiasesRegularizerL2] =
         React.useState<number>(0);
     const [weightsRegularizerL1, setWeightsRegularizerL1] =
         React.useState<number>(0);
@@ -109,10 +109,10 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                         <Grid size={{ xs: 12, sm: 6 }}>
                             <NumberInput
                                 value={biasesRegularizerL1}
-                                setValue={setBiasRegularizerL1}
+                                setValue={setBiasesRegularizerL1}
                                 toggleable={false}
                                 inputEnabled={true}
-                                label={"Bias regularizer L1"}
+                                label={"Biases regularizer L1"}
                                 defaultValue={0}
                                 minValue={0}
                                 maxValue={1}
@@ -123,10 +123,10 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                             <NumberInput
                                 customClass="custom-form-component-margin-top-sm"
                                 value={biasesRegularizerL2}
-                                setValue={setBiasRegularizerL2}
+                                setValue={setBiasesRegularizerL2}
                                 toggleable={false}
                                 inputEnabled={true}
-                                label={"Bias regularizer L2"}
+                                label={"Biases regularizer L2"}
                                 defaultValue={0}
                                 minValue={0}
                                 maxValue={1}

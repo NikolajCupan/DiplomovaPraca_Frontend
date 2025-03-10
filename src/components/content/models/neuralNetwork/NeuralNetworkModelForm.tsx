@@ -1,3 +1,6 @@
+import * as Constants from "../../../../helpers/Constants.tsx";
+import * as CookiesManager from "../../../../helpers/CookiesManager.tsx";
+import * as Helper from "../../../../helpers/Helper.tsx";
 import * as Type from "../../../../helpers/Types.tsx";
 import * as Utility from "../../../../helpers/UtilityProvider.tsx";
 import "../../../../index.css";
@@ -43,7 +46,12 @@ interface NeuralNetworkModelFormProps {
 }
 
 function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
-    const { openDialog, closeDialog, openNotification } = Utility.useUtility();
+    const {
+        openDialog,
+        closeDialog,
+        openNotification,
+        openSuitableNotification,
+    } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -355,7 +363,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
             <>
                 {layer.biasesRegularizerL1 !== 0 && (
                     <>
-                        <span>Bias regularizer L1: </span>
+                        <span>Biases regularizer L1: </span>
                         <span style={{ fontWeight: "bold" }}>
                             {layer.biasesRegularizerL1}
                         </span>
@@ -364,7 +372,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                 )}
                 {layer.biasesRegularizerL2 !== 0 && (
                     <>
-                        <span>Bias regularizer L2: </span>
+                        <span>Biases regularizer L2: </span>
                         <span style={{ fontWeight: "bold" }}>
                             {layer.biasesRegularizerL2}
                         </span>
@@ -488,7 +496,150 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
         return content;
     };
 
-    const handleConfirmButtonClick = async () => {};
+    const handleConfirmButtonClick = async () => {
+        if (props.actionInProgress) {
+            return;
+        }
+
+        if (!selectedDatasetInfo) {
+            openNotification("Zvoľte dataset", "white", "red");
+            return;
+        } else if (layers.size === 0) {
+            openNotification(
+                "Neurónová sieť musí obsahovať aspoň jednu vrstvu",
+                "white",
+                "red",
+            );
+            return;
+        }
+
+        props.setActionInProgress(true);
+
+        try {
+            const formData = new FormData();
+            formData.append(
+                "idDataset",
+                selectedDatasetInfo.idDataset.toString(),
+            );
+
+            formData.append("train_percent", trainPercent.toString());
+            formData.append(
+                Constants.FORECAST_COUNT_KEY,
+                forecastCount.toString(),
+            );
+
+            formData.append("input_window_size", inputWindowSize.toString());
+            Helper.appendIfAvailable(
+                formData,
+                "batch_size",
+                batchSize,
+                batchSizeEnabled,
+            );
+
+            formData.append("epoch_count", epochCount.toString());
+
+            // Optimizers
+            formData.append("optimizer", optimizer);
+
+            formData.append(
+                "starting_learning_rate",
+                startingLearningRate.toString(),
+            );
+            formData.append(
+                "learning_rate_decay",
+                learningRateDecay.toString(),
+            );
+            formData.append("epsilon", epsilon.toString());
+            formData.append("beta1", beta1.toString());
+            formData.append("beta2", beta2.toString());
+            formData.append("rho", rho.toString());
+            formData.append("momentum", momentum.toString());
+            // Optimizers end
+
+            formData.append("loss_function", lossFunction);
+            formData.append(
+                "max_percentage_difference",
+                maxPercentageDifference.toString(),
+            );
+
+            const processedLayers: string[] = processLayers(layers);
+            formData.append("layers", JSON.stringify(processedLayers));
+
+            const request: Type.FetchRequest = {
+                url: Constants.BACKEND_PATH + Constants.NEURAL_NETWORK,
+                options: {
+                    method: "post",
+                    body: formData,
+                },
+            };
+
+            CookiesManager.prepareRequest(request);
+            const response = await fetch(request.url, request.options);
+            const responseBody = (await response.json()) as Type.RequestResult;
+
+            if (response.ok) {
+                CookiesManager.processResponse(response);
+
+                props.setResponseBody(responseBody);
+            } else {
+                props.setResponseBody(null);
+                openSuitableNotification(response, responseBody);
+            }
+        } catch (ex) {
+            console.log(ex);
+            props.setResponseBody(null);
+            openNotification(
+                "Pri vykonávaní akcie nastala chyba",
+                "white",
+                "red",
+            );
+        }
+
+        props.setActionInProgress(false);
+    };
+
+    const processLayers = (
+        layers: Map<number, NeuralNetworkTypes.Layer>,
+    ): string[] => {
+        const processedLayers: string[] = [];
+
+        layers.forEach((layer: NeuralNetworkTypes.Layer, _: any) => {
+            const processedLayer: Record<string, string> = {};
+
+            if (isHiddenLayer(layer)) {
+                const hiddenLayer = layer as NeuralNetworkTypes.HiddenLayer;
+
+                processedLayer["type"] = "hidden";
+                processedLayer["activation_function"] =
+                    hiddenLayer.activationFunction;
+                processedLayer["neurons_count"] =
+                    hiddenLayer.neuronsCount.toString();
+
+                processedLayer["biases_regularizer_l1"] =
+                    hiddenLayer.biasesRegularizerL1.toString();
+                processedLayer["biases_regularizer_l2"] =
+                    hiddenLayer.biasesRegularizerL2.toString();
+                processedLayer["weights_regularizer_l1"] =
+                    hiddenLayer.weightsRegularizerL1.toString();
+                processedLayer["weights_regularizer_l2"] =
+                    hiddenLayer.weightsRegularizerL2.toString();
+
+                if (hiddenLayer.activationFunction === "leaky_relu") {
+                    processedLayer["slope"] =
+                        hiddenLayer.activationFunctionParameters["slope"];
+                }
+            } else {
+                const dropoutLayer = layer as NeuralNetworkTypes.DropoutLayer;
+
+                processedLayer["type"] = "dropout";
+                processedLayer["keep_rate"] = dropoutLayer.keepRate.toString();
+            }
+
+            processedLayers.push(JSON.stringify(processedLayer));
+        });
+
+        return processedLayers;
+    };
 
     return (
         <>
