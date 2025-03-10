@@ -1,5 +1,6 @@
 import * as Type from "../../../../helpers/Types.tsx";
 import * as Utility from "../../../../helpers/UtilityProvider.tsx";
+import "../../../../index.css";
 import Header from "../../../common/elements/Header.tsx";
 import CustomButton from "../../../common/inputs/CustomButton.tsx";
 import DatasetSelector from "../../../common/inputs/DatasetSelector.tsx";
@@ -17,8 +18,16 @@ import StochasticGradientDescentWithMomentumForm from "./optimizers/StochasticGr
 
 import AddIcon from "@mui/icons-material/Add";
 import BlurLinearIcon from "@mui/icons-material/BlurLinear";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import GrainIcon from "@mui/icons-material/Grain";
-import { Button } from "@mui/material";
+import {
+    Box,
+    Button,
+    IconButton,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
 import * as React from "react";
@@ -34,7 +43,7 @@ interface NeuralNetworkModelFormProps {
 }
 
 function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
-    const { openDialog: openDialog } = Utility.useUtility();
+    const { openDialog, closeDialog, openNotification } = Utility.useUtility();
 
     const [datasetInfos, setDatasetInfos] = React.useState<Type.DatasetInfo[]>(
         [],
@@ -74,7 +83,25 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     const [maxPercentageDifference, setMaxPercentageDifference] =
         React.useState<number>(5);
 
-    const [layers, setLayers] = React.useState<NeuralNetworkTypes.Layer[]>([]);
+    const [layers, setLayers] = React.useState<
+        Map<number, NeuralNetworkTypes.Layer>
+    >(new Map());
+
+    const addLayer = (newLayer: NeuralNetworkTypes.Layer) => {
+        if (layers.size === 0) {
+            const map: Map<number, NeuralNetworkTypes.Layer> = new Map();
+            map.set(0, newLayer);
+
+            setLayers(map);
+        } else {
+            const map: Map<number, NeuralNetworkTypes.Layer> = layers;
+            const lastEntry = Array.from(layers.entries()).pop();
+            const maxKey = lastEntry![0];
+
+            map.set(maxKey + 1, newLayer);
+            setLayers(map);
+        }
+    };
 
     let optimizerContent = <></>;
     if (optimizer.trim() !== "") {
@@ -193,19 +220,256 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
     };
 
     const handleAddHiddenLayerButtonClick = () => {
-        openDialog(
-            <AddHiddenLayerForm layers={layers} setLayers={setLayers} />,
-            true,
-            "md",
-        );
+        openDialog(<AddHiddenLayerForm addLayer={addLayer} />, true, "md");
     };
 
     const handleAddDropoutLayerButtonClick = () => {
-        openDialog(
-            <AddDropoutLayerForm layers={layers} setLayers={setLayers} />,
-            true,
-            "md",
+        openDialog(<AddDropoutLayerForm addLayer={addLayer} />, true, "md");
+    };
+
+    const isHiddenLayer = (layer: NeuralNetworkTypes.Layer) => {
+        return "activationFunction" in layer;
+    };
+
+    const handleLayerDelete = (
+        layer: NeuralNetworkTypes.Layer,
+        key: number,
+    ) => {
+        const map: Map<number, NeuralNetworkTypes.Layer> = layers;
+        const newMap: Map<number, NeuralNetworkTypes.Layer> = new Map();
+
+        map.forEach((layer: NeuralNetworkTypes.Layer, mapKey: number) => {
+            if (mapKey < key) {
+                newMap.set(mapKey, layer);
+            }
+        });
+
+        setLayers(newMap);
+        closeDialog();
+        openNotification("Vrstva bola úspešne zmazaná", "white", "green");
+    };
+
+    const confirmLayerDelete = (
+        layer: NeuralNetworkTypes.Layer,
+        key: number,
+    ) => {
+        const content = (
+            <>
+                <p
+                    style={{
+                        marginTop: "0",
+                        fontWeight: "bold",
+                        fontSize: "25px",
+                        textAlign: "center",
+                    }}
+                >
+                    Potvrdenie zmazania
+                </p>
+                <p>
+                    Ste si istý, že chcete vymazať danú vrstvu? Zmazanie vrstvy
+                    spôsobi zmazanie všetkých nasledujúcich vrstiev
+                </p>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: 2,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginTop: "30px",
+                    }}
+                >
+                    <Button
+                        type="submit"
+                        size="medium"
+                        variant="contained"
+                        onClick={closeDialog}
+                        style={{ backgroundColor: "green" }}
+                    >
+                        Zrušiť
+                    </Button>
+                    <Button
+                        type="submit"
+                        size="medium"
+                        variant="contained"
+                        style={{ backgroundColor: "red" }}
+                        onClick={() => handleLayerDelete(layer, key)}
+                    >
+                        Zmazať
+                    </Button>
+                </Box>
+            </>
         );
+
+        openDialog(content, true, "xs");
+    };
+
+    const getHiddenLayerElement = (
+        layer: NeuralNetworkTypes.HiddenLayer,
+        key: number,
+    ) => {
+        const primaryTextElement = (
+            <>
+                <span
+                    style={{
+                        color: "var(--primary-color)",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Hidden layer
+                </span>
+                <br></br>
+                <span>Počet neurónov: </span>
+                <span style={{ fontWeight: "bold" }}>{layer.neuronsCount}</span>
+                <br></br>
+                <span>Aktivačná funkcia: </span>
+                <span style={{ fontWeight: "bold" }}>
+                    {layer.activationFunction.replace("_", " ")}
+                </span>
+                {layer.activationFunction === "leaky_relu" && (
+                    <span>
+                        {" "}
+                        (sklon: {layer.activationFunctionParameters["slope"]})
+                    </span>
+                )}
+            </>
+        );
+
+        const secondaryTextElement = (
+            <>
+                {layer.biasesRegularizerL1 !== 0 && (
+                    <>
+                        <span>Bias regularizer L1: </span>
+                        <span style={{ fontWeight: "bold" }}>
+                            {layer.biasesRegularizerL1}
+                        </span>
+                        <br></br>
+                    </>
+                )}
+                {layer.biasesRegularizerL2 !== 0 && (
+                    <>
+                        <span>Bias regularizer L2: </span>
+                        <span style={{ fontWeight: "bold" }}>
+                            {layer.biasesRegularizerL2}
+                        </span>
+                        <br></br>
+                    </>
+                )}
+                {layer.weightsRegularizerL1 !== 0 && (
+                    <>
+                        <span>Weights regularizer L1: </span>
+                        <span style={{ fontWeight: "bold" }}>
+                            {layer.weightsRegularizerL1}
+                        </span>
+                        <br></br>
+                    </>
+                )}
+                {layer.weightsRegularizerL2 !== 0 && (
+                    <>
+                        <span>Weights regularizer L2: </span>
+                        <span style={{ fontWeight: "bold" }}>
+                            {layer.weightsRegularizerL2}
+                        </span>
+                        <br></br>
+                    </>
+                )}
+            </>
+        );
+
+        return (
+            <ListItem
+                key={key}
+                secondaryAction={
+                    <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => {
+                            confirmLayerDelete(layer, key);
+                        }}
+                    >
+                        <DeleteForeverIcon color="primary" />
+                    </IconButton>
+                }
+            >
+                <ListItemAvatar>
+                    <GrainIcon color="primary" />
+                </ListItemAvatar>
+                <ListItemText
+                    primary={primaryTextElement}
+                    secondary={secondaryTextElement}
+                />
+            </ListItem>
+        );
+    };
+
+    const getDropoutLayerElement = (
+        layer: NeuralNetworkTypes.DropoutLayer,
+        key: number,
+    ) => {
+        return (
+            <ListItem
+                key={key}
+                secondaryAction={
+                    <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => {
+                            confirmLayerDelete(layer, key);
+                        }}
+                    >
+                        <DeleteForeverIcon color="primary" />
+                    </IconButton>
+                }
+            >
+                <ListItemAvatar>
+                    <BlurLinearIcon color="primary" />
+                </ListItemAvatar>
+                <ListItemText
+                    primary={
+                        <span
+                            style={{
+                                color: "var(--primary-color)",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Dropout layer
+                        </span>
+                    }
+                    secondary={
+                        <>
+                            <span>Percento zachovaných neurónov: </span>
+                            <span style={{ fontWeight: "bold" }}>
+                                {layer.keepRate} %
+                            </span>
+                        </>
+                    }
+                />
+            </ListItem>
+        );
+    };
+
+    const getLayerElements = () => {
+        const content: React.ReactNode[] = [];
+
+        layers.forEach((layer: NeuralNetworkTypes.Layer, key: number) => {
+            if (isHiddenLayer(layer)) {
+                content.push(
+                    getHiddenLayerElement(
+                        layer as NeuralNetworkTypes.HiddenLayer,
+                        key,
+                    ),
+                );
+            } else {
+                content.push(
+                    getDropoutLayerElement(
+                        layer as NeuralNetworkTypes.DropoutLayer,
+                        key,
+                    ),
+                );
+            }
+        });
+
+        return content;
     };
 
     const handleConfirmButtonClick = async () => {};
@@ -369,11 +633,24 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
             <CustomButton
                 action={handleAddLayerButtonClick}
                 text={"Pridať novú vrstvu"}
-                customClass="custom-form-component-margin-top custom-form-component-margin-bottom-small"
+                customClass="custom-form-component-margin-top custom-form-component-margin-bottom"
                 toggleable={false}
                 submitEnabled={!props.actionInProgress}
                 icon={<AddIcon />}
             />
+
+            {layers.size === 0 ? (
+                <div className="custom-border" style={{ textAlign: "center" }}>
+                    Neurónová sieť aktuálne neobsahuje žiadne vstvy
+                </div>
+            ) : (
+                <ul
+                    style={{ marginTop: "0", marginBottom: "0" }}
+                    className="custom-border"
+                >
+                    <>{getLayerElements()}</>
+                </ul>
+            )}
 
             <CustomButton
                 action={handleConfirmButtonClick}

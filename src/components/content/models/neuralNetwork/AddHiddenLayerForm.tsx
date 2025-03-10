@@ -1,6 +1,8 @@
 import * as Constants from "../../../../helpers/Constants.tsx";
+import * as Utility from "../../../../helpers/UtilityProvider.tsx";
 import NumberInput from "../../../common/inputs/NumberInput.tsx";
 import SelectInput from "../../../common/inputs/SelectInput.tsx";
+import "./NeuralNetworkModelForm.css";
 import * as NeuralNetworkTypes from "./NeuralNetworkModelTypes.tsx";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -10,11 +12,12 @@ import Grid from "@mui/material/Grid2";
 import * as React from "react";
 
 interface AddHiddenLayerFormProps {
-    layers: NeuralNetworkTypes.Layer[];
-    setLayers: React.Dispatch<React.SetStateAction<NeuralNetworkTypes.Layer[]>>;
+    addLayer: (newLayer: NeuralNetworkTypes.Layer) => void;
 }
 
 function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
+    const { closeDialog, openNotification } = Utility.useUtility();
+
     const [neuronsCount, setNeuronsCount] = React.useState<number>(10);
     const [useRegularizer, setUseRegularizer] = React.useState<string>(
         Constants.STRING_FALSE,
@@ -32,6 +35,31 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
     const [activationFunction, setActivationFunction] =
         React.useState<string>("linear");
     const [slope, setSlope] = React.useState<number>(0.01);
+
+    const handleAddHiddenLayer = () => {
+        const hiddenLayer = {} as NeuralNetworkTypes.HiddenLayer;
+
+        hiddenLayer.activationFunction = activationFunction;
+
+        if (activationFunction === "leaky_relu") {
+            const activationFunctionParameters: Record<string, string> = {};
+            activationFunctionParameters["slope"] = slope.toString();
+
+            hiddenLayer.activationFunctionParameters =
+                activationFunctionParameters;
+        }
+
+        hiddenLayer.neuronsCount = neuronsCount;
+
+        hiddenLayer.biasesRegularizerL1 = biasesRegularizerL1;
+        hiddenLayer.biasesRegularizerL2 = biasesRegularizerL2;
+        hiddenLayer.weightsRegularizerL1 = weightsRegularizerL1;
+        hiddenLayer.weightsRegularizerL2 = weightsRegularizerL2;
+
+        props.addLayer(hiddenLayer);
+        closeDialog();
+        openNotification("Vrstva bola úspešne pridaná", "white", "green");
+    };
 
     return (
         <>
@@ -62,7 +90,7 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <SelectInput
                         customClass="custom-form-component-margin-bottom custom-form-component-margin-top-sm"
-                        label={"Optimalizátor"}
+                        label={"Regularizer"}
                         value={useRegularizer}
                         setValue={setUseRegularizer}
                         toggleable={false}
@@ -84,7 +112,6 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                                 setValue={setBiasRegularizerL1}
                                 toggleable={false}
                                 inputEnabled={true}
-                                decimalValuesAllowed={false}
                                 label={"Bias regularizer L1"}
                                 defaultValue={0}
                                 minValue={0}
@@ -99,7 +126,6 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                                 setValue={setBiasRegularizerL2}
                                 toggleable={false}
                                 inputEnabled={true}
-                                decimalValuesAllowed={false}
                                 label={"Bias regularizer L2"}
                                 defaultValue={0}
                                 minValue={0}
@@ -117,7 +143,6 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                                 setValue={setWeightsRegularizerL1}
                                 toggleable={false}
                                 inputEnabled={true}
-                                decimalValuesAllowed={false}
                                 label={"Weights regularizer L1"}
                                 defaultValue={0}
                                 minValue={0}
@@ -132,7 +157,6 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                                 setValue={setWeightsRegularizerL2}
                                 toggleable={false}
                                 inputEnabled={true}
-                                decimalValuesAllowed={false}
                                 label={"Weights regularizer L2"}
                                 defaultValue={0}
                                 minValue={0}
@@ -181,6 +205,7 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
                     variant="contained"
                     endIcon={<AddIcon />}
                     size="large"
+                    onClick={handleAddHiddenLayer}
                 >
                     Pridať vrstvu
                 </Button>
