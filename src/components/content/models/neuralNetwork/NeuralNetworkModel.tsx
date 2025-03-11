@@ -5,7 +5,6 @@ import "../../../../index.css";
 import Layout from "../../../layout/Layout.tsx";
 import NeuralNetworkModelForm from "./forms/NeuralNetworkModelForm.tsx";
 import LossChart from "./results/LossChart.tsx";
-import Random from "./results/Random.tsx";
 
 import { Client } from "@stomp/stompjs";
 
@@ -60,17 +59,6 @@ function NeuralNetworkModel() {
                     "/user/" + sessionCookie + "/queue/notification/loss",
                     (message) => {
                         const body = message.body;
-                        const messages: string[] = body
-                            .split("\n")
-                            .filter((message) => message.trim() !== "");
-
-                        messages.forEach((stringJson) => {
-                            const json: Record<any, string> =
-                                JSON.parse(stringJson);
-                            if ("message" in json) {
-                                console.log(json);
-                            }
-                        });
                     },
                 );
             };
@@ -110,16 +98,20 @@ function NeuralNetworkModel() {
 
             {clientSocket.current ? (
                 <>
-                    <div className="custom-container">
-                        <LossChart clientSocket={clientSocket.current} />
-                    </div>
-
-                    <div className="custom-container">
-                        <Random clientSocket={clientSocket.current} />
+                    <div
+                        className="custom-container"
+                        style={{ marginBottom: "20px" }}
+                    >
+                        <LossChart actionInProgress={actionInProgress} clientSocket={clientSocket.current} />
                     </div>
                 </>
             ) : (
-                <div>no socket</div>
+                <div
+                    className="custom-container"
+                    style={{ marginBottom: "20px" }}
+                >
+                    <div className="inner-container-style">Vykonajte akciu</div>
+                </div>
             )}
         </>
     );

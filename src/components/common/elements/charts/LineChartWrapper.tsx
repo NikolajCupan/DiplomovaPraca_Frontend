@@ -20,6 +20,7 @@ interface LineChartProps {
 
     height: number;
     color?: string;
+    skipAnimation?: boolean;
 
     useSlider?: boolean;
     minSliderDistance?: number;
@@ -145,6 +146,10 @@ function LineChartWrapper(props: LineChartProps) {
                         sx: { pointerEvents: "none" },
                         skipAnimation: true,
                     })}
+                    {...(props.skipAnimation !== undefined &&
+                        props.skipAnimation && {
+                            skipAnimation: true,
+                        })}
                 />
 
                 {getSliderElement()}
