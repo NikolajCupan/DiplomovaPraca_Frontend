@@ -111,6 +111,9 @@ export const NEURAL_NETWORK_LINK = "/model/neural-network";
 
 // Other
 export const BACKEND_PATH = "http://localhost:8080";
+export const WEBSOCKET_LINK = "ws://localhost:8080/websocket";
+
+export const GET_COOKIE = "/user/get-cookie";
 
 export const UPLOAD_DATASET_PATH = "/dataset/upload";
 export const DOWNLOAD_DATASET_PATH = "/dataset/download";

@@ -513,6 +513,18 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
             return;
         }
 
+        const lastLayer: NeuralNetworkTypes.Layer = Array.from(
+            layers.values(),
+        ).pop()!;
+        if (!isHiddenLayer(lastLayer)) {
+            openNotification(
+                "Posledná vrstva v neurónovej sieti nemôže byť dropout layer",
+                "white",
+                "red",
+            );
+            return;
+        }
+
         props.setActionInProgress(true);
 
         try {
@@ -604,7 +616,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
         const processedLayers: string[] = [];
 
         layers.forEach((layer: NeuralNetworkTypes.Layer, _: any) => {
-            const processedLayer: Record<string, string> = {};
+            const processedLayer: Record<string, any> = {};
 
             if (isHiddenLayer(layer)) {
                 const hiddenLayer = layer as NeuralNetworkTypes.HiddenLayer;
@@ -612,17 +624,16 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                 processedLayer["type"] = "hidden";
                 processedLayer["activation_function"] =
                     hiddenLayer.activationFunction;
-                processedLayer["neurons_count"] =
-                    hiddenLayer.neuronsCount.toString();
+                processedLayer["neurons_count"] = hiddenLayer.neuronsCount;
 
                 processedLayer["biases_regularizer_l1"] =
-                    hiddenLayer.biasesRegularizerL1.toString();
+                    hiddenLayer.biasesRegularizerL1;
                 processedLayer["biases_regularizer_l2"] =
-                    hiddenLayer.biasesRegularizerL2.toString();
+                    hiddenLayer.biasesRegularizerL2;
                 processedLayer["weights_regularizer_l1"] =
-                    hiddenLayer.weightsRegularizerL1.toString();
+                    hiddenLayer.weightsRegularizerL1;
                 processedLayer["weights_regularizer_l2"] =
-                    hiddenLayer.weightsRegularizerL2.toString();
+                    hiddenLayer.weightsRegularizerL2;
 
                 if (hiddenLayer.activationFunction === "leaky_relu") {
                     processedLayer["slope"] =
@@ -632,7 +643,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                 const dropoutLayer = layer as NeuralNetworkTypes.DropoutLayer;
 
                 processedLayer["type"] = "dropout";
-                processedLayer["keep_rate"] = dropoutLayer.keepRate.toString();
+                processedLayer["keep_rate"] = dropoutLayer.keepRate;
             }
 
             processedLayers.push(JSON.stringify(processedLayer));

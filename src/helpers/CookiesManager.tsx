@@ -42,3 +42,12 @@ export const prepareRequest = (request: Type.FetchRequest) => {
         }
     } catch {}
 };
+
+export const getSessionCookie = (): string | null => {
+    try {
+        const cookies = new Cookies();
+        return cookies.get(Constants.SESSION_COOKIE_NAME);
+    } catch {
+        return null;
+    }
+};

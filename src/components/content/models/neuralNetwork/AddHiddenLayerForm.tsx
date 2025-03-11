@@ -42,8 +42,8 @@ function AddHiddenLayerForm(props: AddHiddenLayerFormProps) {
         hiddenLayer.activationFunction = activationFunction;
 
         if (activationFunction === "leaky_relu") {
-            const activationFunctionParameters: Record<string, string> = {};
-            activationFunctionParameters["slope"] = slope.toString();
+            const activationFunctionParameters: Record<string, any> = {};
+            activationFunctionParameters["slope"] = slope;
 
             hiddenLayer.activationFunctionParameters =
                 activationFunctionParameters;
