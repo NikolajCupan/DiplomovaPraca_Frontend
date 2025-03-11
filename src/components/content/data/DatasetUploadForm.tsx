@@ -30,7 +30,7 @@ interface DatasetUploadFormProps {
 }
 
 function DatasetUploadForm(props: DatasetUploadFormProps) {
-    const { openNotification } = Utility.useUtility();
+    const { openNotification, closeNotification } = Utility.useUtility();
 
     const [datasetName, setDatasetName] = React.useState<string>("");
     const [file, setFile] = React.useState<File | null>(null);
@@ -393,6 +393,9 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
                                     Frekvencia
                                 </InputLabel>
                                 <Select
+                                    onFocus={() => {
+                                        closeNotification();
+                                    }}
                                     labelId="input-label-select-frequency"
                                     id="id-dataset-frequency"
                                     value={frequency}

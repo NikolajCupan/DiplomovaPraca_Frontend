@@ -1,9 +1,9 @@
-import * as Constants from "../../../../helpers/Constants.tsx";
-import * as Utility from "../../../../helpers/UtilityProvider.tsx";
-import NumberInput from "../../../common/inputs/NumberInput.tsx";
-import SelectInput from "../../../common/inputs/SelectInput.tsx";
+import * as Constants from "../../../../../helpers/Constants.tsx";
+import * as Utility from "../../../../../helpers/UtilityProvider.tsx";
+import NumberInput from "../../../../common/inputs/NumberInput.tsx";
+import SelectInput from "../../../../common/inputs/SelectInput.tsx";
+import * as NeuralNetworkTypes from "../NeuralNetworkModelTypes.tsx";
 import "./NeuralNetworkModelForm.css";
-import * as NeuralNetworkTypes from "./NeuralNetworkModelTypes.tsx";
 
 import AddIcon from "@mui/icons-material/Add";
 import { Button } from "@mui/material";

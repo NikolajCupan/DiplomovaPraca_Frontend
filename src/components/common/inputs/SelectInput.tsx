@@ -1,3 +1,5 @@
+import * as Utility from "../../../helpers/UtilityProvider.tsx";
+
 import { Checkbox, MenuItem, TextField } from "@mui/material";
 
 import * as React from "react";
@@ -18,6 +20,8 @@ interface SelectInputProps {
 }
 
 function SelectInput(props: SelectInputProps) {
+    const { closeNotification } = Utility.useUtility();
+
     const [keepDefaultMaxWidth, setKeepDefaultMaxWidth] =
         React.useState<boolean>(props.value.trim() !== "");
 
@@ -30,6 +34,7 @@ function SelectInput(props: SelectInputProps) {
     return (
         <TextField
             onFocus={() => {
+                closeNotification();
                 setKeepDefaultMaxWidth(true);
             }}
             onBlur={() => {
