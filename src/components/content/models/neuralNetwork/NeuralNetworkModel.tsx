@@ -4,7 +4,7 @@ import * as Type from "../../../../helpers/Types.tsx";
 import "../../../../index.css";
 import Layout from "../../../layout/Layout.tsx";
 import NeuralNetworkModelForm from "./forms/NeuralNetworkModelForm.tsx";
-import LossChart from "./results/LossChart.tsx";
+import NeuralNetworkResult from "./NeuralNetworkResult.tsx";
 
 import { Client } from "@stomp/stompjs";
 
@@ -85,6 +85,26 @@ function NeuralNetworkModel() {
         }
     };
 
+    const getResultElement = () => {
+        if (clientSocket.current) {
+            return (
+                <NeuralNetworkResult
+                    actionInProgress={actionInProgress}
+                    clientSocket={clientSocket.current}
+                />
+            );
+        } else {
+            return (
+                <div
+                    className="custom-container"
+                    style={{ marginBottom: "20px" }}
+                >
+                    <div className="inner-container-style">Vykonajte akciu</div>
+                </div>
+            );
+        }
+    };
+
     const content = (
         <>
             <div className="custom-container">
@@ -96,23 +116,7 @@ function NeuralNetworkModel() {
                 />
             </div>
 
-            {clientSocket.current ? (
-                <>
-                    <div
-                        className="custom-container"
-                        style={{ marginBottom: "20px" }}
-                    >
-                        <LossChart actionInProgress={actionInProgress} clientSocket={clientSocket.current} />
-                    </div>
-                </>
-            ) : (
-                <div
-                    className="custom-container"
-                    style={{ marginBottom: "20px" }}
-                >
-                    <div className="inner-container-style">Vykonajte akciu</div>
-                </div>
-            )}
+            {getResultElement()}
         </>
     );
 

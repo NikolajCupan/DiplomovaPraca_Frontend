@@ -2,6 +2,8 @@ import * as Constants from "../../../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../../../helpers/Types.tsx";
 import LineChartWrapper from "../../../../common/elements/charts/LineChartWrapper.tsx";
+import ScrollableContainer from "../../../../common/elements/ScrollableContainer.tsx";
+import Header from "../../../../common/elements/Header.tsx";
 
 import { Client } from "@stomp/stompjs";
 
@@ -85,27 +87,58 @@ function LossChart(props: LossChartProps) {
         }
     }, [props.actionInProgress]);
 
-    return (
-        <>
-            <LineChartWrapper
-                label={"loss"}
-                xAxisArrayKey={"epoch"}
-                yAxisArrayKey={"loss"}
-                responseBody={lossBody!}
-                skipAnimation={true}
-                height={Constants.DEFAULT_CHART_HEIGHT}
-            />
+    let content;
+    if (losses.current.length <= 2 || accuracies.current.length <= 2) {
+        content = (
+            <div className="inner-container-style">
+                Trénovanie bolo spustené
+            </div>
+        );
+    } else {
+        content = (
+            <>
+                <Header
+                    text={"Trénovanie"}
+                    breakpointWidth={300}
+                    link={[]}
+                    excludeInfoTooltip={true}
+                />
 
-            <LineChartWrapper
-                label={"accuracy"}
-                xAxisArrayKey={"epoch"}
-                yAxisArrayKey={"accuracy"}
-                responseBody={accuracyBody!}
-                skipAnimation={true}
-                height={Constants.DEFAULT_CHART_HEIGHT}
-            />
-        </>
-    );
+                <ScrollableContainer
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
+                    customStyle={{ marginBottom: "20px" }}
+                >
+                    <LineChartWrapper
+                        label={"Loss"}
+                        xAxisArrayKey={"epoch"}
+                        yAxisArrayKey={"loss"}
+                        responseBody={lossBody!}
+                        skipAnimation={true}
+                        height={Constants.DEFAULT_CHART_HEIGHT}
+                    />
+                </ScrollableContainer>
+
+                <ScrollableContainer
+                    breakpointWidth={
+                        Constants.DEFAULT_SCROLLABLE_CONTAINER_BREAKPOINT_WIDTH
+                    }
+                >
+                    <LineChartWrapper
+                        label={"Presnosť"}
+                        xAxisArrayKey={"epoch"}
+                        yAxisArrayKey={"accuracy"}
+                        responseBody={accuracyBody!}
+                        skipAnimation={true}
+                        height={Constants.DEFAULT_CHART_HEIGHT}
+                    />
+                </ScrollableContainer>
+            </>
+        );
+    }
+
+    return content;
 }
 
 export default LossChart;
