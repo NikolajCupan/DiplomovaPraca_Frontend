@@ -2,8 +2,8 @@ import * as Constants from "../../../../../helpers/Constants.tsx";
 import * as CookiesManager from "../../../../../helpers/CookiesManager.tsx";
 import * as Type from "../../../../../helpers/Types.tsx";
 import LineChartWrapper from "../../../../common/elements/charts/LineChartWrapper.tsx";
-import ScrollableContainer from "../../../../common/elements/ScrollableContainer.tsx";
 import Header from "../../../../common/elements/Header.tsx";
+import ScrollableContainer from "../../../../common/elements/ScrollableContainer.tsx";
 
 import { Client } from "@stomp/stompjs";
 
@@ -40,6 +40,10 @@ function LossChart(props: LossChartProps) {
 
                 messages.forEach((stringJson) => {
                     const json: Record<any, string> = JSON.parse(stringJson);
+                    if ("action" in json) {
+                        // Training stopped early
+                        return;
+                    }
 
                     const newEpoch = json["epoch"];
                     epochs.current.push(newEpoch);

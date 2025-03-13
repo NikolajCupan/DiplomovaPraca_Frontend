@@ -86,9 +86,13 @@ function NeuralNetworkModel() {
     };
 
     const getResultElement = () => {
-        if (clientSocket.current) {
+        if (
+            clientSocket.current &&
+            (actionInProgress || responseBody !== null)
+        ) {
             return (
                 <NeuralNetworkResult
+                    responseBody={responseBody}
                     actionInProgress={actionInProgress}
                     clientSocket={clientSocket.current}
                 />

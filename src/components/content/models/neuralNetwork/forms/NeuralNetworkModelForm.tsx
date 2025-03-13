@@ -526,6 +526,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
         }
 
         props.setActionInProgress(true);
+        props.setResponseBody(null);
 
         try {
             const formData = new FormData();
@@ -597,8 +598,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                 props.setResponseBody(null);
                 openSuitableNotification(response, responseBody);
             }
-        } catch (ex) {
-            console.log(ex);
+        } catch {
             props.setResponseBody(null);
             openNotification(
                 "Pri vykonávaní akcie nastala chyba",
@@ -743,7 +743,7 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                         decimalValuesAllowed={false}
                         label={"Počet epoch"}
                         defaultValue={50}
-                        minValue={1}
+                        minValue={10}
                         step={1}
                     />
                 </Grid>
