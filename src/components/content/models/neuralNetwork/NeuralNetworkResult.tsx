@@ -1,7 +1,5 @@
 import * as Type from "../../../../helpers/Types.tsx";
-import Header from "../../../common/elements/Header.tsx";
-import AccuracyTable from "../result/AccuracyTable.tsx";
-import ModelResultDataTable from "../result/ModelResultDataTable.tsx";
+import ModelFullResult from "../result/ModelFullResult.tsx";
 import EarlyTrainingStop from "./results/EarlyTrainingStop.tsx";
 import LossChart from "./results/LossChart.tsx";
 
@@ -30,23 +28,10 @@ function NeuralNetworkResult(props: NeuralNetworkResultProps) {
             </div>
 
             {resultDataIsAvailable() && (
-                <div className="custom-container">
-                    <Header
-                        text={"Prehľad"}
-                        breakpointWidth={300}
-                        link={[]}
-                        excludeInfoTooltip={true}
-                    />
-
-                    <AccuracyTable
-                        responseBody={props.responseBody}
-                        trainJsonKey={"train_accuracy"}
-                        testJsonKey={"test_accuracy"}
-                        customStyle={{ marginBottom: "40px" }}
-                    />
-
-                    {<ModelResultDataTable responseBody={props.responseBody} />}
-                </div>
+                <ModelFullResult
+                    responseBody={props.responseBody}
+                    actionInProgress={props.actionInProgress}
+                />
             )}
 
             <div style={{ marginBottom: "20px" }}></div>

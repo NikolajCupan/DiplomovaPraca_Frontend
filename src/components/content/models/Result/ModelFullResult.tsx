@@ -83,9 +83,14 @@ function ModelFullResult(props: ModelFullResultProps) {
                 </ScrollableContainer>
             </div>
 
-            <div className="custom-container" style={{ paddingBottom: "40px" }}>
-                <DetailedModelResult responseBody={props.responseBody} />
-            </div>
+            {Constants.SUMMARY_KEY in responseBodyData && (
+                <div
+                    className="custom-container"
+                    style={{ paddingBottom: "40px" }}
+                >
+                    <DetailedModelResult responseBody={props.responseBody} />
+                </div>
+            )}
 
             <div className="custom-container">
                 <Header
