@@ -11,7 +11,7 @@ interface NumberInputProps {
     inputEnabled: boolean;
     setInputEnabled?: React.Dispatch<React.SetStateAction<boolean>>;
 
-    label: string;
+    label: string | React.ReactNode;
     defaultValue: number;
     forbiddenValues?: number[];
     limitValuesAllowed?: boolean;

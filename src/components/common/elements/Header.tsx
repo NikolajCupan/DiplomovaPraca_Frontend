@@ -86,7 +86,7 @@ function Header(props: HeaderProps) {
                     props.link.map((item, key) => (
                         <React.Fragment key={key}>
                             <ToolTipElement
-                                title={"Oficiálna dokumentácia " + item[1]}
+                                title={"Dokumentácia " + item[1]}
                                 link={item[0]}
                                 icon={
                                     <FindInPageIcon
@@ -99,7 +99,7 @@ function Header(props: HeaderProps) {
                     ))
                 ) : (
                     <ToolTipElement
-                        title={"Oficiálna dokumentácia"}
+                        title={"Dokumentácia"}
                         link={props.link}
                         icon={
                             <FindInPageIcon style={iconStyle} color="primary" />

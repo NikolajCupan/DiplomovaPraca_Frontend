@@ -30,6 +30,7 @@ import {
     ListItem,
     ListItemAvatar,
     ListItemText,
+    Tooltip,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 
@@ -709,7 +710,17 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                         toggleable={false}
                         inputEnabled={true}
                         decimalValuesAllowed={false}
-                        label={"Veľkosť vstupného okna"}
+                        label={
+                            <Tooltip
+                                title="Počet predchádzajúcich hodnôt použitých na predikciu ďalšej hodnoty"
+                                placement="top-start"
+                                arrow
+                            >
+                                <span style={{ color: "var(--primary-color)" }}>
+                                    Veľkosť vstupného okna
+                                </span>
+                            </Tooltip>
+                        }
                         defaultValue={10}
                         minValue={1}
                         step={1}
@@ -724,7 +735,17 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                         inputEnabled={batchSizeEnabled}
                         setInputEnabled={setBatchSizeEnabled}
                         decimalValuesAllowed={false}
-                        label={"Veľkosť dávky"}
+                        label={
+                            <Tooltip
+                                title="Počet vzoriek spracovaných naraz pri učení"
+                                placement="top-start"
+                                arrow
+                            >
+                                <span style={{ color: "var(--primary-color)" }}>
+                                    Veľkosť dávky
+                                </span>
+                            </Tooltip>
+                        }
                         defaultValue={100}
                         minValue={0}
                         step={1}
@@ -741,7 +762,17 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                         toggleable={false}
                         inputEnabled={true}
                         decimalValuesAllowed={false}
-                        label={"Počet epoch"}
+                        label={
+                            <Tooltip
+                                title="Počet koľkokrát model prejde celým tréningovým datasetom"
+                                placement="top-start"
+                                arrow
+                            >
+                                <span style={{ color: "var(--primary-color)" }}>
+                                    Počet epoch
+                                </span>
+                            </Tooltip>
+                        }
                         defaultValue={50}
                         minValue={10}
                         step={1}
@@ -799,7 +830,17 @@ function NeuralNetworkModel(props: NeuralNetworkModelFormProps) {
                         setValue={setMaxPercentageDifference}
                         toggleable={false}
                         inputEnabled={true}
-                        label={"Maximálny percentuálny rozdiel"}
+                        label={
+                            <Tooltip
+                                title="Definuje maximálny povolený percentuálny rozdiel medzi skutočnou hodnotou a predikciou pri výpočte presnosti modelu"
+                                placement="top-start"
+                                arrow
+                            >
+                                <span style={{ color: "var(--primary-color)" }}>
+                                    Maximálny percentuálny rozdiel
+                                </span>
+                            </Tooltip>
+                        }
                         defaultValue={5}
                         minValue={0}
                         maxValue={100}
