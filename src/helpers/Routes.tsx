@@ -1,6 +1,5 @@
 import Data from "../components/content/data/Data.tsx";
 import DatasetViewer from "../components/content/data/DatasetViewer.tsx";
-import Home from "../components/content/Home.tsx";
 import ArimaModel from "../components/content/models/arima/ArimaModel.tsx";
 import DoubleExpSmoothingModel from "../components/content/models/doubleExpSmoothing/DoubleExpSmoothingModel.tsx";
 import HoltWinterModel from "../components/content/models/holtWinter/HoltWinterModel.tsx";
@@ -18,14 +17,10 @@ import Logarithm from "../components/content/transformations/Logarithm.tsx";
 import Normalization from "../components/content/transformations/Normalization.tsx";
 import Standardization from "../components/content/transformations/Standardization.tsx";
 import * as Constants from "../helpers/Constants.tsx";
-import Test from "../testing/Test.tsx";
-import Todo from "../testing/Todo.tsx";
+
+import * as ReactRouter from "react-router-dom";
 
 export const ROUTES = [
-    {
-        path: Constants.HOME_LINK,
-        element: <Home />,
-    },
     {
         path: Constants.UPLOAD_DATASET_LINK,
         element: <Data />,
@@ -99,11 +94,9 @@ export const ROUTES = [
         element: <NeuralNetworkModel />,
     },
     {
-        path: Constants.TESTING_LINK,
-        element: <Test />,
-    },
-    {
-        path: Constants.TODO_LINK,
-        element: <Todo />,
+        path: "*",
+        element: (
+            <ReactRouter.Navigate to={Constants.UPLOAD_DATASET_LINK} replace />
+        ),
     },
 ];

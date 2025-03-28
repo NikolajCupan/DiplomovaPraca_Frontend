@@ -98,13 +98,6 @@ export default function CustomizedMenus() {
                 onClose={handleClose}
                 className="mini-menu-items"
             >
-                <a href={Constants.HOME_LINK}>
-                    <MenuItem disableRipple>
-                        <NavigateNextIcon style={{ color: "black" }} />
-                        Domovská stránka
-                    </MenuItem>
-                </a>
-
                 <a href={Constants.UPLOAD_DATASET_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />

@@ -2,6 +2,8 @@ import * as Constants from "../../../../helpers/Constants.tsx";
 import * as Helper from "../../../../helpers/Helper.tsx";
 import * as Type from "../../../../helpers/Types.tsx";
 
+import _ from "lodash";
+
 import * as React from "react";
 
 interface ChartDataManagerProps {
@@ -160,11 +162,11 @@ function ChartDataManager(props: ChartDataManagerProps) {
     ): [min: number, max: number, range: number] {
         const filteredArray = array.filter((x) => x !== null);
 
-        const min = Math.min(...filteredArray);
-        const max = Math.max(...filteredArray);
-        const range = max - min;
+        const min = _.min(filteredArray);
+        const max = _.max(filteredArray);
+        const range = max! - min!;
 
-        return [min, max, range];
+        return [min!, max!, range];
     }
 
     function getDateArrayRange(
