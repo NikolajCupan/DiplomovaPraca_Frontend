@@ -33,7 +33,7 @@ function ArimaModel() {
                 />
 
                 <p className="sub-header" style={{ marginBottom: "25px" }}>
-                    Všetky testy sú vykonané na reziduách z trénovacej množiny
+                    Všetky testy sú vykonané na rezíduách z trénovacej množiny
                 </p>
 
                 <Header

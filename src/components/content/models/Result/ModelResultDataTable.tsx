@@ -122,7 +122,7 @@ function ModelResultDataTable(props: ModelResultDataTableProps) {
             isNumeric: true,
         },
         {
-            label: "Reziduum",
+            label: "Rezíduum",
             dataKey: Constants.MODEL_RESIDUALS_KEY,
             minWidthPx: 100,
             isNumeric: true,

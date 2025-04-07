@@ -36,7 +36,7 @@ function ResidualsChart(props: ResidualsChartProps) {
             }
         >
             <LineChartWrapper
-                label={"Reziduum"}
+                label={"Rezíduum"}
                 xAxisArrayKey={"date"}
                 yAxisArrayKey={"data"}
                 responseBody={json}

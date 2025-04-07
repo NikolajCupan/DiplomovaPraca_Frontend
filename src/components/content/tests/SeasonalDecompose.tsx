@@ -88,7 +88,7 @@ function SeasonalDecompose() {
                 }
             >
                 <LineChartWrapper
-                    label={"reziduá"}
+                    label={"rezíduá"}
                     yAxisArrayKey={"resid"}
                     responseBody={responseBody!}
                     height={Constants.DEFAULT_CHART_HEIGHT}

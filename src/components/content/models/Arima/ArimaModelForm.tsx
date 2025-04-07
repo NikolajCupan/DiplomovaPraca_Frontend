@@ -116,7 +116,7 @@ function ArimaModelForm(props: ArimaModelFormProps) {
     return (
         <>
             <Header
-                text={"ARIMA"}
+                text={"SARIMA"}
                 breakpointWidth={250}
                 link={
                     "https://www.statsmodels.org/dev/generated/statsmodels.tsa.statespace.sarimax.SARIMAX.html"

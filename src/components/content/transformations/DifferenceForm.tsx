@@ -106,7 +106,7 @@ function DifferenceForm(props: DifferenceFormProps) {
     return (
         <>
             <Header
-                text={"Diferencia"}
+                text={"Diferenciácia"}
                 breakpointWidth={300}
                 link={[]}
                 excludeInfoTooltip={true}
@@ -138,7 +138,7 @@ function DifferenceForm(props: DifferenceFormProps) {
                         toggleable={false}
                         inputEnabled={true}
                         decimalValuesAllowed={false}
-                        label={"Level diferencie"}
+                        label={"Level diferenciácie"}
                         defaultValue={1}
                         minValue={1}
                         maxValue={10}

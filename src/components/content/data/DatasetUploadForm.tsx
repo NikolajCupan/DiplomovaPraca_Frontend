@@ -163,6 +163,8 @@ function DatasetUploadForm(props: DatasetUploadFormProps) {
 
         setDatasetHasDateColumn(false);
         setDatasetHasHeaderColumn(false);
+
+        setStartDateElementLoaded(true);
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

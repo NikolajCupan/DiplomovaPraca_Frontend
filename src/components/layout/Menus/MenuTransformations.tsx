@@ -101,7 +101,7 @@ export default function CustomizedMenus() {
                 <a href={Constants.DIFFERENCE_LINK}>
                     <MenuItem disableRipple>
                         <NavigateNextIcon style={{ color: "black" }} />
-                        Diferencia
+                        Diferenciácia
                     </MenuItem>
                 </a>
 
