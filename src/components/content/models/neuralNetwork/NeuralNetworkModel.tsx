@@ -59,6 +59,7 @@ function NeuralNetworkModel() {
                     "/user/" + sessionCookie + "/queue/notification/loss",
                     (message) => {
                         const body = message.body;
+                        body;
                     },
                 );
             };

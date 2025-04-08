@@ -43,7 +43,7 @@ interface UtilityProviderProps {
 const UtilityContext = React.createContext<UtilityContextProps | null>(null);
 
 export const UtilityProvider = (props: UtilityProviderProps) => {
-    const timeoutRef = React.useRef<number | undefined>(undefined);
+    const timeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined);
 
     const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
     const [dialogContent, setDialogContent] =
