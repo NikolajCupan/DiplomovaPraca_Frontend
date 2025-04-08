@@ -60,6 +60,7 @@ function NeuralNetworkModel() {
                     (message) => {
                         const body = message.body;
                         body;
+                        // test
                     },
                 );
             };
