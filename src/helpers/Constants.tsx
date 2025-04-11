@@ -110,8 +110,8 @@ export const NEURAL_NETWORK_LINK = "/model/neural-network";
 // Backend paths
 
 // Other
-export const BACKEND_PATH = "http://localhost:8080";
-export const WEBSOCKET_LINK = "ws://localhost:8080/websocket";
+export const BACKEND_PATH = import.meta.env.VITE_REACT_APP_BACKEND_PATH;
+export const WEBSOCKET_LINK = import.meta.env.VITE_REACT_APP_WEBSOCKET_LINK;
 
 export const GET_COOKIE = "/user/get-cookie";
 

@@ -30,3 +30,4 @@ learning/
 .vscode/
 src/testing
 old/
+.env
