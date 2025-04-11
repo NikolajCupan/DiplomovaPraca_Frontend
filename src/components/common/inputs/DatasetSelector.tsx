@@ -4,6 +4,8 @@ import * as Type from "../../../helpers/Types.tsx";
 
 import { Autocomplete, TextField } from "@mui/material";
 
+import useDetectScroll from "@smakss/react-scroll-direction";
+
 import * as React from "react";
 import * as ReactRouter from "react-router-dom";
 
@@ -23,10 +25,17 @@ interface DatasetSelectorProps {
 
 function DatasetSelector(props: DatasetSelectorProps) {
     const location = ReactRouter.useLocation();
+    const { scrollPosition } = useDetectScroll();
+
+    const [menuOpen, setMenuOpen] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         loadDatasetInfos();
     }, []);
+
+    React.useEffect(() => {
+        setMenuOpen(false);
+    }, [scrollPosition]);
 
     const loadDatasetInfos = async () => {
         try {
@@ -74,6 +83,9 @@ function DatasetSelector(props: DatasetSelectorProps) {
 
     return (
         <Autocomplete
+            open={menuOpen}
+            onOpen={() => setMenuOpen(true)}
+            onClose={() => setMenuOpen(false)}
             className={props.customClass}
             value={props.selectedDatasetInfo || null}
             options={props.datasetInfos}

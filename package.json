@@ -18,6 +18,7 @@
         "@mui/x-charts": "^7.24.1",
         "@mui/x-data-grid": "^7.23.0",
         "@mui/x-date-pickers": "^7.22.1",
+        "@smakss/react-scroll-direction": "^4.2.0",
         "@stomp/stompjs": "^7.0.1",
         "@toolpad/core": "^0.8.1",
         "@typescript-eslint/parser": "^8.12.2",
