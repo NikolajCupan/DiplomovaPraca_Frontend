@@ -1,6 +1,14 @@
+import * as React from "react";
+import * as ReactRouter from "react-router-dom";
 import { ROUTES } from "./Routes.tsx";
 
-import * as ReactRouter from "react-router-dom";
+const ErrorRedirect = () => {
+    React.useEffect(() => {
+        window.location.href = "/";
+    }, []);
+
+    return null;
+};
 
 export const router = ReactRouter.createBrowserRouter(
     ReactRouter.createRoutesFromElements(
@@ -9,6 +17,7 @@ export const router = ReactRouter.createBrowserRouter(
                 key={route.path}
                 path={route.path}
                 element={route.element}
+                errorElement={<ErrorRedirect />}
             />
         )),
     ),

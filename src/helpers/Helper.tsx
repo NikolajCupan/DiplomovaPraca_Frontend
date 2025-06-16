@@ -106,17 +106,11 @@ export function stringToDate(string: string | Date): Date {
     }
 
     const year = Number(string.substring(0, 4));
-    const month = Number(string.substring(5, 7));
+    const month = Number(string.substring(5, 7)) - 1;
     const day = Number(string.substring(8, 10));
     const hour = Number(string.substring(11, 13));
 
-    let date = new Date(new Date().toDateString());
-    date.setFullYear(year);
-    date.setMonth(month - 1);
-    date.setDate(day);
-    date.setHours(hour);
-
-    return date;
+    return new Date(year, month, day, hour);
 }
 
 export function translateFrequency(frequency: string): string {
